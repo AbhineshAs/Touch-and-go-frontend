@@ -43,6 +43,8 @@ import {
   AUTH_USER_KEY,
   AUTH_ROLE_KEY,
   notifyAuthChange,
+  getStoredToken,
+  getStoredUser,
 } from "@/lib/api/auth";
 
 export interface CandidateContextType {
@@ -986,12 +988,91 @@ export function CandidateProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Auto-initialize demo candidate persona on mount if no active candidate record exists
+  // Only initialize candidate persona if candidate role is explicitly active
   useEffect(() => {
-    if (!candidateRecord) {
-      loadDemoCandidate("ananya");
+    if (typeof window === "undefined") return;
+    const token = getStoredToken();
+    const storedRole = localStorage.getItem(AUTH_ROLE_KEY);
+    const storedUser = getStoredUser();
+
+    if (token && storedRole === "candidate" && !candidateRecord) {
+      if (storedUser?.name && !storedUser.name.toLowerCase().includes("ananya")) {
+        // Custom registered candidate
+        setCandidateRecord({
+          id: storedUser.id,
+          schemaVersion: "1.0.0",
+          profileRevision: 1,
+          onboardingComplete: true,
+          confirmedAt: storedUser.createdAt || new Date().toISOString(),
+          identity: {
+            fullName: storedUser.name,
+            email: storedUser.email,
+            countryCode: "+91",
+            phone: "9876543210",
+            agreeToTerms: true,
+          },
+          discovery: {
+            careerStage: "experienced",
+            primaryGoal: "interview_prep",
+            targetRoles: ["Software Engineer", "Full Stack Developer"],
+            challenges: ["few_interview_calls"],
+            primaryChallenge: "few_interview_calls",
+            skills: [{ name: "React", level: "comfortable" }, { name: "TypeScript", level: "comfortable" }],
+            strengths: ["problem_solving"],
+            preferredSupport: ["cv_support"],
+            timeBudget: "1_to_3_hours",
+          },
+          profile: {
+            headline: `${storedUser.name} • Software Professional`,
+            summary: "Active software engineering professional exploring high-impact opportunities on TAG.",
+            phone: "9876543210",
+            skills: [{ name: "React", level: "comfortable" }, { name: "TypeScript", level: "comfortable" }, { name: "Node.js", level: "comfortable" }],
+            education: [],
+            experience: [],
+            projects: [],
+            certifications: [],
+            links: [],
+            location: "India",
+            jobPreferences: {
+              desiredRoles: ["Software Engineer", "Frontend Engineer"],
+              preferredLocations: ["Bengaluru", "Hyderabad", "Remote"],
+              desiredWorkModes: ["hybrid", "remote"],
+              employmentTypes: ["full_time"],
+              availability: "immediate",
+              noticePeriodDays: 30,
+              minimumSalaryINR: 1500000,
+              salaryCurrency: "INR",
+              salaryPeriod: "year",
+            },
+          },
+          applications: [],
+          savedJobIds: [],
+          interviews: [],
+        });
+      } else {
+        loadDemoCandidate("ananya");
+      }
     }
   }, [candidateRecord, loadDemoCandidate]);
+
+  // Reset candidate state when signing out
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleAuthChange = () => {
+      const token = getStoredToken();
+      if (!token) {
+        setCandidateRecord(null);
+        setIdentityState(null);
+        setPhoneVerifiedState(false);
+      }
+    };
+    window.addEventListener("tag_auth_changed", handleAuthChange);
+    window.addEventListener("storage", handleAuthChange);
+    return () => {
+      window.removeEventListener("tag_auth_changed", handleAuthChange);
+      window.removeEventListener("storage", handleAuthChange);
+    };
+  }, []);
 
   // Recommendation feedback
   const saveRecommendation = useCallback((recId: string) => {

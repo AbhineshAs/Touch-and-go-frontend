@@ -39,20 +39,35 @@ export function PublicNavbar() {
     return "Admin Console";
   };
 
-  const navLinks = [
-    { label: "Explore Roles", href: "/jobs", icon: Compass },
-    { label: "Product Features", href: "#product-showcase", icon: Award },
-    {
-      label: "Employer Console",
-      href: isAuthenticated
-        ? user?.role === "employer"
-          ? "/employer/dashboard"
-          : "/employer/dashboard"
-        : "/sign-in?role=employer&redirect=%2Femployer%2Fdashboard",
-      icon: Building2,
-    },
-    { label: "Trust & Security", href: "/trust", icon: ShieldCheck },
-  ];
+  const navLinks = isAuthenticated && user
+    ? user.role === "candidate"
+      ? [
+          { label: "Find Jobs", href: "/candidate/jobs", icon: Compass },
+          { label: "Applications", href: "/candidate/applications", icon: Briefcase },
+          { label: "My Resume", href: "/candidate/resume", icon: Award },
+          { label: "Trust & Security", href: "/trust", icon: ShieldCheck },
+        ]
+      : user.role === "employer"
+      ? [
+          { label: "Hiring Pipeline", href: "/employer/dashboard", icon: Building2 },
+          { label: "Post a Job", href: "/employer/jobs/new", icon: Award },
+          { label: "Candidates", href: "/employer/jobs", icon: Compass },
+          { label: "Trust & Security", href: "/trust", icon: ShieldCheck },
+        ]
+      : [
+          { label: "Admin Console", href: "/admin/dashboard", icon: ShieldCheck },
+          { label: "Verifications", href: "/admin/verifications", icon: Award },
+        ]
+    : [
+        { label: "Explore Roles", href: "/jobs", icon: Compass },
+        { label: "Product Features", href: "/#product-showcase", icon: Award },
+        {
+          label: "Employer Console",
+          href: "/sign-in?role=employer&redirect=%2Femployer%2Fdashboard",
+          icon: Building2,
+        },
+        { label: "Trust & Security", href: "/trust", icon: ShieldCheck },
+      ];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#B9D7EA] shadow-2xs text-[#1A2838] transition-all">

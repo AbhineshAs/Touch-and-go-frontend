@@ -24,7 +24,7 @@ export default function SavedJobsPage() {
           Saved Opportunities ({savedJobs.length})
         </h1>
         <p className="text-xs sm:text-sm text-text-secondary">
-          Sample jobs you have bookmarked to review or explore further.
+          Opportunities you have bookmarked to review or explore further.
         </p>
       </div>
 
@@ -32,7 +32,7 @@ export default function SavedJobsPage() {
         <EmptyState
           icon={<Bookmark className="w-8 h-8 text-text-muted" />}
           title="No saved jobs yet"
-          description="Click the bookmark icon on any sample job card to save it here for later review."
+          description="Click the bookmark icon on any job card to save it here for later review."
           action={{
             label: "Explore Jobs",
             onClick: () => (window.location.href = "/candidate/jobs"),

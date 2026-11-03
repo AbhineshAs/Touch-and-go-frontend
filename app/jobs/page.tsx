@@ -121,13 +121,13 @@ function JobsSearchContent() {
     selectedLevels.length;
 
   const FilterControls = () => (
-    <div className="flex flex-col gap-6 text-xs font-sans text-slate-700">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-        <span className="font-extrabold text-sm text-slate-900">Filters</span>
+    <div className="flex flex-col gap-6 text-xs font-sans text-[#1A2838]">
+      <div className="flex items-center justify-between pb-3 border-b border-[#B9D7EA]">
+        <span className="font-extrabold text-sm text-[#1A2838]">Filters</span>
         {activeFilterCount > 0 && (
           <button
             onClick={clearAllFilters}
-            className="text-[#2563EB] hover:underline font-bold cursor-pointer text-xs"
+            className="text-[#769FCD] hover:underline font-bold cursor-pointer text-xs"
           >
             Clear all ({activeFilterCount})
           </button>
@@ -136,9 +136,9 @@ function JobsSearchContent() {
 
       {/* Work Mode */}
       <div className="flex flex-col gap-2.5">
-        <label className="font-extrabold text-slate-900 uppercase tracking-wider text-[11px]">Work Mode</label>
+        <label className="font-extrabold text-[#1A2838] uppercase tracking-wider text-[11px]">Work Mode</label>
         {workModeOptions.map((mode) => (
-          <label key={mode} className="flex items-center gap-2.5 text-slate-700 hover:text-slate-900 cursor-pointer font-medium">
+          <label key={mode} className="flex items-center gap-2.5 text-[#1A2838]/80 hover:text-[#1A2838] cursor-pointer font-medium">
             <input
               type="checkbox"
               checked={selectedWorkModes.includes(mode)}
@@ -149,7 +149,7 @@ function JobsSearchContent() {
                     : selectedWorkModes.filter((m) => m !== mode)
                 );
               }}
-              className="rounded border-slate-300 text-[#2563EB] focus:ring-blue-500/20 accent-[#2563EB] w-4 h-4"
+              className="rounded border-[#B9D7EA] text-[#1A2838] focus:ring-[#769FCD]/20 accent-[#1A2838] w-4 h-4 cursor-pointer"
             />
             <span>{mode}</span>
           </label>
@@ -157,10 +157,10 @@ function JobsSearchContent() {
       </div>
 
       {/* Employment Type */}
-      <div className="flex flex-col gap-2.5 pt-4 border-t border-slate-200">
-        <label className="font-extrabold text-slate-900 uppercase tracking-wider text-[11px]">Employment Type</label>
+      <div className="flex flex-col gap-2.5 pt-4 border-t border-[#B9D7EA]">
+        <label className="font-extrabold text-[#1A2838] uppercase tracking-wider text-[11px]">Employment Type</label>
         {employmentTypeOptions.map((type) => (
-          <label key={type} className="flex items-center gap-2.5 text-slate-700 hover:text-slate-900 cursor-pointer font-medium">
+          <label key={type} className="flex items-center gap-2.5 text-[#1A2838]/80 hover:text-[#1A2838] cursor-pointer font-medium">
             <input
               type="checkbox"
               checked={selectedTypes.includes(type)}
@@ -171,7 +171,7 @@ function JobsSearchContent() {
                     : selectedTypes.filter((t) => t !== type)
                 );
               }}
-              className="rounded border-slate-300 text-[#2563EB] focus:ring-blue-500/20 accent-[#2563EB] w-4 h-4"
+              className="rounded border-[#B9D7EA] text-[#1A2838] focus:ring-[#769FCD]/20 accent-[#1A2838] w-4 h-4 cursor-pointer"
             />
             <span>{type}</span>
           </label>
@@ -179,10 +179,10 @@ function JobsSearchContent() {
       </div>
 
       {/* Experience Level */}
-      <div className="flex flex-col gap-2.5 pt-4 border-t border-slate-200">
-        <label className="font-extrabold text-slate-900 uppercase tracking-wider text-[11px]">Experience Level</label>
+      <div className="flex flex-col gap-2.5 pt-4 border-t border-[#B9D7EA]">
+        <label className="font-extrabold text-[#1A2838] uppercase tracking-wider text-[11px]">Experience Level</label>
         {experienceOptions.map((lvl) => (
-          <label key={lvl} className="flex items-center gap-2.5 text-slate-700 hover:text-slate-900 cursor-pointer font-medium">
+          <label key={lvl} className="flex items-center gap-2.5 text-[#1A2838]/80 hover:text-[#1A2838] cursor-pointer font-medium">
             <input
               type="checkbox"
               checked={selectedLevels.includes(lvl)}
@@ -193,7 +193,7 @@ function JobsSearchContent() {
                     : selectedLevels.filter((l) => l !== lvl)
                 );
               }}
-              className="rounded border-slate-300 text-[#2563EB] focus:ring-blue-500/20 accent-[#2563EB] w-4 h-4"
+              className="rounded border-[#B9D7EA] text-[#1A2838] focus:ring-[#769FCD]/20 accent-[#1A2838] w-4 h-4 cursor-pointer"
             />
             <span>{lvl}</span>
           </label>
@@ -203,11 +203,11 @@ function JobsSearchContent() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#F4F8FB] text-[#1A2838] font-sans">
       <PublicNavbar />
 
       {/* Top Search Banner */}
-      <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/90 py-6 px-4 sm:px-6 lg:px-8 shadow-2xs">
+      <div className="bg-white/95 backdrop-blur-md border-b border-[#B9D7EA] py-6 px-4 sm:px-6 lg:px-8 shadow-2xs">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-3">
           <div className="w-full flex-1">
             <SearchInput
@@ -221,7 +221,7 @@ function JobsSearchContent() {
           <div className="w-full md:w-72 flex items-center">
             <Input
               placeholder="City (e.g. Bengaluru, Gurgaon, Remote)"
-              leftIcon={<MapPin className="w-4 h-4 text-[#2563EB]" />}
+              leftIcon={<MapPin className="w-4 h-4 text-[#769FCD]" />}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
@@ -244,13 +244,13 @@ function JobsSearchContent() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full appearance-none rounded-xl bg-slate-50 border border-slate-300 px-3.5 py-2.5 pr-8 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#2563EB] cursor-pointer"
+                className="w-full appearance-none rounded-xl bg-[#D6E6F2]/30 border border-[#B9D7EA] px-3.5 py-2.5 pr-8 text-xs font-bold text-[#1A2838] focus:outline-none focus:border-[#769FCD] cursor-pointer"
               >
                 <option value="relevant">Sort: Most Relevant</option>
                 <option value="match">Sort: Highest Match</option>
                 <option value="newest">Sort: Newest First</option>
               </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#769FCD] pointer-events-none" />
             </div>
           </div>
         </div>
@@ -261,18 +261,18 @@ function JobsSearchContent() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Desktop Left Filter Sidebar */}
           <aside className="hidden lg:block lg:col-span-1">
-            <div className="sticky top-24 bg-white p-5 rounded-2xl border border-slate-200/90 shadow-2xs">
+            <div className="sticky top-24 bg-white p-5 rounded-2xl border border-[#B9D7EA] shadow-2xs">
               <FilterControls />
             </div>
           </aside>
 
           {/* Job Results List */}
           <main className="lg:col-span-3 flex flex-col gap-4">
-            <div className="flex items-center justify-between text-xs text-slate-500 font-medium pb-2">
+            <div className="flex items-center justify-between text-xs text-[#1A2838]/70 font-medium pb-2">
               <span>
-                Showing <strong className="text-slate-900 font-bold">{jobs.length}</strong> verified opportunities in India
+                Showing <strong className="text-[#1A2838] font-bold">{jobs.length}</strong> verified opportunities in India
               </span>
-              <span className="text-[#2563EB] font-bold">Criteria Match Active</span>
+              <span className="text-[#769FCD] font-bold">Criteria Match Active</span>
             </div>
 
             {isLoading ? (
@@ -293,7 +293,7 @@ function JobsSearchContent() {
                   return (
                     <div
                       key={job.id}
-                      className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-2xs hover:shadow-md hover:border-blue-400 transition-all flex flex-col justify-between"
+                      className="bg-white border border-[#B9D7EA] rounded-2xl p-5 sm:p-6 shadow-2xs hover:shadow-md hover:border-[#769FCD] transition-all flex flex-col justify-between"
                     >
                       <div className="flex flex-col gap-4">
                         {/* Header line */}
@@ -302,21 +302,21 @@ function JobsSearchContent() {
                             <img
                               src={job.organizationLogo}
                               alt={job.organizationName}
-                              className="w-12 h-12 rounded-xl object-cover border border-slate-200 shrink-0 shadow-2xs"
+                              className="w-12 h-12 rounded-xl object-cover border border-[#B9D7EA] shrink-0 shadow-2xs"
                             />
                             <div className="flex flex-col">
                               <div className="flex items-center gap-2">
-                                <span className="text-xs font-bold text-slate-600">
+                                <span className="text-xs font-bold text-[#1A2838]/70">
                                   {job.organizationName}
                                 </span>
                                 {job.organizationVerified && (
                                   <span title="Verified Employer">
-                                    <ShieldCheck className="w-4 h-4 text-[#2563EB]" />
+                                    <ShieldCheck className="w-4 h-4 text-[#769FCD]" />
                                   </span>
                                 )}
                               </div>
                               <Link href={`/jobs/${job.slug}`}>
-                                <h2 className="text-base sm:text-lg font-extrabold text-slate-900 hover:text-[#2563EB] transition-colors mt-0.5 leading-snug">
+                                <h2 className="text-base sm:text-lg font-extrabold text-[#1A2838] hover:text-[#769FCD] transition-colors mt-0.5 leading-snug">
                                   {job.title}
                                 </h2>
                               </Link>
@@ -329,34 +329,34 @@ function JobsSearchContent() {
                             )}
                             <button
                               onClick={(e) => handleToggleSave(job.id, e)}
-                              className="p-2 rounded-xl border border-slate-200 text-slate-400 hover:text-[#2563EB] hover:border-blue-300 transition-colors cursor-pointer"
+                              className="p-2 rounded-xl border border-[#B9D7EA] text-[#1A2838]/60 hover:text-[#769FCD] hover:border-[#769FCD] transition-colors cursor-pointer"
                               aria-label={isSaved ? "Remove from saved" : "Save job"}
                               title={isSaved ? "Saved" : "Save Job"}
                             >
                               <Bookmark
-                                className={`w-4 h-4 ${isSaved ? "fill-[#2563EB] text-[#2563EB]" : ""}`}
+                                className={`w-4 h-4 ${isSaved ? "fill-[#769FCD] text-[#769FCD]" : ""}`}
                               />
                             </button>
                           </div>
                         </div>
 
                         {/* Summary */}
-                        <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed font-medium">
+                        <p className="text-xs sm:text-sm text-[#1A2838]/75 line-clamp-2 leading-relaxed font-medium">
                           {job.summary}
                         </p>
 
                         {/* Key Attributes */}
-                        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 font-semibold pt-1">
-                          <span className="font-bold text-slate-900 font-mono">
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-[#1A2838]/70 font-semibold pt-1">
+                          <span className="font-bold text-[#1A2838] font-mono">
                             {formatSalaryRange(job.minSalaryINR, job.maxSalaryINR, job.salaryPeriod)}
                           </span>
-                          <span className="text-slate-300">•</span>
+                          <span className="text-[#B9D7EA]">•</span>
                           <span>{job.location}</span>
-                          <span className="text-slate-300">•</span>
-                          <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[11px] font-bold text-[#2563EB]">
+                          <span className="text-[#B9D7EA]">•</span>
+                          <span className="px-2 py-0.5 rounded-md bg-[#D6E6F2] border border-[#B9D7EA] text-[11px] font-bold text-[#1A2838]">
                             {job.workMode}
                           </span>
-                          <span className="text-slate-300">•</span>
+                          <span className="text-[#B9D7EA]">•</span>
                           <span>{job.experienceLevel}</span>
                         </div>
 
@@ -368,13 +368,13 @@ function JobsSearchContent() {
                         </div>
 
                         {/* Footer / Apply action */}
-                        <div className="flex items-center justify-between pt-4 mt-2 border-t border-slate-100 text-xs">
-                          <span className="text-slate-400 font-medium">
+                        <div className="flex items-center justify-between pt-4 mt-2 border-t border-[#B9D7EA]/40 text-xs">
+                          <span className="text-[#1A2838]/60 font-medium">
                             Posted {formatRelativeTime(job.publishedAt)}
                           </span>
                           <div className="flex items-center gap-2">
                             <Link href={`/jobs/${job.slug}`}>
-                              <button className="px-5 py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer">
+                              <button className="px-5 py-2.5 rounded-xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-extrabold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer">
                                 <Zap className="w-3.5 h-3.5" />
                                 <span>1-Touch Apply</span>
                               </button>
@@ -406,7 +406,7 @@ function JobsSearchContent() {
       >
         <div className="py-2">
           <FilterControls />
-          <div className="mt-6 pt-4 border-t border-slate-200">
+          <div className="mt-6 pt-4 border-t border-[#B9D7EA]">
             <Button
               className="w-full"
               size="md"
@@ -441,7 +441,7 @@ function JobsSearchContent() {
 
 export default function JobsSearchPage() {
   return (
-    <React.Suspense fallback={<LoadingState message="Loading jobs marketplace..." className="min-h-screen bg-[#F8FAFC]" />}>
+    <React.Suspense fallback={<LoadingState message="Loading jobs marketplace..." className="min-h-screen bg-[#F4F8FB]" />}>
       <JobsSearchContent />
     </React.Suspense>
   );

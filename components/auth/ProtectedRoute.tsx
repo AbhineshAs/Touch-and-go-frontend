@@ -42,6 +42,19 @@ export function ProtectedRoute({
     }
   }, [isLoading, effectivelyAuthenticated, isAuthenticated, pathname, router, refreshAuth, storedUser, storedToken]);
 
+  // Role validation: automatically route user to their respective portal so candidate only sees candidate, employer only sees employer
+  useEffect(() => {
+    if (
+      !isLoading &&
+      effectivelyAuthenticated &&
+      effectiveUser &&
+      allowedRoles &&
+      !allowedRoles.includes(effectiveUser.role)
+    ) {
+      router.replace(`/${effectiveUser.role}/dashboard`);
+    }
+  }, [isLoading, effectivelyAuthenticated, effectiveUser, allowedRoles, router]);
+
   if (isLoading || (!isAuthenticated && effectivelyAuthenticated)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -58,64 +71,10 @@ export function ProtectedRoute({
     );
   }
 
-  // Role validation
   if (allowedRoles && effectiveUser && !allowedRoles.includes(effectiveUser.role)) {
-    const primaryTargetRole = allowedRoles[0];
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-6">
-        <div className="max-w-md w-full p-8 rounded-2xl bg-surface border border-border shadow-lg flex flex-col items-center text-center gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
-            <ShieldAlert className="w-7 h-7" />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <h1 className="text-lg font-extrabold text-text-primary">
-              Role Access Restricted
-            </h1>
-            <p className="text-xs text-text-secondary leading-relaxed">
-              You are signed in as <strong className="text-text-primary">{effectiveUser.name}</strong> with the{" "}
-              <span className="capitalize font-semibold text-primary">{effectiveUser.role}</span> role.
-              This area is restricted to{" "}
-              <strong>{allowedRoles.map((r) => r.toUpperCase()).join(" / ")}</strong> accounts.
-            </p>
-            {requiredPermissionDescription && (
-              <p className="text-[11px] text-text-muted mt-1 bg-background-alt p-2 rounded-lg">
-                {requiredPermissionDescription}
-              </p>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-2.5 w-full pt-2">
-            <Button
-              variant="primary"
-              size="md"
-              className="w-full"
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-              onClick={async () => {
-                await switchRole(primaryTargetRole);
-                router.push(`/${primaryTargetRole}/dashboard`);
-              }}
-            >
-              Switch to {primaryTargetRole.toUpperCase()} Persona
-            </Button>
-
-            <Link href={`/${effectiveUser.role}/dashboard`} className="w-full">
-              <Button variant="secondary" size="md" className="w-full">
-                Return to My {effectiveUser.role.toUpperCase()} Workspace
-              </Button>
-            </Link>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-text-muted hover:text-danger mt-1"
-              leftIcon={<LogOut className="w-3.5 h-3.5" />}
-              onClick={() => logout("/")}
-            >
-              Sign Out
-            </Button>
-          </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F8FB]">
+        <LoadingState message={`Returning to your ${effectiveUser.role} workspace...`} />
       </div>
     );
   }

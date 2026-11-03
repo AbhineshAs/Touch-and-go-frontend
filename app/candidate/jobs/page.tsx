@@ -28,9 +28,9 @@ export default function CandidateJobsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary">Find Sample Jobs</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary">Explore Jobs</h1>
           <p className="text-xs sm:text-sm text-text-secondary">
-            Browse our typed catalogue of sample technology openings across seniorities and domains.
+            Browse verified technology openings across seniorities and engineering domains.
           </p>
         </div>
 
@@ -75,8 +75,8 @@ export default function CandidateJobsPage() {
                           {job.organizationVerified && (
                             <ShieldCheck className="w-3.5 h-3.5 text-success" />
                           )}
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-border-subtle text-text-muted font-medium">
-                            Sample Job
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
+                            Verified Opening
                           </span>
                         </div>
                         <Link href={`/jobs/${job.slug}`}>

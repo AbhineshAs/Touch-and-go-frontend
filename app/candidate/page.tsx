@@ -84,7 +84,7 @@ export default function CandidatePage() {
 
   // Profile Form state (Personal Info)
   const [editMode, setEditMode] = useState(false);
-  const [fullName, setFullName] = useState(candidateRecord?.identity.fullName || "Alen William");
+  const [fullName, setFullName] = useState(candidateRecord?.identity.fullName || "Candidate");
   const [headline, setHeadline] = useState(candidateRecord?.profile.headline || "Senior Full-Stack Engineer");
   const [location, setLocation] = useState(candidateRecord?.profile.location || "Bengaluru, India");
 
@@ -111,11 +111,11 @@ export default function CandidatePage() {
   if (!candidateRecord) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-blue-100 text-[#2563EB] flex items-center justify-center font-black text-xl">
+        <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] text-[#1A2838] flex items-center justify-center font-black text-xl">
           TAG
         </div>
-        <h2 className="text-xl font-bold text-slate-900">Candidate Experience Portal Demo</h2>
-        <p className="text-xs text-slate-500 max-w-md">
+        <h2 className="text-xl font-bold text-[#1A2838]">Candidate Experience Portal Demo</h2>
+        <p className="text-xs text-[#1A2838]/70 max-w-md">
           Experience the full candidate workflow, AI resume parser, match engine, interview simulator, and autonomous AI agents.
         </p>
         <div className="flex items-center gap-3 mt-2">
@@ -144,12 +144,12 @@ export default function CandidatePage() {
 
   // AI Sub-Agents Data
   const subAgents = [
-    { name: "Profile Agent", icon: <User className="w-4 h-4 text-blue-600" />, desc: "Manages identity, bio, and skills sync" },
-    { name: "Resume Agent", icon: <FileText className="w-4 h-4 text-purple-600" />, desc: "Extracts data, parses PDFs & optimizes ATS" },
-    { name: "Job Agent", icon: <Search className="w-4 h-4 text-emerald-600" />, desc: "Matches jobs, evaluates compatibility" },
-    { name: "Skill Agent", icon: <Award className="w-4 h-4 text-amber-600" />, desc: "Detects skill gaps & verifies badges" },
-    { name: "Interview Agent", icon: <Mic className="w-4 h-4 text-indigo-600" />, desc: "Simulates STAR interviews & scores" },
-    { name: "Career Agent", icon: <TrendingUp className="w-4 h-4 text-rose-600" />, desc: "Builds 12-month career growth roadmaps" },
+    { name: "Profile Agent", icon: <User className="w-4 h-4 text-[#769FCD]" />, desc: "Manages identity, bio, and skills sync" },
+    { name: "Resume Agent", icon: <FileText className="w-4 h-4 text-[#769FCD]" />, desc: "Extracts data, parses PDFs & optimizes ATS" },
+    { name: "Job Agent", icon: <Search className="w-4 h-4 text-[#769FCD]" />, desc: "Matches jobs, evaluates compatibility" },
+    { name: "Skill Agent", icon: <Award className="w-4 h-4 text-[#1A2838]" />, desc: "Detects skill gaps & verifies badges" },
+    { name: "Interview Agent", icon: <Mic className="w-4 h-4 text-[#769FCD]" />, desc: "Simulates STAR interviews & scores" },
+    { name: "Career Agent", icon: <TrendingUp className="w-4 h-4 text-[#769FCD]" />, desc: "Builds 12-month career growth roadmaps" },
   ];
 
   // Filter Jobs
@@ -259,38 +259,38 @@ export default function CandidatePage() {
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-16">
       {/* Top Banner & Profile Overview */}
-      <div className="relative rounded-3xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white p-6 sm:p-8 shadow-xl overflow-hidden border border-slate-800">
-        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative rounded-3xl bg-[#1A2838] text-white p-6 sm:p-8 shadow-xl overflow-hidden border border-[#B9D7EA]/30">
+        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-96 h-96 bg-[#769FCD]/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="flex items-start sm:items-center gap-4">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 p-0.5 shadow-md shrink-0">
-              <div className="w-full h-full rounded-[14px] bg-slate-900 flex items-center justify-center text-white font-extrabold text-2xl">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#769FCD] p-0.5 shadow-md shrink-0">
+              <div className="w-full h-full rounded-[14px] bg-[#141F2C] flex items-center justify-center text-white font-extrabold text-2xl">
                 {candidateRecord.identity.fullName.charAt(0)}
               </div>
             </div>
 
             <div className="flex flex-col">
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-xl sm:text-2xl font-black tracking-tight">
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
                   {candidateRecord.identity.fullName}
                 </h1>
-                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#D6E6F2]/10 text-[#B9D7EA] border border-[#B9D7EA]/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#769FCD] animate-pulse" />
                   Candidate Portal
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-300 mt-1 font-medium">
+              <p className="text-xs sm:text-sm text-[#D6E6F2]/80 mt-1 font-medium">
                 {candidateRecord.profile.headline}
               </p>
-              <div className="flex items-center gap-3 text-xs text-slate-400 mt-2 flex-wrap">
+              <div className="flex items-center gap-3 text-xs text-[#B9D7EA] mt-2 flex-wrap">
                 <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-blue-400" />
+                  <MapPin className="w-3.5 h-3.5 text-[#769FCD]" />
                   {candidateRecord.profile.location || "Bengaluru, India"}
                 </span>
                 <span className="flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  ATS Score: <strong className="text-emerald-300">94%</strong>
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#769FCD]" />
+                  ATS Score: <strong className="text-white">94%</strong>
                 </span>
               </div>
             </div>
@@ -298,31 +298,31 @@ export default function CandidatePage() {
 
           <div className="flex flex-col gap-3 min-w-[240px] bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-300 font-semibold">Profile Completeness</span>
-              <span className="font-extrabold text-blue-400">{profileScore}%</span>
+              <span className="text-[#D6E6F2] font-semibold">Profile Completeness</span>
+              <span className="font-extrabold text-[#B9D7EA]">{profileScore}%</span>
             </div>
-            <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-[#141F2C] rounded-full h-2 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-blue-500 to-emerald-400 h-2 rounded-full transition-all duration-500"
+                className="bg-[#769FCD] h-2 rounded-full transition-all duration-500"
                 style={{ width: `${profileScore}%` }}
               />
             </div>
             <div className="flex items-center justify-between pt-1">
-              <span className="text-[11px] text-slate-400">Applications: {applications.length}</span>
-              <span className="text-[11px] text-slate-400">Saved Jobs: {savedJobIds.length}</span>
-              <span className="text-[11px] text-blue-300 font-bold">Matched: {matchedJobs.length}</span>
+              <span className="text-[11px] text-[#D6E6F2]/60">Applications: {applications.length}</span>
+              <span className="text-[11px] text-[#D6E6F2]/60">Saved Jobs: {savedJobIds.length}</span>
+              <span className="text-[11px] text-[#B9D7EA] font-bold">Matched: {matchedJobs.length}</span>
             </div>
           </div>
         </div>
 
         {/* Stepper Workflow Diagram */}
-        <div className="mt-8 pt-6 border-t border-slate-800">
+        <div className="mt-8 pt-6 border-t border-[#B9D7EA]/20">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#B9D7EA] flex items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5 text-[#769FCD]" />
               End-to-End Candidate Workflow Stepper
             </span>
-            <span className="text-[11px] text-blue-300">Click step to view workflow panel</span>
+            <span className="text-[11px] text-[#D6E6F2]/70">Click step to view workflow panel</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
@@ -335,22 +335,22 @@ export default function CandidatePage() {
                     setCurrentStep(stepItem.step);
                     setActiveTab(stepItem.tab as any);
                   }}
-                  className={`flex flex-col text-left p-3 rounded-xl border transition-all text-xs ${
+                  className={`flex flex-col text-left p-3 rounded-xl border transition-all text-xs cursor-pointer ${
                     isActive
-                      ? "bg-blue-600/30 border-blue-400 text-white shadow-md ring-1 ring-blue-400"
-                      : "bg-slate-950/40 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-900/60"
+                      ? "bg-[#769FCD]/30 border-[#769FCD] text-white shadow-md ring-1 ring-[#769FCD]"
+                      : "bg-[#141F2C] border-[#B9D7EA]/20 text-[#D6E6F2]/70 hover:border-[#769FCD] hover:text-white"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${
-                      isActive ? "bg-blue-500 text-white" : "bg-slate-800 text-slate-400"
+                      isActive ? "bg-[#769FCD] text-white" : "bg-[#1A2838] text-[#B9D7EA]"
                     }`}>
                       STEP 0{stepItem.step}
                     </span>
-                    {isActive && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+                    {isActive && <CheckCircle2 className="w-3.5 h-3.5 text-[#B9D7EA]" />}
                   </div>
                   <span className="font-bold text-xs">{stepItem.label}</span>
-                  <span className="text-[10px] text-slate-400 truncate">{stepItem.description}</span>
+                  <span className="text-[10px] text-[#D6E6F2]/60 truncate">{stepItem.description}</span>
                 </button>
               );
             })}
@@ -359,35 +359,35 @@ export default function CandidatePage() {
       </div>
 
       {/* Main Tab Navigation Header */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-200">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-[#B9D7EA]">
         {[
           { id: "overview", label: "Overview & Launchpad", icon: <BarChart3 className="w-4 h-4" /> },
           { id: "profile", label: "Profile & Experience", icon: <User className="w-4 h-4" /> },
           { id: "resume", label: "Resume Hub & Parsing", icon: <FileText className="w-4 h-4" /> },
           { id: "jobs", label: "Search & Apply Jobs", icon: <Search className="w-4 h-4" /> },
-          { id: "agent", label: "Candidate AI Agent", icon: <Bot className="w-4 h-4 text-blue-600" />, badge: "6 Agents" },
-          { id: "matching", label: "AI Job Matching", icon: <Sparkles className="w-4 h-4 text-amber-600" /> },
-          { id: "career", label: "Career Intelligence", icon: <TrendingUp className="w-4 h-4 text-emerald-600" /> },
-          { id: "assessments", label: "Skill Assessments", icon: <Award className="w-4 h-4 text-purple-600" /> },
-          { id: "interview", label: "AI Interviewer", icon: <Mic className="w-4 h-4 text-indigo-600" /> },
-          { id: "rag", label: "RAG Assistant", icon: <BrainCircuit className="w-4 h-4 text-rose-600" /> },
+          { id: "agent", label: "Candidate AI Agent", icon: <Bot className="w-4 h-4 text-[#769FCD]" />, badge: "6 Agents" },
+          { id: "matching", label: "AI Job Matching", icon: <Sparkles className="w-4 h-4 text-[#769FCD]" /> },
+          { id: "career", label: "Career Intelligence", icon: <TrendingUp className="w-4 h-4 text-[#769FCD]" /> },
+          { id: "assessments", label: "Skill Assessments", icon: <Award className="w-4 h-4 text-[#1A2838]" /> },
+          { id: "interview", label: "AI Interviewer", icon: <Mic className="w-4 h-4 text-[#769FCD]" /> },
+          { id: "rag", label: "RAG Assistant", icon: <BrainCircuit className="w-4 h-4 text-[#769FCD]" /> },
         ].map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 isActive
-                  ? "bg-[#2563EB] text-white shadow-md"
-                  : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200/80"
+                  ? "bg-[#1A2838] text-white shadow-md border border-[#1A2838]"
+                  : "bg-white text-[#1A2838] hover:bg-[#D6E6F2]/30 border border-[#B9D7EA]"
               }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
               {tab.badge && (
                 <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold ${
-                  isActive ? "bg-white/20 text-white" : "bg-blue-100 text-blue-700"
+                  isActive ? "bg-[#769FCD] text-white" : "bg-[#D6E6F2] text-[#1A2838]"
                 }`}>
                   {tab.badge}
                 </span>
@@ -403,14 +403,14 @@ export default function CandidatePage() {
       {activeTab === "overview" && (
         <div className="flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50/50 border-blue-200 flex flex-col justify-between">
+            <Card className="p-6 bg-[#D6E6F2]/30 border border-[#B9D7EA] flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-extrabold uppercase text-blue-700">AI Match Engine</span>
-                  <Sparkles className="w-5 h-5 text-blue-600" />
+                  <span className="text-xs font-extrabold uppercase text-[#1A2838]">AI Match Engine</span>
+                  <Sparkles className="w-5 h-5 text-[#769FCD]" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">{matchedJobs.length} High-Match Jobs</h3>
-                <p className="text-xs text-slate-600 mt-1">
+                <h3 className="text-xl font-bold text-[#1A2838]">{matchedJobs.length} High-Match Jobs</h3>
+                <p className="text-xs text-[#1A2838]/70 mt-1">
                   Jobs with over 85% skill alignment based on your candidate profile.
                 </p>
               </div>
@@ -424,42 +424,42 @@ export default function CandidatePage() {
               </Button>
             </Card>
 
-            <Card className="p-6 bg-gradient-to-br from-purple-50 to-indigo-50/50 border-purple-200 flex flex-col justify-between">
+            <Card className="p-6 bg-[#D6E6F2]/30 border border-[#B9D7EA] flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-extrabold uppercase text-purple-700">Autonomous Agent</span>
-                  <Bot className="w-5 h-5 text-purple-600" />
+                  <span className="text-xs font-extrabold uppercase text-[#1A2838]">Autonomous Agent</span>
+                  <Bot className="w-5 h-5 text-[#769FCD]" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">Candidate AI Agent</h3>
-                <p className="text-xs text-slate-600 mt-1">
+                <h3 className="text-xl font-bold text-[#1A2838]">Candidate AI Agent</h3>
+                <p className="text-xs text-[#1A2838]/70 mt-1">
                   6 coordinated sub-agents running autonomous career workflows.
                 </p>
               </div>
               <Button
                 variant="outline"
                 size="sm"
-                className="mt-4 w-full border-purple-300 text-purple-700 hover:bg-purple-100"
+                className="mt-4 w-full"
                 onClick={() => setActiveTab("agent")}
               >
                 Launch Agent Console <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </Card>
 
-            <Card className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50/50 border-emerald-200 flex flex-col justify-between">
+            <Card className="p-6 bg-[#D6E6F2]/30 border border-[#B9D7EA] flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-extrabold uppercase text-emerald-700">Interactive Prep</span>
-                  <Mic className="w-5 h-5 text-emerald-600" />
+                  <span className="text-xs font-extrabold uppercase text-[#1A2838]">Interactive Prep</span>
+                  <Mic className="w-5 h-5 text-[#769FCD]" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">AI Interview Simulator</h3>
-                <p className="text-xs text-slate-600 mt-1">
+                <h3 className="text-xl font-bold text-[#1A2838]">AI Interview Simulator</h3>
+                <p className="text-xs text-[#1A2838]/70 mt-1">
                   Practice STAR interview questions with real-time feedback.
                 </p>
               </div>
               <Button
                 variant="outline"
                 size="sm"
-                className="mt-4 w-full border-emerald-300 text-emerald-700 hover:bg-emerald-100"
+                className="mt-4 w-full"
                 onClick={() => setActiveTab("interview")}
               >
                 Start Practice Session <ArrowRight className="w-4 h-4 ml-1" />
@@ -473,41 +473,41 @@ export default function CandidatePage() {
               {
                 title: "Candidate Profile",
                 desc: "Personal info, experience, education & skills CRUD",
-                icon: <User className="w-5 h-5 text-blue-600" />,
+                icon: <User className="w-5 h-5 text-[#769FCD]" />,
                 tab: "profile",
               },
               {
                 title: "Resume Manager",
                 desc: "Upload, view, download, replace & delete resume",
-                icon: <FileText className="w-5 h-5 text-purple-600" />,
+                icon: <FileText className="w-5 h-5 text-[#769FCD]" />,
                 tab: "resume",
               },
               {
                 title: "Job Search & Apply",
                 desc: "Filter by location, job type, salary & skills",
-                icon: <Search className="w-5 h-5 text-emerald-600" />,
+                icon: <Search className="w-5 h-5 text-[#769FCD]" />,
                 tab: "jobs",
               },
               {
                 title: "RAG Career Assistant",
                 desc: "RAG-grounded candidate Q&A knowledge base",
-                icon: <BrainCircuit className="w-5 h-5 text-rose-600" />,
+                icon: <BrainCircuit className="w-5 h-5 text-[#769FCD]" />,
                 tab: "rag",
               },
             ].map((feature, i) => (
               <Card
                 key={i}
-                className="p-5 hover:shadow-md transition-all cursor-pointer border-slate-200 flex flex-col justify-between"
+                className="p-5 hover:shadow-md transition-all cursor-pointer border-[#B9D7EA] flex flex-col justify-between"
                 onClick={() => setActiveTab(feature.tab as any)}
               >
                 <div className="flex items-start gap-3">
-                  <div className="p-2.5 rounded-xl bg-slate-100">{feature.icon}</div>
+                  <div className="p-2.5 rounded-xl bg-[#D6E6F2]">{feature.icon}</div>
                   <div>
-                    <h4 className="font-bold text-sm text-slate-900">{feature.title}</h4>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">{feature.desc}</p>
+                    <h4 className="font-bold text-sm text-[#1A2838]">{feature.title}</h4>
+                    <p className="text-xs text-[#1A2838]/70 mt-1 leading-relaxed">{feature.desc}</p>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center justify-between text-xs text-[#2563EB] font-bold">
+                <div className="mt-4 flex items-center justify-between text-xs text-[#769FCD] font-bold">
                   <span>Open Tool</span>
                   <ChevronRight className="w-4 h-4" />
                 </div>
@@ -516,18 +516,18 @@ export default function CandidatePage() {
           </div>
 
           {/* Recent Applications Tracker */}
-          <Card className="p-6">
+          <Card className="p-6 border-[#B9D7EA]">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-extrabold text-base text-slate-900 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-blue-600" />
+              <h3 className="font-extrabold text-base text-[#1A2838] flex items-center gap-2">
+                <FileText className="w-5 h-5 text-[#769FCD]" />
                 Application Tracking Pipeline
               </h3>
-              <span className="text-xs text-slate-500">Total Applied: {applications.length}</span>
+              <span className="text-xs text-[#1A2838]/60">Total Applied: {applications.length}</span>
             </div>
 
             {applications.length === 0 ? (
-              <div className="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                <p className="text-xs text-slate-500">No job applications submitted yet.</p>
+              <div className="p-8 text-center bg-[#D6E6F2]/20 rounded-2xl border border-dashed border-[#B9D7EA]">
+                <p className="text-xs text-[#1A2838]/60">No job applications submitted yet.</p>
                 <Button
                   size="sm"
                   variant="primary"
@@ -542,22 +542,22 @@ export default function CandidatePage() {
                 {applications.map((app) => (
                   <div
                     key={app.id}
-                    className="p-4 rounded-xl border border-slate-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                    className="p-4 rounded-xl border border-[#B9D7EA] bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
+                      <div className="w-10 h-10 rounded-xl bg-[#D6E6F2] text-[#1A2838] flex items-center justify-center font-bold text-sm">
                         {app.jobTitle.charAt(0)}
                       </div>
                       <div>
-                        <h4 className="font-bold text-sm text-slate-900">{app.jobTitle}</h4>
-                        <p className="text-xs text-slate-500">
+                        <h4 className="font-bold text-sm text-[#1A2838]">{app.jobTitle}</h4>
+                        <p className="text-xs text-[#1A2838]/60">
                           {app.organizationName} • Applied {formatRelativeTime(app.appliedAt)}
                         </p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-xs px-3 py-1 rounded-full font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                      <span className="text-xs px-3 py-1 rounded-full font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
                         {app.stage.toUpperCase()}
                       </span>
                       <Button
@@ -657,10 +657,10 @@ export default function CandidatePage() {
           </Card>
 
           {/* Work Experience CRUD */}
-          <Card className="p-6">
+          <Card className="p-6 border-[#B9D7EA]">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-extrabold text-base text-slate-900 flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-indigo-600" />
+              <h3 className="font-extrabold text-base text-[#1A2838] flex items-center gap-2">
+                <Briefcase className="w-5 h-5 text-[#769FCD]" />
                 Work Experience (CRUD)
               </h3>
               <Button size="sm" variant="outline" onClick={() => setIsExpModalOpen(true)}>
@@ -672,15 +672,15 @@ export default function CandidatePage() {
               {candidateRecord.profile.experience.map((exp) => (
                 <div
                   key={exp.id}
-                  className="p-4 rounded-xl border border-slate-200 bg-white flex items-start justify-between gap-4"
+                  className="p-4 rounded-xl border border-[#B9D7EA] bg-white flex items-start justify-between gap-4"
                 >
                   <div>
-                    <h4 className="font-bold text-sm text-slate-900">{exp.title}</h4>
-                    <p className="text-xs font-semibold text-blue-600">{exp.company}</p>
-                    <span className="text-[11px] text-slate-400">
+                    <h4 className="font-bold text-sm text-[#1A2838]">{exp.title}</h4>
+                    <p className="text-xs font-semibold text-[#769FCD]">{exp.company}</p>
+                    <span className="text-[11px] text-[#1A2838]/60">
                       {exp.startDate} – {exp.endDate || "Present"}
                     </span>
-                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">{exp.description}</p>
+                    <p className="text-xs text-[#1A2838]/70 mt-2 leading-relaxed">{exp.description}</p>
                   </div>
                   <button
                     onClick={() => deleteExperience(exp.id)}
@@ -811,48 +811,48 @@ export default function CandidatePage() {
             )}
 
             {/* Resume Preview Window */}
-            <div className="p-6 rounded-2xl bg-slate-900 text-slate-100 font-mono text-xs leading-relaxed overflow-x-auto border border-slate-800 shadow-inner">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4 font-sans text-xs">
-                <span className="text-blue-400 font-bold flex items-center gap-1.5">
-                  <FileText className="w-4 h-4" />
-                  Alen_William_ATS_Resume_2026.pdf
+            <div className="p-6 rounded-2xl bg-[#1A2838] text-white font-mono text-xs leading-relaxed overflow-x-auto border border-[#B9D7EA]/30 shadow-inner">
+              <div className="flex items-center justify-between pb-3 border-b border-[#B9D7EA]/20 mb-4 font-sans text-xs">
+                <span className="text-[#B9D7EA] font-bold flex items-center gap-1.5">
+                  <FileText className="w-4 h-4 text-[#769FCD]" />
+                  {`${(candidateRecord?.identity.fullName || "Candidate").replace(/\s+/g, "_")}_Resume.pdf`}
                 </span>
-                <span className="text-slate-400 text-[11px]">Last Updated: 2 Hours Ago</span>
+                <span className="text-[#D6E6F2]/60 text-[11px]">Last Updated: 2 Hours Ago</span>
               </div>
 
-              <p className="text-slate-300 font-bold text-sm font-sans mb-1">{candidateRecord.identity.fullName}</p>
-              <p className="text-slate-400 text-xs font-sans mb-4">{candidateRecord.profile.headline}</p>
+              <p className="text-white font-bold text-sm font-sans mb-1">{candidateRecord.identity.fullName}</p>
+              <p className="text-[#D6E6F2]/80 text-xs font-sans mb-4">{candidateRecord.profile.headline}</p>
 
-              <div className="text-slate-400 mb-2">// SUMMARY</div>
-              <p className="text-slate-200 mb-4 font-sans leading-normal">
+              <div className="text-[#B9D7EA] mb-2">// SUMMARY</div>
+              <p className="text-[#D6E6F2] mb-4 font-sans leading-normal">
                 {candidateRecord.profile.summary}
               </p>
 
-              <div className="text-slate-400 mb-2">// EXTRACTED SKILLS</div>
+              <div className="text-[#B9D7EA] mb-2">// EXTRACTED SKILLS</div>
               <div className="flex flex-wrap gap-1.5 mb-4">
                 {candidateRecord.profile.skills.map((s, idx) => {
                   const sName = typeof s === "string" ? s : s.name;
                   return (
-                    <span key={sName || idx} className="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-sans text-[11px]">
+                    <span key={sName || idx} className="px-2 py-0.5 rounded bg-[#141F2C] text-[#B9D7EA] border border-[#B9D7EA]/20 font-sans text-[11px]">
                       {sName}
                     </span>
                   );
                 })}
               </div>
 
-              <div className="text-slate-400 mb-2">// ATS COMPATIBILITY METRICS</div>
+              <div className="text-[#B9D7EA] mb-2">// ATS COMPATIBILITY METRICS</div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-sans mt-2">
-                <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
-                  <span className="text-slate-400 text-[10px]">Readability Index</span>
-                  <span className="text-emerald-400 font-extrabold text-sm block">98/100</span>
+                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#B9D7EA]/20">
+                  <span className="text-[#D6E6F2]/70 text-[10px]">Readability Index</span>
+                  <span className="text-white font-extrabold text-sm block">98/100</span>
                 </div>
-                <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
-                  <span className="text-slate-400 text-[10px]">Keyword Match Rate</span>
-                  <span className="text-blue-400 font-extrabold text-sm block">92%</span>
+                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#B9D7EA]/20">
+                  <span className="text-[#D6E6F2]/70 text-[10px]">Keyword Match Rate</span>
+                  <span className="text-[#B9D7EA] font-extrabold text-sm block">92%</span>
                 </div>
-                <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700">
-                  <span className="text-slate-400 text-[10px]">Format Compliance</span>
-                  <span className="text-emerald-400 font-extrabold text-sm block">Passed</span>
+                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#B9D7EA]/20">
+                  <span className="text-[#D6E6F2]/70 text-[10px]">Format Compliance</span>
+                  <span className="text-white font-extrabold text-sm block">Passed</span>
                 </div>
               </div>
             </div>
@@ -984,24 +984,24 @@ export default function CandidatePage() {
       {/* 5. CANDIDATE AI AGENT TAB */}
       {activeTab === "agent" && (
         <div className="flex flex-col gap-6">
-          <Card className="p-6 bg-slate-900 text-white border-slate-800">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
+          <Card className="p-6 bg-[#1A2838] text-white border-[#B9D7EA]/30">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#B9D7EA]/20">
               <div>
                 <div className="flex items-center gap-2">
-                  <Bot className="w-6 h-6 text-blue-400" />
+                  <Bot className="w-6 h-6 text-[#769FCD]" />
                   <h3 className="font-extrabold text-lg text-white">Autonomous Candidate AI Agent</h3>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-[#D6E6F2]/70 mt-1">
                   Single unified master agent with 6 specialized sub-agents & human-in-the-loop approval.
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700">
-                <span className="text-xs text-slate-400 pl-2">Active Sub-Agent:</span>
+              <div className="flex items-center gap-2 bg-[#141F2C] p-1.5 rounded-xl border border-[#B9D7EA]/20">
+                <span className="text-xs text-[#D6E6F2]/70 pl-2">Active Sub-Agent:</span>
                 <select
                   value={selectedAgent}
                   onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="bg-slate-900 text-blue-300 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none"
+                  className="bg-[#1A2838] text-[#D6E6F2] text-xs font-bold px-3 py-1.5 rounded-lg border border-[#B9D7EA]/30 focus:outline-none cursor-pointer"
                 >
                   {subAgents.map((sa) => (
                     <option key={sa.name} value={sa.name}>
@@ -1020,18 +1020,18 @@ export default function CandidatePage() {
                   <button
                     key={sa.name}
                     onClick={() => setSelectedAgent(sa.name)}
-                    className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all ${
+                    className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                       isSel
-                        ? "bg-blue-600/30 border-blue-400 text-white shadow-lg ring-1 ring-blue-400"
-                        : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-800"
+                        ? "bg-[#769FCD]/30 border-[#769FCD] text-white shadow-lg ring-1 ring-[#769FCD]"
+                        : "bg-[#141F2C] border-[#B9D7EA]/20 text-[#D6E6F2]/70 hover:bg-[#769FCD]/10 hover:text-white"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       {sa.icon}
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="w-2 h-2 rounded-full bg-[#769FCD] animate-pulse" />
                     </div>
                     <span className="font-bold text-xs">{sa.name}</span>
-                    <span className="text-[10px] text-slate-400 truncate mt-0.5">{sa.desc}</span>
+                    <span className="text-[10px] text-[#D6E6F2]/60 truncate mt-0.5">{sa.desc}</span>
                   </button>
                 );
               })}
@@ -1088,10 +1088,10 @@ export default function CandidatePage() {
                       <h4 className="font-bold text-sm text-slate-900">{matchedJob.title}</h4>
                       <MatchBadge score={matchScore} />
                     </div>
-                    <p className="text-xs text-slate-600 font-medium mb-3">{matchedJob.organizationName} • {matchedJob.location}</p>
+                    <p className="text-xs text-[#1A2838]/70 font-medium mb-3">{matchedJob.organizationName} • {matchedJob.location}</p>
 
-                    <div className="p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 leading-relaxed mb-3">
-                      <strong className="text-blue-700 block mb-1">💡 Match Reason:</strong>
+                    <div className="p-3 rounded-xl bg-white border border-[#B9D7EA] text-xs text-[#1A2838] leading-relaxed mb-3">
+                      <strong className="text-[#1A2838] block mb-1">💡 Match Reason:</strong>
                       "{matchItem.matchReasons[0] || 'Strong overlap in React, TypeScript, and micro-frontend architecture.'}"
                     </div>
                   </div>
@@ -1108,32 +1108,32 @@ export default function CandidatePage() {
 
       {/* 7. CAREER INTELLIGENCE TAB */}
       {activeTab === "career" && (
-        <Card className="p-6">
-          <h3 className="font-extrabold text-base text-slate-900 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-emerald-600" />
+        <Card className="p-6 border-[#B9D7EA]">
+          <h3 className="font-extrabold text-base text-[#1A2838] mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-[#769FCD]" />
             Skill Gap & 12-Month Career Progression Roadmap
           </h3>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="p-4 rounded-xl bg-blue-50 border border-blue-200">
-              <h4 className="font-bold text-xs text-blue-900 uppercase">Target Role</h4>
-              <p className="text-lg font-black text-blue-950 mt-1">Staff Frontend Architect</p>
-              <span className="text-xs text-blue-700 mt-2 block">Estimated Timeline: 12 Months</span>
+            <div className="p-4 rounded-xl bg-[#D6E6F2]/40 border border-[#B9D7EA]">
+              <h4 className="font-bold text-xs text-[#1A2838] uppercase">Target Role</h4>
+              <p className="text-lg font-black text-[#1A2838] mt-1">Staff Frontend Architect</p>
+              <span className="text-xs text-[#769FCD] mt-2 block font-semibold">Estimated Timeline: 12 Months</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200">
-              <h4 className="font-bold text-xs text-amber-900 uppercase">Skill Gap Identified</h4>
+            <div className="p-4 rounded-xl bg-[#D6E6F2]/30 border border-[#B9D7EA]">
+              <h4 className="font-bold text-xs text-[#1A2838] uppercase">Skill Gap Identified</h4>
               <div className="flex flex-wrap gap-1.5 mt-2">
-                <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-bold">GraphQL Federation</span>
-                <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-bold">WebAssembly</span>
-                <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-bold">Performance CWV</span>
+                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA] text-xs font-bold">GraphQL Federation</span>
+                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA] text-xs font-bold">WebAssembly</span>
+                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA] text-xs font-bold">Performance CWV</span>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
-              <h4 className="font-bold text-xs text-emerald-900 uppercase">Projected Compensation Increase</h4>
-              <p className="text-lg font-black text-emerald-950 mt-1">+35% (₹38L – ₹48L PA)</p>
-              <span className="text-xs text-emerald-700 mt-2 block">Based on India Tech Report 2026</span>
+            <div className="p-4 rounded-xl bg-[#D6E6F2]/40 border border-[#B9D7EA]">
+              <h4 className="font-bold text-xs text-[#1A2838] uppercase">Projected Compensation Increase</h4>
+              <p className="text-lg font-black text-[#1A2838] mt-1">+35% (₹38L – ₹48L PA)</p>
+              <span className="text-xs text-[#769FCD] mt-2 block font-semibold">Based on India Tech Report 2026</span>
             </div>
           </div>
         </Card>
@@ -1141,9 +1141,9 @@ export default function CandidatePage() {
 
       {/* 8. SKILL ASSESSMENTS TAB */}
       {activeTab === "assessments" && (
-        <Card className="p-6">
-          <h3 className="font-extrabold text-base text-slate-900 mb-4 flex items-center gap-2">
-            <Award className="w-5 h-5 text-purple-600" />
+        <Card className="p-6 border-[#B9D7EA]">
+          <h3 className="font-extrabold text-base text-[#1A2838] mb-4 flex items-center gap-2">
+            <Award className="w-5 h-5 text-[#769FCD]" />
             Skill Assessments & Verified Badges
           </h3>
 
@@ -1153,10 +1153,10 @@ export default function CandidatePage() {
               { title: "TypeScript & Type Safety", duration: "12 Mins", questions: "8 MCQs", status: "Verified 92%" },
               { title: "Frontend Performance & CWV", duration: "20 Mins", questions: "12 MCQs", status: "Take Quiz" },
             ].map((quiz, idx) => (
-              <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-white flex flex-col justify-between">
+              <div key={idx} className="p-4 rounded-xl border border-[#B9D7EA] bg-white flex flex-col justify-between">
                 <div>
-                  <h4 className="font-bold text-sm text-slate-900">{quiz.title}</h4>
-                  <p className="text-xs text-slate-500 mt-1">{quiz.duration} • {quiz.questions}</p>
+                  <h4 className="font-bold text-sm text-[#1A2838]">{quiz.title}</h4>
+                  <p className="text-xs text-[#1A2838]/60 mt-1">{quiz.duration} • {quiz.questions}</p>
                 </div>
                 <Button size="sm" variant={quiz.status.includes("Verified") ? "outline" : "primary"} className="mt-4 w-full">
                   {quiz.status}
@@ -1169,18 +1169,18 @@ export default function CandidatePage() {
 
       {/* 9. AI INTERVIEW SIMULATOR TAB */}
       {activeTab === "interview" && (
-        <Card className="p-6">
-          <h3 className="font-extrabold text-base text-slate-900 mb-4 flex items-center gap-2">
-            <Mic className="w-5 h-5 text-indigo-600" />
+        <Card className="p-6 border-[#B9D7EA]">
+          <h3 className="font-extrabold text-base text-[#1A2838] mb-4 flex items-center gap-2">
+            <Mic className="w-5 h-5 text-[#769FCD]" />
             AI STAR Method Interview Simulator
           </h3>
-          <div className="p-6 rounded-2xl bg-indigo-950 text-white flex flex-col items-center justify-center text-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-indigo-600/40 border border-indigo-400 flex items-center justify-center text-indigo-300 animate-pulse">
+          <div className="p-6 rounded-2xl bg-[#1A2838] text-white flex flex-col items-center justify-center text-center gap-4 border border-[#B9D7EA]/30">
+            <div className="w-16 h-16 rounded-full bg-[#769FCD]/30 border border-[#B9D7EA]/40 flex items-center justify-center text-[#B9D7EA] animate-pulse">
               <Mic className="w-8 h-8" />
             </div>
             <div>
-              <h4 className="font-extrabold text-lg">Interview Question:</h4>
-              <p className="text-xs text-indigo-200 max-w-md mt-1 italic">
+              <h4 className="font-extrabold text-lg text-white">Interview Question:</h4>
+              <p className="text-xs text-[#D6E6F2]/80 max-w-md mt-1 italic">
                 "Describe a situation where you optimized performance for a Next.js application facing high traffic."
               </p>
             </div>
@@ -1193,17 +1193,17 @@ export default function CandidatePage() {
 
       {/* 10. RAG CAREER ASSISTANT TAB */}
       {activeTab === "rag" && (
-        <Card className="p-6">
-          <h3 className="font-extrabold text-base text-slate-900 mb-4 flex items-center gap-2">
-            <BrainCircuit className="w-5 h-5 text-rose-600" />
+        <Card className="p-6 border-[#B9D7EA]">
+          <h3 className="font-extrabold text-base text-[#1A2838] mb-4 flex items-center gap-2">
+            <BrainCircuit className="w-5 h-5 text-[#769FCD]" />
             RAG Grounded Career Assistant
           </h3>
-          <div className="p-4 rounded-2xl bg-slate-900 text-white font-mono text-xs flex flex-col gap-3">
-            <div className="p-3 rounded-xl bg-slate-800 text-slate-200">
-              💬 <strong className="text-blue-400">Candidate:</strong> "What salary expectation should I set for a Senior Frontend role in Bengaluru?"
+          <div className="p-4 rounded-2xl bg-[#1A2838] text-white font-mono text-xs flex flex-col gap-3 border border-[#B9D7EA]/30">
+            <div className="p-3 rounded-xl bg-[#141F2C] text-[#D6E6F2]">
+              💬 <strong className="text-[#B9D7EA]">Candidate:</strong> "What salary expectation should I set for a Senior Frontend role in Bengaluru?"
             </div>
-            <div className="p-3 rounded-xl bg-blue-950/80 border border-blue-800/80 text-blue-100">
-              🤖 <strong className="text-emerald-400">RAG Assistant:</strong> Based on the <em>[India Tech Compensation Report 2026]</em>, candidate with 4+ years in React/Next.js commands ₹28L – ₹36L base salary.
+            <div className="p-3 rounded-xl bg-[#D6E6F2]/10 border border-[#B9D7EA]/30 text-[#D6E6F2]">
+              🤖 <strong className="text-[#B9D7EA]">RAG Assistant:</strong> Based on the <em>[India Tech Compensation Report 2026]</em>, candidate with 4+ years in React/Next.js commands ₹28L – ₹36L base salary.
             </div>
           </div>
         </Card>

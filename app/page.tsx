@@ -1,4 +1,6 @@
 import React from "react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Footer } from "@/components/layout/Footer";
 import { NaukriHero } from "@/components/landing/NaukriHero";
@@ -12,6 +14,7 @@ import { NaukriJobGrid } from "@/components/landing/NaukriJobGrid";
 import { LandingTestimonials } from "@/components/landing/LandingTestimonials";
 import { LandingCtaBanner } from "@/components/landing/LandingCtaBanner";
 import { LandingStickyBar } from "@/components/landing/LandingStickyBar";
+import { ClientAuthRedirect } from "@/components/auth/ClientAuthRedirect";
 
 export const metadata = {
   title: "TAG — Touch And Go | AI-Assisted Tech Recruitment Platform",
@@ -19,9 +22,27 @@ export const metadata = {
     "Touch And Go – India's premier AI-assisted tech recruitment marketplace connecting top talent with pre-vetted employers through explainable match scoring, salary transparency, and instant 1-touch applications.",
 };
 
-export default function RootPage() {
+export default async function RootPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("tag_auth_token")?.value;
+  const role = cookieStore.get("tag_active_role")?.value || "candidate";
+
+  // If already joined (logged in / registered), route directly to workspace/portal
+  if (token) {
+    if (role === "employer") {
+      redirect("/employer/dashboard");
+    } else if (role === "admin") {
+      redirect("/admin/dashboard");
+    } else {
+      redirect("/candidate/dashboard");
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#F4F8FB] text-[#1A2838] flex flex-col font-sans selection:bg-[#769FCD] selection:text-white">
+      {/* Client-side auth redirect for localStorage sessions */}
+      <ClientAuthRedirect />
+
       {/* Glassmorphism Top Navigation */}
       <PublicNavbar />
 
@@ -60,7 +81,7 @@ export default function RootPage() {
       {/* Floating Sticky Conversion Dock */}
       <LandingStickyBar />
 
-      {/* Modern Indigo Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );

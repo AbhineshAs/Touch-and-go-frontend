@@ -26,7 +26,6 @@ import {
   Sparkles,
   Home,
 } from "lucide-react";
-import { MOCK_USERS } from "@/lib/mocks/data";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
@@ -46,12 +45,9 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
   const { user: authUser, logout } = useAuth();
   const { candidateRecord, resetAll } = useCandidate();
 
-  const candidateName = candidateRecord?.identity.fullName || authUser?.name || "Alen William";
-  const candidateEmail = candidateRecord?.identity.email || authUser?.email || "alenwilliam92@gmail.com";
-  const candidateAvatar =
-    candidateName.toLowerCase().includes("ananya")
-      ? MOCK_USERS.candidate.avatarUrl
-      : undefined;
+  const candidateName = candidateRecord?.identity.fullName || authUser?.name || "Candidate";
+  const candidateEmail = candidateRecord?.identity.email || authUser?.email || "";
+  const candidateAvatar = authUser?.avatarUrl || undefined;
 
   const applicationsCount = candidateRecord?.applications.length || 0;
   const savedJobsCount = candidateRecord?.savedJobIds.length || 0;
@@ -92,28 +88,28 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
     {
       label: "RAG Assistant",
       href: "/candidate/assistant",
-      icon: <BrainCircuit className="w-4 h-4 text-purple-600" />,
+      icon: <BrainCircuit className="w-4 h-4 text-[#769FCD]" />,
     },
     {
       label: "AI Interviewer",
       href: "/candidate/interview-simulator",
-      icon: <Mic className="w-4 h-4 text-indigo-600" />,
+      icon: <Mic className="w-4 h-4 text-[#769FCD]" />,
     },
     {
       label: "Career Intelligence",
       href: "/candidate/career-intelligence",
-      icon: <TrendingUp className="w-4 h-4 text-emerald-600" />,
+      icon: <TrendingUp className="w-4 h-4 text-[#769FCD]" />,
     },
     {
       label: "Skill Assessments",
       href: "/candidate/assessments",
-      icon: <Award className="w-4 h-4 text-amber-600" />,
+      icon: <Award className="w-4 h-4 text-[#1A2838]" />,
     },
   ];
 
   return (
     <ProtectedRoute allowedRoles={["candidate", "admin"]}>
-      <div className="min-h-screen lg:h-screen flex flex-col lg:flex-row bg-[#F8FAFC] text-slate-900 lg:overflow-hidden font-sans">
+      <div className="min-h-screen lg:h-screen flex flex-col lg:flex-row bg-[#F4F8FB] text-[#1A2838] lg:overflow-hidden font-sans">
         {/* Mobile Top Bar */}
         <header className="lg:hidden h-16 bg-white border-b border-[#B9D7EA] px-4 flex items-center justify-between sticky top-0 z-30 shadow-2xs">
           <TagLogo href="/candidate/dashboard" height={36} />
@@ -169,8 +165,8 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
             {/* Quick Status Pill */}
             <div className="mx-2 px-3 py-2 rounded-xl bg-[#D6E6F2] border border-[#B9D7EA] flex items-center justify-between text-xs">
               <span className="text-[#1A2838] font-bold">Candidate Portal</span>
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-white px-2 py-0.5 rounded-full border border-emerald-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1A2838] bg-white px-2 py-0.5 rounded-full border border-[#B9D7EA]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#769FCD] animate-pulse" />
                 Open to Work
               </span>
             </div>

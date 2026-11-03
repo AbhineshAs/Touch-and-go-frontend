@@ -143,9 +143,9 @@ export function MatchBadge({ score, size = "md", className }: MatchBadgeProps) {
   const isMid = score >= 50 && score < 75;
 
   const bg = isHigh
-    ? "bg-gradient-to-r from-emerald-50 to-teal-50/80 text-[#0E4F45] border-teal-200/90 shadow-[0_1px_3px_rgba(22,107,92,0.08)]"
+    ? "bg-[#D6E6F2] text-[#1A2838] border-[#B9D7EA] font-bold shadow-2xs"
     : isMid
-    ? "bg-amber-50 text-amber-900 border-amber-200"
+    ? "bg-[#D6E6F2]/60 text-[#1A2838] border-[#B9D7EA]/60 font-semibold"
     : "bg-slate-100 text-slate-700 border-slate-200";
 
   const sizes = {
@@ -164,7 +164,7 @@ export function MatchBadge({ score, size = "md", className }: MatchBadgeProps) {
       )}
       title="Criteria Alignment with published job specifications"
     >
-      <Sparkles className="w-3.5 h-3.5 shrink-0 text-primary animate-pulse" />
+      <Sparkles className="w-3.5 h-3.5 shrink-0 text-[#769FCD] animate-pulse" />
       <span>{score}% Alignment</span>
     </span>
   );

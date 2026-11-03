@@ -46,32 +46,36 @@ export default function ResumeBuilderEditorPage() {
 
   // Basic Details
   const [fullName, setFullName] = useState(
-    candidateRecord?.identity.fullName || "Alen William"
+    candidateRecord?.identity.fullName || ""
   );
   const [targetRole, setTargetRole] = useState(
     candidateRecord?.profile?.headline ||
       candidateRecord?.resumeDraft?.headline ||
-      "Senior Frontend & Full Stack Engineer"
+      ""
   );
   const [email, setEmail] = useState(
-    candidateRecord?.identity.email || "alenwilliam92@gmail.com"
+    candidateRecord?.identity.email || ""
   );
   const [phone, setPhone] = useState(
-    candidateRecord?.identity.phone || "+91 98765 43210"
+    candidateRecord?.identity.phone || ""
   );
   const [location, setLocation] = useState(
     candidateRecord?.profile?.location ||
       candidateRecord?.resumeDraft?.contact?.location ||
-      "Bengaluru, India (Remote / Hybrid)"
+      ""
   );
-  const [portfolioUrl, setPortfolioUrl] = useState("https://alenwilliam.dev");
-  const [linkedinUrl, setLinkedinUrl] = useState("https://linkedin.com/in/alenwilliam");
+  const [portfolioUrl, setPortfolioUrl] = useState(
+    candidateRecord?.profile?.links?.find((l) => l.label.toLowerCase().includes("portfolio"))?.url || ""
+  );
+  const [linkedinUrl, setLinkedinUrl] = useState(
+    candidateRecord?.profile?.links?.find((l) => l.label.toLowerCase().includes("linkedin"))?.url || ""
+  );
 
   // Summary
   const [summary, setSummary] = useState(
     candidateRecord?.profile?.summary ||
       candidateRecord?.resumeDraft?.summary ||
-      "Impact-focused Software Engineer with 4+ years of experience architecting high-performance web applications, scalable component systems, and real-time frontend services using TypeScript, Next.js, and modern cloud technologies."
+      ""
   );
 
   // Skills
@@ -80,69 +84,46 @@ export default function ResumeBuilderEditorPage() {
       ? candidateRecord.resumeDraft.skills
       : candidateRecord?.profile?.skills && candidateRecord.profile.skills.length > 0
         ? candidateRecord.profile.skills.map((s) => (typeof s === "string" ? s : s.name))
-        : [
-            "React",
-            "Next.js",
-            "TypeScript",
-            "JavaScript (ES6+)",
-            "Tailwind CSS",
-            "Node.js",
-            "REST APIs",
-            "GraphQL",
-            "Git & CI/CD",
-            "Jest & Testing",
-            "System Design",
-            "Performance Optimization",
-          ]
+        : []
   );
   const [newSkillInput, setNewSkillInput] = useState("");
 
   // Experience
-  const [experiences, setExperiences] = useState<ExperienceItem[]>([
-    {
-      id: "exp-1",
-      company: "TechNova Solutions",
-      role: "Senior Frontend Engineer",
-      duration: "2023 – Present",
-      bullets: [
-        "Spearheaded redesign of core checkout flow, improving page conversion by 28% and reducing bundle size by 42%.",
-        "Engineered shared design system components adopted by 14 cross-functional development squads.",
-        "Mentored 4 junior engineers on TypeScript best practices, unit testing patterns, and code review standards.",
-      ],
-    },
-    {
-      id: "exp-2",
-      company: "Zynorix Global Systems",
-      role: "Frontend Developer",
-      duration: "2021 – 2023",
-      bullets: [
-        "Built responsive client portals handling 85,000+ monthly active enterprise users with 99.9% uptime.",
-        "Integrated real-time analytics streaming pipelines using WebSockets and REST APIs.",
-        "Reduced Lighthouse first-contentful-paint (FCP) latency from 2.8s to 0.9s across all core dashboards.",
-      ],
-    },
-  ]);
+  const [experiences, setExperiences] = useState<ExperienceItem[]>(
+    candidateRecord?.profile?.experience && candidateRecord.profile.experience.length > 0
+      ? candidateRecord.profile.experience.map((e) => ({
+          id: e.id,
+          company: e.company,
+          role: e.title,
+          duration: `${e.startDate} – ${e.endDate || "Present"}`,
+          bullets: e.description ? [e.description] : [],
+        }))
+      : []
+  );
 
   // Education
-  const [education, setEducation] = useState<EducationItem[]>([
-    {
-      id: "edu-1",
-      institution: "National Institute of Technology",
-      degree: "B.Tech in Computer Science & Engineering",
-      year: "2017 – 2021",
-    },
-  ]);
+  const [education, setEducation] = useState<EducationItem[]>(
+    candidateRecord?.profile?.education && candidateRecord.profile.education.length > 0
+      ? candidateRecord.profile.education.map((e) => ({
+          id: e.id,
+          institution: e.institution,
+          degree: `${e.degree}${e.fieldOfStudy ? ` in ${e.fieldOfStudy}` : ""}`,
+          year: `${e.startYear} – ${e.endYear || "Present"}`,
+        }))
+      : []
+  );
 
   // Projects
-  const [projects, setProjects] = useState<ProjectItem[]>([
-    {
-      id: "proj-1",
-      title: "Touch And Go (TAG) Candidate Ecosystem",
-      tools: "Next.js, TypeScript, Tailwind CSS, TanStack Query",
-      description:
-        "High-performance candidate discovery and matching portal featuring 1-touch matched opportunities, automated profile scoring, and intelligent ATS resume analysis.",
-    },
-  ]);
+  const [projects, setProjects] = useState<ProjectItem[]>(
+    candidateRecord?.profile?.projects && candidateRecord.profile.projects.length > 0
+      ? candidateRecord.profile.projects.map((p) => ({
+          id: p.id,
+          title: p.title,
+          tools: p.technologies?.join(", ") || "",
+          description: p.description,
+        }))
+      : []
+  );
 
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
   const [isSaved, setIsSaved] = useState(false);

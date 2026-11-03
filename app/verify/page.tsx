@@ -12,12 +12,12 @@ import { UserRole } from "@/types";
 function VerifyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "ananya.sharma@example.com";
-  const role = searchParams.get("role") || "candidate";
-  const redirect = searchParams.get("redirect");
   const { user, login, refreshAuth } = useAuth();
+  const email = searchParams.get("email") || user?.email || "";
+  const role = searchParams.get("role") || user?.role || "candidate";
+  const redirect = searchParams.get("redirect");
 
-  const [otp, setOtp] = useState(["7", "2", "9", "4", "1", "0"]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [countdown, setCountdown] = useState(45);
@@ -50,7 +50,7 @@ function VerifyContent() {
       if (redirect) {
         router.push(redirect);
       } else if (role === "employer") {
-        router.push("/employer/organization?setup=true");
+        router.push("/employer/dashboard");
       } else {
         router.push("/candidate/dashboard");
       }

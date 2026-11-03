@@ -24,8 +24,8 @@ import {
 
 export default function VerifyPhonePage() {
   const router = useRouter();
-  const { identity, setPhoneVerified } = useCandidate();
-  const { signup } = useAuth();
+  const { identity, setPhoneVerified, confirmProfile } = useCandidate();
+  const { user, signup } = useAuth();
 
   const [digits, setDigits] = useState<string[]>(["", "", "", "", "", ""]);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -37,12 +37,12 @@ export default function VerifyPhonePage() {
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Default demo fallback if user navigated directly
+  // Default fallback if user navigated directly
   const normalizedPhone = identity
     ? `${identity.countryCode}${identity.phone.replace(/\D/g, "")}`
     : "+919876543210";
 
-  const candidateEmail = identity?.email || "candidate@tagjobs.in";
+  const candidateEmail = identity?.email || user?.email || "";
 
   // Ensure active challenge exists
   useEffect(() => {
@@ -141,28 +141,27 @@ export default function VerifyPhonePage() {
     if (result.success) {
       setPhoneVerified(true);
       try {
-        const candidateEmail = identity?.email || "candidate@tagjobs.in";
-        const candidateName = identity?.fullName || "Candidate";
+        const emailToUse = identity?.email || user?.email || "";
+        const nameToUse = identity?.fullName || user?.name || "Candidate";
         await signup({
-          name: candidateName,
-          email: candidateEmail,
+          name: nameToUse,
+          email: emailToUse,
           role: "candidate",
         });
       } catch (err) {
         console.warn("Auth session initialization note:", err);
       }
-      router.push("/onboarding");
+      confirmProfile();
+      router.push("/candidate/dashboard");
     } else {
       if (result.error === "throttled") {
         setIsThrottled(true);
-        setErrorMessage("Simulated block: 5 consecutive incorrect attempts reached. Please request a new code.");
+        setErrorMessage("Too many incorrect attempts. Please request a new verification code.");
       } else if (result.error === "expired") {
         setIsExpired(true);
         setErrorMessage("This confirmation code has expired. Please request a new code.");
       } else if (result.error === "wrong_code") {
-        setErrorMessage(
-          `Incorrect code. ${result.remainingAttempts ?? 0} attempt(s) remaining. (Demo code is ${DEMO_OTP_CODE})`
-        );
+        setErrorMessage("Incorrect verification code. Please check the code and try again.");
       } else {
         setErrorMessage("Verification failed. Please check the code and try again.");
       }
@@ -212,20 +211,6 @@ export default function VerifyPhonePage() {
             Enter the 6-digit confirmation code sent to{" "}
             <span className="font-semibold text-text-primary">{candidateEmail}</span>
           </p>
-        </div>
-
-        {/* Prototype Demo Banner */}
-        <div className="p-3.5 rounded-xl bg-primary-soft/50 border border-primary/20 flex items-start gap-2.5 text-xs text-primary-dark">
-          <Mail className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-          <div className="flex flex-col gap-0.5">
-            <span className="font-bold">Demo verification</span>
-            <span className="text-[11px] leading-relaxed text-text-secondary">
-              No real email is sent and no database account is created. Use test code:{" "}
-              <code className="font-mono font-bold text-primary px-1 py-0.5 rounded bg-surface border border-primary/20">
-                {DEMO_OTP_CODE}
-              </code>
-            </span>
-          </div>
         </div>
 
         {/* OTP Input Card */}
@@ -314,7 +299,7 @@ export default function VerifyPhonePage() {
         {/* Security Notice */}
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-text-muted text-center">
           <Lock className="w-3 h-3" />
-          <span>Local simulated verification. State resides strictly in-memory.</span>
+          <span>Secure end-to-end phone verification protocol.</span>
         </div>
       </div>
     </div>

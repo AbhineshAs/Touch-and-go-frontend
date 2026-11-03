@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FileEdit, Sparkles, Send, X, CheckCircle2, Copy, ArrowRight, Zap, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/Modal";
+import { useAuth } from "@/lib/auth/AuthContext";
 
 interface ATSQuickActionsProps {
   className?: string;
@@ -12,12 +13,15 @@ interface ATSQuickActionsProps {
 }
 
 export function ATSQuickActions({ className }: ATSQuickActionsProps) {
+  const { user } = useAuth();
   const [isCoverLetterModalOpen, setIsCoverLetterModalOpen] = useState(false);
   const [targetCompany, setTargetCompany] = useState("");
-  const [targetRole, setTargetRole] = useState("Full Stack Software Engineer");
+  const [targetRole, setTargetRole] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedLetter, setGeneratedLetter] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  const candidateName = user?.name || "Applicant";
 
   const handleGenerateCoverLetter = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,14 +31,14 @@ export function ATSQuickActions({ className }: ATSQuickActionsProps) {
 
     const letter = `Dear Hiring Team at ${targetCompany || "the company"},
 
-I am writing to express my strong interest in the ${targetRole} position. With a solid foundation in modern web engineering, clean architecture, and performance-focused application design, I have built and delivered high-velocity digital products matching rigorous technical specifications.
+I am writing to express my strong interest in the ${targetRole || "open"} position. With a solid foundation in modern web engineering, clean architecture, and performance-focused application design, I have built and delivered high-velocity digital products matching rigorous technical specifications.
 
 In my recent projects, I focused on building high-conversion experiences, integrating RESTful services, and optimizing frontend performance. My experience aligns well with your team's mission to drive scalable product growth and delightful user experiences.
 
 I welcome the opportunity to discuss how my technical skills and work ethic can support your goals. Thank you for your time and consideration.
 
 Sincerely,
-Candidate (Touch And Go Verified)`;
+${candidateName}`;
 
     setGeneratedLetter(letter);
   };

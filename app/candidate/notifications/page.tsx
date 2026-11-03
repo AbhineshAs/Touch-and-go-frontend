@@ -8,11 +8,15 @@ import { NotificationItem } from "@/types";
 import { MOCK_NOTIFICATIONS } from "@/lib/mocks/data";
 import { formatRelativeTime } from "@/lib/utils";
 import { Bell, Calendar, Sparkles, CheckCheck, ShieldCheck, ArrowRight } from "lucide-react";
+import { useAuth } from "@/lib/auth/AuthContext";
 
 export default function CandidateNotificationsPage() {
-  const [notifications, setNotifications] = useState<NotificationItem[]>(
-    MOCK_NOTIFICATIONS.filter((n) => n.userId === "usr_cand_01")
-  );
+  const { user } = useAuth();
+  const [notifications, setNotifications] = useState<NotificationItem[]>(() => {
+    if (!user) return [];
+    const list = MOCK_NOTIFICATIONS.filter((n) => n.userId === user.id);
+    return list;
+  });
 
   const handleMarkAllRead = () => {
     setNotifications(notifications.map((n) => ({ ...n, read: true })));
@@ -45,57 +49,71 @@ export default function CandidateNotificationsPage() {
           </p>
         </div>
 
-        <Button
-          size="sm"
-          variant="outline"
-          leftIcon={<CheckCheck className="w-3.5 h-3.5" />}
-          onClick={handleMarkAllRead}
-        >
-          Mark all as read
-        </Button>
+        {notifications.length > 0 && (
+          <Button
+            size="sm"
+            variant="outline"
+            leftIcon={<CheckCheck className="w-3.5 h-3.5" />}
+            onClick={handleMarkAllRead}
+          >
+            Mark all as read
+          </Button>
+        )}
       </div>
 
       <div className="flex flex-col gap-3">
-        {notifications.map((notif) => (
-          <Card
-            key={notif.id}
-            className={`p-4 sm:p-5 flex items-start justify-between gap-4 border transition-all ${
-              notif.read ? "bg-surface border-border" : "bg-primary-soft/20 border-primary/30 shadow-xs"
-            }`}
-          >
-            <div className="flex items-start gap-3.5">
-              <div
-                className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
-                  notif.read ? "bg-background text-text-muted" : "bg-primary-soft text-primary"
-                }`}
-              >
-                {getIcon(notif.type)}
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-text-primary">{notif.title}</h3>
-                  {!notif.read && (
-                    <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
-                  )}
+        {notifications.length === 0 ? (
+          <div className="p-12 text-center rounded-2xl bg-surface border border-border flex flex-col items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-primary-soft text-primary flex items-center justify-center">
+              <Bell className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-text-primary">No notifications yet</h3>
+            <p className="text-xs text-text-muted max-w-sm">
+              When employers view your profile, schedule interviews, or release new matching positions, you will see them here.
+            </p>
+          </div>
+        ) : (
+          notifications.map((notif) => (
+            <Card
+              key={notif.id}
+              className={`p-4 sm:p-5 flex items-start justify-between gap-4 border transition-all ${
+                notif.read ? "bg-surface border-border" : "bg-primary-soft/20 border-primary/30 shadow-xs"
+              }`}
+            >
+              <div className="flex items-start gap-3.5">
+                <div
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                    notif.read ? "bg-background text-text-muted" : "bg-primary-soft text-primary"
+                  }`}
+                >
+                  {getIcon(notif.type)}
                 </div>
-                <p className="text-xs text-text-secondary leading-relaxed">{notif.message}</p>
-                <span className="text-[11px] text-text-muted mt-1">
-                  {formatRelativeTime(notif.createdAt)}
-                </span>
+                <div className="flex flex-col gap-0.5">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-bold text-text-primary">{notif.title}</h3>
+                    {!notif.read && (
+                      <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
+                    )}
+                  </div>
+                  <p className="text-xs text-text-secondary leading-relaxed">{notif.message}</p>
+                  <span className="text-[11px] text-text-muted mt-1">
+                    {formatRelativeTime(notif.createdAt)}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center gap-2 shrink-0">
-              {notif.link && (
-                <Link href={notif.link}>
-                  <Button size="sm" variant="secondary" rightIcon={<ArrowRight className="w-3 h-3" />}>
-                    View
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </Card>
-        ))}
+              <div className="flex items-center gap-2 shrink-0">
+                {notif.link && (
+                  <Link href={notif.link}>
+                    <Button size="sm" variant="secondary" rightIcon={<ArrowRight className="w-3 h-3" />}>
+                      View
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );

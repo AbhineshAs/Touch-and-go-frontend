@@ -3,8 +3,11 @@
 import React from "react";
 import Link from "next/link";
 import { Briefcase, MapPin, Zap, ArrowRight, Clock, Building2, CheckCircle2, Sparkles } from "lucide-react";
+import { useAuth } from "@/lib/auth/AuthContext";
 
 export function NaukriJobGrid() {
+  const { isAuthenticated, user } = useAuth();
+  const applyHref = isAuthenticated && user?.role === "candidate" ? "/candidate/jobs" : "/sign-up?role=candidate";
   const jobs = [
     {
       title: "Senior Full-Stack Engineer (Next.js 16 & Node)",
@@ -147,10 +150,10 @@ export function NaukriJobGrid() {
                   <CheckCircle2 className="w-4 h-4 text-[#769FCD]" />
                   <span>100% Verified Employer</span>
                 </div>
-                <Link href="/sign-up?role=candidate">
+                <Link href={applyHref}>
                   <button className="px-5 py-2.5 rounded-xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-extrabold text-xs shadow-md shadow-[#1A2838]/20 flex items-center gap-1.5 transition-all cursor-pointer hover:scale-[1.02]">
                     <Zap className="w-3.5 h-3.5 fill-[#B9D7EA] text-[#B9D7EA]" />
-                    <span>1-Touch Apply</span>
+                    <span>{isAuthenticated && user?.role === "candidate" ? "View in Portal" : "1-Touch Apply"}</span>
                   </button>
                 </Link>
               </div>

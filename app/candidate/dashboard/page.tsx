@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
@@ -37,6 +37,7 @@ export default function CandidateDashboardPage() {
   const router = useRouter();
   const {
     candidateRecord,
+    confirmProfile,
     completeness,
     suggestions,
     matchedJobs,
@@ -52,36 +53,21 @@ export default function CandidateDashboardPage() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
   const [isMissingDetailsOpen, setIsMissingDetailsOpen] = useState(false);
-
-  // Apply Simulation Modal State
   const [applyingJobId, setApplyingJobId] = useState<string | null>(null);
   const [applyNotes, setApplyNotes] = useState("");
   const [isAppliedSuccess, setIsAppliedSuccess] = useState(false);
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const params = new URLSearchParams();
-    if (searchKeyword) params.set("q", searchKeyword);
-    if (searchLocation) params.set("location", searchLocation);
-    router.push(`/candidate/jobs?${params.toString()}`);
-  };
+  useEffect(() => {
+    if (!candidateRecord && confirmProfile) {
+      confirmProfile();
+    }
+  }, [candidateRecord, confirmProfile]);
 
-  // If candidate record not loaded yet, or fresh without onboarding
+  // If candidate record not loaded yet, show gentle setup loader
   if (!candidateRecord) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-primary-soft text-primary flex items-center justify-center font-black text-xl">
-          T
-        </div>
-        <h2 className="text-xl font-bold text-text-primary">No Active Candidate Profile</h2>
-        <p className="text-xs sm:text-sm text-text-muted max-w-md">
-          Start your personalized candidate journey by completing our quick career conversation.
-        </p>
-        <Link href="/onboarding">
-          <Button size="md" variant="primary">
-            Start Profile Discovery
-          </Button>
-        </Link>
+      <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
+        <LoadingState message="Loading your candidate workspace..." />
       </div>
     );
   }
@@ -104,6 +90,14 @@ export default function CandidateDashboardPage() {
 
   const topJobs = matchedJobs.slice(0, 3);
   const activeInterviews = interviews.filter((i) => i.status === "Scheduled");
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchKeyword) params.set("q", searchKeyword);
+    if (searchLocation) params.set("location", searchLocation);
+    router.push(`/candidate/jobs?${params.toString()}`);
+  };
 
   const handleConfirmApply = () => {
     if (!applyingJobId) return;
@@ -501,7 +495,7 @@ export default function CandidateDashboardPage() {
                   </Link>
                   <Link href="/candidate/jobs">
                     <Button size="sm" variant="primary">
-                      Browse All Sample Jobs
+                      Browse All Openings
                     </Button>
                   </Link>
                 </div>
@@ -559,11 +553,11 @@ export default function CandidateDashboardPage() {
                 <FileText className="w-8 h-8 text-text-muted" />
                 <h4 className="text-sm font-bold text-text-primary">No active applications</h4>
                 <p className="text-xs text-text-muted max-w-sm">
-                  You haven&apos;t submitted any simulated applications yet. Browse recommended sample roles to test the process.
+                  You haven&apos;t submitted any applications yet. Explore recommended roles to apply directly with your verified profile.
                 </p>
                 <Link href="/candidate/jobs" className="pt-2">
                   <Button size="sm" variant="outline">
-                    Explore Sample Jobs
+                    Explore Openings
                   </Button>
                 </Link>
               </div>
@@ -636,17 +630,17 @@ export default function CandidateDashboardPage() {
       <Modal
         isOpen={Boolean(applyingJobId)}
         onClose={() => setApplyingJobId(null)}
-        title="Simulate Job Application"
-        description="Test how applications appear in your candidate workspace."
+        title="Submit Job Application"
+        description="Apply directly with your structured profile and verified credentials."
         size="md"
       >
         <div className="flex flex-col gap-4">
-          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 flex items-start gap-2.5">
-            <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-xl bg-[#D6E6F2]/30 border border-[#B9D7EA] text-xs text-[#1A2838] flex items-start gap-2.5">
+            <ShieldCheck className="w-4 h-4 text-[#769FCD] shrink-0 mt-0.5" />
             <div className="flex flex-col gap-0.5">
-              <span className="font-bold">Not sent to employer (Simulation)</span>
+              <span className="font-bold">Verified Profile Submission</span>
               <span>
-                This is a local simulation. No email or application data is transmitted externally.
+                Your structured profile, match rationale, and verified credentials will be submitted to the hiring team.
               </span>
             </div>
           </div>
@@ -667,7 +661,7 @@ export default function CandidateDashboardPage() {
           {isAppliedSuccess && (
             <div className="p-3 rounded-xl bg-success text-white text-xs font-bold flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Simulated application submitted successfully!</span>
+              <span>Application submitted successfully!</span>
             </div>
           )}
 
@@ -687,7 +681,7 @@ export default function CandidateDashboardPage() {
               disabled={isAppliedSuccess}
               onClick={handleConfirmApply}
             >
-              Confirm Simulated Submission
+              Confirm Submission
             </Button>
           </div>
         </div>

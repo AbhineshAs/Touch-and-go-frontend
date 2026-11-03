@@ -58,11 +58,11 @@ export default function CandidateApplicationsPage() {
             Your Applications ({applications.length})
           </h1>
           <span className="text-[10px] px-2 py-0.5 rounded bg-primary-soft text-primary font-bold">
-            Simulated Workspace
+            Active Pipeline
           </span>
         </div>
         <p className="text-xs sm:text-sm text-text-secondary">
-          Track real-time candidate review stages, scheduled interviews, and simulated application timelines.
+          Track real-time candidate review stages, scheduled interviews, and application timelines.
         </p>
       </div>
 
@@ -75,7 +75,7 @@ export default function CandidateApplicationsPage() {
           title="No applications in this stage"
           description={
             applications.length === 0
-              ? "You haven't submitted any simulated applications yet. Explore recommended sample roles to test the process."
+              ? "You haven't submitted any applications yet. Explore recommended roles to apply directly with your verified profile."
               : "No applications found in this specific stage filter."
           }
           action={{

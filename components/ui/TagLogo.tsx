@@ -33,17 +33,17 @@ export function TagLogo({
           className="object-contain transition-transform duration-200 group-hover:scale-105 max-w-[180px]"
         />
       ) : (
-        <div className="w-10 h-10 rounded-xl bg-[#2563EB] text-white flex items-center justify-center font-black text-lg shadow-xs">
+        <div className="w-10 h-10 rounded-xl bg-[#1A2838] border border-[#B9D7EA]/40 text-white flex items-center justify-center font-black text-lg shadow-xs">
           T
         </div>
       )}
 
       {showText && (
         <div className="flex flex-col text-left leading-none">
-          <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 group-hover:text-[#2563EB] transition-colors">
+          <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 group-hover:text-[#769FCD] transition-colors">
             Touch And Go
           </span>
-          <span className="text-[10px] font-bold text-blue-600 tracking-wider uppercase">
+          <span className="text-[10px] font-bold text-[#769FCD] tracking-wider uppercase">
             Recruitment India
           </span>
         </div>

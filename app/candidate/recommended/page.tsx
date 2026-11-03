@@ -100,8 +100,8 @@ export default function RecommendedJobsPage() {
                         {job.organizationVerified && (
                           <ShieldCheck className="w-3.5 h-3.5 text-success" />
                         )}
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-border-subtle text-text-muted font-medium">
-                          Sample Job
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
+                          Verified Opening
                         </span>
                       </div>
                       <Link href={`/jobs/${job.slug}`}>
@@ -204,12 +204,12 @@ export default function RecommendedJobsPage() {
         size="md"
       >
         <div className="flex flex-col gap-4">
-          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 flex items-start gap-2.5">
-            <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-xl bg-[#D6E6F2]/30 border border-[#B9D7EA] text-xs text-[#1A2838] flex items-start gap-2.5">
+            <ShieldCheck className="w-4 h-4 text-[#769FCD] shrink-0 mt-0.5" />
             <div className="flex flex-col gap-0.5">
-              <span className="font-bold">Not sent to employer (Simulation)</span>
+              <span className="font-bold">Verified Profile Submission</span>
               <span>
-                This is a local simulated application. No email or personal data is transmitted.
+                Your structured profile, match rationale, and verified credentials will be submitted to the hiring team.
               </span>
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function RecommendedJobsPage() {
           {isAppliedSuccess && (
             <div className="p-3 rounded-xl bg-success text-white text-xs font-bold flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Simulated application submitted successfully!</span>
+              <span>Application submitted successfully!</span>
             </div>
           )}
 
@@ -250,7 +250,7 @@ export default function RecommendedJobsPage() {
               disabled={isAppliedSuccess}
               onClick={handleConfirmApply}
             >
-              Confirm Simulated Submission
+              Confirm Submission
             </Button>
           </div>
         </div>

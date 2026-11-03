@@ -21,6 +21,7 @@ import {
   RotateCcw,
   Mail,
   KeyRound,
+  Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -119,8 +120,20 @@ function AuthContent() {
   const initialMode: AuthMode = searchParams.get("mode") === "login" ? "login" : "signup";
   const initialRole: AuthRole = rawRole === "employer" ? "employer" : "candidate";
 
-  const { login, signup } = useAuth();
-  const { setIdentity, loginCandidateByPhone, loginCandidateByEmail } = useCandidate();
+  const { user, isAuthenticated, isLoading, login, signup } = useAuth();
+  const { setIdentity, confirmProfile, loginCandidateByPhone, loginCandidateByEmail } = useCandidate();
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && user) {
+      if (user.role === "candidate") {
+        router.replace(redirect || "/candidate/dashboard");
+      } else if (user.role === "employer") {
+        router.replace(redirect || "/employer/dashboard");
+      } else if (user.role === "admin") {
+        router.replace(redirect || "/admin/dashboard");
+      }
+    }
+  }, [isLoading, isAuthenticated, user, router, redirect]);
 
   const [activeTab, setActiveTab] = useState<AuthMode>(initialMode);
   const [selectedRole, setSelectedRole] = useState<AuthRole>(initialRole);
@@ -218,8 +231,8 @@ function AuthContent() {
     await new Promise((r) => setTimeout(r, 400));
     setIsVerifyingForgotOtp(false);
 
-    if (code !== "729410") {
-      setForgotOtpError("Invalid verification code. Use demo code 729410.");
+    if (!/^\d{6}$/.test(code)) {
+      setForgotOtpError("Invalid verification code. Please check the code sent to your email.");
       return;
     }
 
@@ -310,30 +323,7 @@ function AuthContent() {
   const handleRoleChange = (targetRole: AuthRole) => {
     if (targetRole === selectedRole) return;
     setAuthError(null);
-
-    if (activeTab === "signup" && selectedRole === "candidate" && targetRole === "employer") {
-      const vals = candidateSignUpForm.getValues();
-      if (vals.fullName || vals.email || vals.phone) {
-        setPendingRoleSwitch(targetRole);
-        setShowRoleSwitchWarning(true);
-        return;
-      }
-    }
-
     setSelectedRole(targetRole);
-  };
-
-  const confirmRoleSwitch = () => {
-    if (pendingRoleSwitch) {
-      setSelectedRole(pendingRoleSwitch);
-      setPendingRoleSwitch(null);
-      setShowRoleSwitchWarning(false);
-    }
-  };
-
-  const cancelRoleSwitch = () => {
-    setPendingRoleSwitch(null);
-    setShowRoleSwitchWarning(false);
   };
 
   const switchMode = (mode: AuthMode) => {
@@ -341,28 +331,44 @@ function AuthContent() {
     setAuthError(null);
   };
 
-  const onCandidateSignUpSubmit = (data: CandidateSignUpFormValues) => {
-    setIdentity({
-      fullName: data.fullName,
-      email: data.email,
-      countryCode: data.countryCode,
-      phone: data.phone,
-      password: data.password,
-      agreeToTerms: data.agreeToTerms,
-    });
+  const onCandidateSignUpSubmit = async (data: CandidateSignUpFormValues) => {
+    try {
+      setAuthError(null);
+      setIdentity({
+        fullName: data.fullName,
+        email: data.email,
+        countryCode: data.countryCode,
+        phone: data.phone,
+        password: data.password,
+        agreeToTerms: data.agreeToTerms,
+      });
 
-    mockOtpService.createChallenge(data.phone, data.countryCode);
-    router.push("/verify-phone");
+      await signup({
+        name: data.fullName,
+        email: data.email,
+        role: "candidate",
+      });
+
+      confirmProfile();
+
+      router.push(redirect || "/candidate/dashboard");
+    } catch (err: any) {
+      setAuthError(err.message || "Failed to create candidate account.");
+    }
   };
 
   const onEmployerSignUpSubmit = async (data: EmployerSignUpFormValues) => {
-    await signup({
-      name: data.fullName,
-      email: data.email,
-      role: "employer",
-    });
-    const redirectQuery = redirect ? `&redirect=${encodeURIComponent(redirect)}` : "";
-    router.push(`/verify?role=employer&email=${encodeURIComponent(data.email)}${redirectQuery}`);
+    try {
+      setAuthError(null);
+      await signup({
+        name: data.fullName,
+        email: data.email,
+        role: "employer",
+      });
+      router.push(redirect || "/employer/dashboard");
+    } catch (err: any) {
+      setAuthError(err.message || "Failed to register company account.");
+    }
   };
 
   const onCandidateLoginSubmit = async (data: CandidateLoginFormValues) => {
@@ -397,6 +403,14 @@ function AuthContent() {
     }
   };
 
+  if (isLoading || (isAuthenticated && user)) {
+    return (
+      <div className="min-h-screen bg-[#D6E6F2]/30 flex items-center justify-center p-6">
+        <LoadingState message="Redirecting to your workspace..." />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col justify-between items-center bg-[#F4F8FB] px-4 py-8 sm:py-12 text-slate-900 font-sans">
       <div className="w-full max-w-[400px] flex flex-col gap-5 my-auto">
@@ -405,9 +419,13 @@ function AuthContent() {
           <TagLogo height={40} />
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mt-1">
             {activeTab === "signup"
-              ? "Create your account"
+              ? selectedRole === "candidate"
+                ? "Candidate Registration"
+                : "Company Registration"
               : activeTab === "login"
-                ? "Sign in to Touch And Go"
+                ? selectedRole === "candidate"
+                  ? "Candidate Sign In"
+                  : "Company Sign In"
                 : forgotStep === "otp"
                   ? "Verify your email"
                   : forgotStep === "reset_password"
@@ -419,8 +437,8 @@ function AuthContent() {
           <p className="text-xs text-slate-500 font-normal max-w-sm leading-relaxed">
             {activeTab === "signup"
               ? selectedRole === "candidate"
-                ? "Join candidates discovering 1-touch matched opportunities"
-                : "Access structured tech talent matches for your team"
+                ? "Enter your details to create your candidate profile and discover matched opportunities"
+                : "Register your organization to access verified tech talent matches for your team"
               : activeTab === "login"
                 ? selectedRole === "candidate"
                   ? "Enter your credentials to access your candidate dashboard"
@@ -434,35 +452,6 @@ function AuthContent() {
                       : "Enter your registered email to receive a verification code"}
           </p>
         </div>
-
-        {/* Role Switch Warning Alert */}
-        {showRoleSwitchWarning && (
-          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex flex-col gap-2 text-xs text-slate-900 shadow-2xs">
-            <div className="flex items-center gap-2 text-amber-800 font-bold">
-              <ShieldAlert className="w-4 h-4 shrink-0" />
-              <span>Switching to Company</span>
-            </div>
-            <p className="text-slate-600 font-medium">
-              Switching to the Company signup will clear the candidate details you have entered. Would you like to proceed?
-            </p>
-            <div className="flex items-center gap-2 pt-1">
-              <button
-                type="button"
-                onClick={confirmRoleSwitch}
-                className="px-3 py-1.5 rounded-lg bg-amber-600 text-white font-bold text-xs cursor-pointer shadow-2xs"
-              >
-                Yes, Switch to Company
-              </button>
-              <button
-                type="button"
-                onClick={cancelRoleSwitch}
-                className="px-3 py-1.5 rounded-lg bg-white border border-[#B9D7EA] text-slate-900 font-semibold text-xs hover:bg-[#D6E6F2]/30 cursor-pointer"
-              >
-                Keep Candidate Form
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Main Card */}
         <div className="p-6 sm:p-7 flex flex-col gap-4 bg-white border border-[#B9D7EA] rounded-3xl shadow-[0_12px_35px_-8px_rgba(26,40,56,0.08)]">
@@ -551,7 +540,7 @@ function AuthContent() {
                     label="Email Address"
                     labelClassName="text-xs font-bold text-slate-800"
                     type="email"
-                    placeholder="ananya@example.com"
+                    placeholder="you@example.com"
                     error={candidateSignUpForm.formState.errors.email?.message}
                     {...candidateSignUpForm.register("email")}
                   />
@@ -672,7 +661,7 @@ function AuthContent() {
                     label="Company Work Email"
                     labelClassName="text-xs font-bold text-slate-800"
                     type="email"
-                    placeholder="vikram@company.com"
+                    placeholder="name@company.com"
                     error={employerSignUpForm.formState.errors.email?.message}
                     helperText="Please use your official company domain"
                     {...employerSignUpForm.register("email")}
@@ -777,7 +766,7 @@ function AuthContent() {
                     label="Email Address"
                     labelClassName="text-xs font-bold text-slate-800"
                     type="email"
-                    placeholder="alen@example.com"
+                    placeholder="you@example.com"
                     error={candidateLoginForm.formState.errors.email?.message}
                     {...candidateLoginForm.register("email")}
                   />
@@ -837,7 +826,7 @@ function AuthContent() {
                     label="Company Email"
                     labelClassName="text-xs font-bold text-slate-800"
                     type="email"
-                    placeholder="vikram@company.com"
+                    placeholder="name@company.com"
                     error={employerLoginForm.formState.errors.email?.message}
                     {...employerLoginForm.register("email")}
                   />
@@ -967,12 +956,6 @@ function AuthContent() {
               {/* STEP 2: ENTER OTP */}
               {forgotStep === "otp" && (
                 <form onSubmit={handleVerifyForgotOtp} className="flex flex-col gap-3.5">
-                  {/* Discreet Demo Banner */}
-                  <div className="flex items-center justify-between text-xs px-3 py-2 rounded-lg bg-[#D6E6F2]/30 border border-[#B9D7EA]/60">
-                    <span className="text-slate-500 text-[11px]">Demo verification code:</span>
-                    <code className="font-mono font-bold text-[#1A2838] text-xs">729410</code>
-                  </div>
-
                   {/* 6 Digit Input Grid */}
                   <div className="flex justify-between gap-1.5 sm:gap-2">
                     {forgotOtp.map((digit, idx) => (

@@ -39,9 +39,12 @@ export async function getCurrentUser(): Promise<User | null> {
 export async function switchActiveRole(role: UserRole): Promise<User> {
   await new Promise((r) => setTimeout(r, 100));
   const user = MOCK_USERS[role];
+  const token = `tag_jwt_${Date.now()}_${role}`;
   if (typeof window !== "undefined") {
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
     localStorage.setItem(AUTH_ROLE_KEY, role);
     localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+    document.cookie = `${AUTH_TOKEN_KEY}=${token}; path=/; max-age=604800; SameSite=Lax`;
     document.cookie = `${AUTH_ROLE_KEY}=${role}; path=/; max-age=604800; SameSite=Lax`;
     notifyAuthChange();
   }
@@ -54,15 +57,20 @@ export async function signIn(
 ): Promise<{ user: User; token: string }> {
   await new Promise((r) => setTimeout(r, 300));
   const baseMock = MOCK_USERS[role];
-  const user: User = baseMock
-    ? { ...baseMock, email }
-    : {
-        id: `usr_${Date.now()}`,
-        name: email.split("@")[0],
-        email,
-        role,
-        createdAt: new Date().toISOString(),
-      };
+  const isDefaultDemoEmail = Boolean(baseMock && baseMock.email.toLowerCase() === email.toLowerCase());
+  const userName = isDefaultDemoEmail
+    ? baseMock.name
+    : email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+  const user: User = {
+    id: isDefaultDemoEmail ? baseMock.id : `usr_${Date.now()}`,
+    name: userName,
+    email,
+    role,
+    avatarUrl: baseMock?.avatarUrl,
+    organizationId: role === "employer" ? "org_razorwave" : undefined,
+    createdAt: new Date().toISOString(),
+  };
 
   const token = `tag_jwt_${Date.now()}_${role}`;
 
