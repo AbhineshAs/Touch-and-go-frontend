@@ -43,10 +43,10 @@ export default async function RootPage() {
       {/* Client-side auth redirect for localStorage sessions */}
       <ClientAuthRedirect />
 
-      {/* Glassmorphism Top Navigation */}
-      <PublicNavbar />
+      {/* Transparent / Glassmorphism Top Navigation */}
+      <PublicNavbar transparent />
 
-      <main className="flex-1">
+      <main className="flex-1 -mt-20">
         {/* 1. Interactive 3D WebGL Hero Search Section */}
         <NaukriHero />
 

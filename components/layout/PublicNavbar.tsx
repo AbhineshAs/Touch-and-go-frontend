@@ -20,10 +20,16 @@ import {
 
 import { TagLogo } from "@/components/ui/TagLogo";
 
-export function PublicNavbar() {
+interface PublicNavbarProps {
+  transparent?: boolean;
+}
+
+export function PublicNavbar({ transparent }: PublicNavbarProps = {}) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
+
+  const isTransparentMode = transparent !== undefined ? transparent : pathname === "/";
 
   const getPortalLink = () => {
     if (!user) return "/sign-in";
@@ -70,7 +76,14 @@ export function PublicNavbar() {
       ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#B9D7EA] shadow-2xs text-[#1A2838] transition-all">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full text-[#1A2838] transition-all duration-300",
+        isTransparentMode
+          ? "bg-transparent border-b border-transparent shadow-none"
+          : "bg-white/95 backdrop-blur-md border-b border-[#B9D7EA] shadow-2xs"
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         {/* Left Section: Brand Logo */}
         <div className="flex items-center gap-8 shrink-0">
@@ -179,24 +192,24 @@ export function PublicNavbar() {
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
-          <div className="absolute top-full left-0 right-0 z-50 border-t border-[#B9D7EA] bg-white/98 backdrop-blur-xl px-5 pt-4 pb-7 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-5rem)] overflow-y-auto">
-            <nav className="flex flex-col gap-1.5">
+          <div className="fixed top-20 right-0 left-0 bg-white border-b border-[#B9D7EA] shadow-xl p-6 z-50 flex flex-col gap-4 animate-in slide-in-from-top-2 duration-200">
+            <nav className="flex flex-col gap-2">
               {navLinks.map((link) => {
-                const Icon = link.icon;
                 const isActive = pathname === link.href;
+                const Icon = link.icon;
                 return (
                   <Link
                     key={link.label}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "px-4 py-3 text-sm font-bold rounded-xl transition-colors flex items-center justify-between",
+                      "flex items-center justify-between p-3 rounded-xl text-sm font-bold transition-colors",
                       isActive
-                        ? "text-[#1A2838] bg-[#D6E6F2] border border-[#B9D7EA]"
-                        : "text-[#2C3E50] hover:text-[#1A2838] hover:bg-[#D6E6F2]/50"
+                        ? "bg-[#D6E6F2] text-[#1A2838]"
+                        : "text-[#2C3E50] hover:bg-[#D6E6F2]/30 hover:text-[#1A2838]"
                     )}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-3">
                       <Icon className="w-4 h-4 text-[#769FCD]" />
                       <span>{link.label}</span>
                     </div>
