@@ -31,6 +31,16 @@ export function getStoredUser(): User | null {
   }
 }
 
+export function updateStoredUser(fields: Partial<User>): User | null {
+  if (typeof window === "undefined") return null;
+  const current = getStoredUser();
+  if (!current) return null;
+  const updated: User = { ...current, ...fields };
+  localStorage.setItem(AUTH_USER_KEY, JSON.stringify(updated));
+  notifyAuthChange();
+  return updated;
+}
+
 export async function getCurrentUser(): Promise<User | null> {
   await new Promise((r) => setTimeout(r, 60));
   return getStoredUser();

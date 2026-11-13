@@ -47,7 +47,7 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
 
   const candidateName = candidateRecord?.identity.fullName || authUser?.name || "Candidate";
   const candidateEmail = candidateRecord?.identity.email || authUser?.email || "";
-  const candidateAvatar = authUser?.avatarUrl || undefined;
+  const candidateAvatar = candidateRecord?.profile?.avatarUrl || authUser?.avatarUrl || undefined;
 
   const applicationsCount = candidateRecord?.applications.length || 0;
   const savedJobsCount = candidateRecord?.savedJobIds.length || 0;

@@ -322,6 +322,7 @@ export interface StructuredProfile {
   summary: string;
   location: string;
   phone: string;
+  avatarUrl?: string;
   education: CandidateEducation[];
   experience: CandidateExperienceItem[];
   projects: CandidateProject[];

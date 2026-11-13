@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -26,10 +26,47 @@ import {
   FolderGit2,
   ArrowLeft,
   Calendar,
+  Camera,
+  Image as ImageIcon,
 } from "lucide-react";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
+import { useAuth } from "@/lib/auth/AuthContext";
+import { updateStoredUser } from "@/lib/api/auth";
 import { formatSalaryRange } from "@/lib/utils";
 import { CandidateSkill } from "@/lib/candidate/types";
+
+const PRESET_AVATARS = [
+  {
+    id: "preset_1",
+    label: "Modern Professional",
+    url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "preset_2",
+    label: "Engineering Lead",
+    url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "preset_3",
+    label: "Product Designer",
+    url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=240&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "preset_4",
+    label: "Full Stack Engineer",
+    url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "preset_5",
+    label: "Tech Specialist",
+    url: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=240&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "preset_6",
+    label: "Software Architect",
+    url: "https://images.unsplash.com/photo-1534751516642-a1714f32145b?w=240&auto=format&fit=crop&q=80",
+  },
+];
 
 export default function CandidateProfilePage() {
   const {
@@ -47,7 +84,13 @@ export default function CandidateProfilePage() {
     updatePreferences,
   } = useCandidate();
 
+  const { user: authUser } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [isSavedNotice, setIsSavedNotice] = useState(false);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [photoDraft, setPhotoDraft] = useState("");
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
 
   // Edit Personal Info Modal
   const [isPersonalModalOpen, setIsPersonalModalOpen] = useState(false);
@@ -116,6 +159,57 @@ export default function CandidateProfilePage() {
 
   const { identity, profile } = candidateRecord;
   const fullName = identity?.fullName || "Candidate";
+  const currentAvatarUrl = profile?.avatarUrl || authUser?.avatarUrl || "";
+
+  const handleOpenPhotoModal = () => {
+    setPhotoDraft(currentAvatarUrl);
+    setIsPhotoModalOpen(true);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Please upload an image smaller than 5MB.");
+      return;
+    }
+
+    setIsUploadingPhoto(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (dataUrl) {
+        setPhotoDraft(dataUrl);
+      }
+      setIsUploadingPhoto(false);
+    };
+    reader.onerror = () => {
+      setIsUploadingPhoto(false);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSavePhoto = (newAvatarUrl?: string) => {
+    const finalUrl = newAvatarUrl !== undefined ? newAvatarUrl : photoDraft;
+
+    // Update candidate profile context
+    updateCandidateProfile({
+      avatarUrl: finalUrl ? finalUrl.trim() : undefined,
+    });
+
+    // Update stored user in Auth context so header/sidebar update immediately
+    updateStoredUser({
+      avatarUrl: finalUrl ? finalUrl.trim() : undefined,
+    });
+
+    setIsPhotoModalOpen(false);
+    showNotice();
+  };
+
+  const handleRemovePhoto = () => {
+    handleSavePhoto("");
+  };
 
   const handleOpenPersonalModal = () => {
     setHeadline(profile?.headline || "");
@@ -247,8 +341,42 @@ export default function CandidateProfilePage() {
       <Card className="p-6 sm:p-8 bg-surface border-border shadow-xs flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
           <div className="flex items-start gap-5">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-primary-dark text-white flex items-center justify-center font-black text-2xl shrink-0 shadow-sm">
-              {fullName.charAt(0).toUpperCase()}
+            {/* Interactive Profile Avatar with Photo Edit/Upload */}
+            <div className="relative group shrink-0">
+              <button
+                type="button"
+                onClick={handleOpenPhotoModal}
+                className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl overflow-hidden cursor-pointer relative shadow-sm border border-border group-hover:border-primary transition-all focus:outline-none focus:ring-2 focus:ring-primary/40 block text-left bg-surface"
+                title="Click to add or change profile picture"
+              >
+                {currentAvatarUrl ? (
+                  <img
+                    src={currentAvatarUrl}
+                    alt={fullName}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary to-primary-dark text-white flex items-center justify-center font-black text-2xl sm:text-3xl">
+                    {fullName.charAt(0).toUpperCase()}
+                  </div>
+                )}
+
+                {/* Hover Camera Overlay */}
+                <div className="absolute inset-0 bg-[#141413]/60 backdrop-blur-2xs text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Camera className="w-5 h-5 mb-0.5 text-white" />
+                  <span className="text-[10px] font-bold tracking-tight">Edit Photo</span>
+                </div>
+              </button>
+
+              {/* Floating Camera Button Badge */}
+              <button
+                type="button"
+                onClick={handleOpenPhotoModal}
+                className="absolute -bottom-1.5 -right-1.5 p-1.5 rounded-full bg-white text-[#141413] border border-[#E8E2D8] hover:border-primary hover:text-primary shadow-sm hover:scale-110 active:scale-95 transition-all cursor-pointer z-10"
+                title="Change Profile Picture"
+              >
+                <Camera className="w-3.5 h-3.5 text-primary" />
+              </button>
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
@@ -606,6 +734,36 @@ export default function CandidateProfilePage() {
         size="md"
       >
         <form onSubmit={handleSavePersonal} className="flex flex-col gap-4">
+          {/* Profile Photo Quick Section */}
+          <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
+            <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-[#E8E2D8] bg-white shadow-2xs">
+              {currentAvatarUrl ? (
+                <img src={currentAvatarUrl} alt={fullName} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-primary to-primary-dark text-white flex items-center justify-center font-bold text-base">
+                  {fullName.charAt(0).toUpperCase()}
+                </div>
+              )}
+            </div>
+            <div className="flex-1 min-w-0 flex flex-col">
+              <span className="text-xs font-bold text-[#141413]">Profile Photo</span>
+              <span className="text-[11px] text-[#74726A]">
+                {currentAvatarUrl ? "Custom profile picture set" : "Initials placeholder active"}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsPersonalModalOpen(false);
+                handleOpenPhotoModal();
+              }}
+              className="px-3 py-1.5 rounded-xl border border-[#E8E2D8] hover:border-primary text-xs font-bold text-[#141413] hover:text-primary bg-white transition-colors cursor-pointer shadow-2xs flex items-center gap-1.5"
+            >
+              <Camera className="w-3.5 h-3.5 text-primary" />
+              <span>Change</span>
+            </button>
+          </div>
+
           <Input
             label="Professional Headline"
             value={headline}
@@ -640,6 +798,148 @@ export default function CandidateProfilePage() {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* MODAL: UPDATE PROFILE PICTURE */}
+      <Modal
+        isOpen={isPhotoModalOpen}
+        onClose={() => setIsPhotoModalOpen(false)}
+        title="Update Profile Picture"
+        description="Upload a photo from your computer, choose a professional preset, or link an image."
+        size="md"
+      >
+        <div className="flex flex-col gap-5">
+          {/* Current / Draft Preview */}
+          <div className="flex items-center gap-4 p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
+            <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0 border border-[#E8E2D8] bg-white shadow-xs">
+              {photoDraft ? (
+                <img src={photoDraft} alt="Preview" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-primary to-primary-dark text-white flex items-center justify-center font-black text-xl">
+                  {fullName.charAt(0).toUpperCase()}
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-1 min-w-0">
+              <span className="text-xs font-bold text-[#141413]">
+                {photoDraft ? "Photo Selected" : "Default Initials"}
+              </span>
+              <span className="text-[11px] text-[#74726A]">
+                Square image recommended. Supports PNG, JPG, GIF, WebP up to 5MB.
+              </span>
+            </div>
+          </div>
+
+          {/* Action 1: Upload from Computer */}
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-bold text-[#141413]">Upload from Device</span>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <button
+              type="button"
+              disabled={isUploadingPhoto}
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full py-3 px-4 rounded-xl border-2 border-dashed border-[#E8E2D8] hover:border-primary bg-[#FAF7F2]/50 hover:bg-white text-xs font-bold text-[#141413] flex items-center justify-center gap-2 transition-all cursor-pointer group disabled:opacity-50"
+            >
+              <Upload className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+              <span>{isUploadingPhoto ? "Processing Image..." : "Choose Image File from Computer"}</span>
+            </button>
+          </div>
+
+          {/* Action 2: Choose from Curated Presets */}
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[#141413]">Or Choose a Professional Avatar</span>
+              <span className="text-[10px] font-mono text-[#74726A]">Instant High-Res</span>
+            </div>
+            <div className="grid grid-cols-6 gap-2">
+              {PRESET_AVATARS.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => setPhotoDraft(preset.url)}
+                  className={`group relative rounded-xl overflow-hidden aspect-square border-2 transition-all cursor-pointer ${
+                    photoDraft === preset.url
+                      ? "border-primary ring-2 ring-primary/30 scale-105 shadow-xs"
+                      : "border-transparent hover:border-[#B9D7EA]"
+                  }`}
+                  title={preset.label}
+                >
+                  <img src={preset.url} alt={preset.label} className="w-full h-full object-cover" />
+                  {photoDraft === preset.url && (
+                    <div className="absolute inset-0 bg-primary/30 flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-white drop-shadow" />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Action 3: Image URL input */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs font-bold text-[#141413]">Or Paste Image URL</span>
+            <div className="flex gap-2">
+              <input
+                type="url"
+                placeholder="https://images.unsplash.com/photo-..."
+                value={photoDraft}
+                onChange={(e) => setPhotoDraft(e.target.value)}
+                className="flex-1 px-3 py-2 text-xs rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] focus:bg-white focus:outline-none focus:border-primary"
+              />
+              {photoDraft && (
+                <button
+                  type="button"
+                  onClick={() => setPhotoDraft("")}
+                  className="px-2.5 py-1.5 rounded-xl border border-[#E8E2D8] text-xs text-[#74726A] hover:text-red-600 transition-colors cursor-pointer"
+                  title="Clear Input"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Modal Footer Controls */}
+          <div className="flex items-center justify-between pt-3 border-t border-border">
+            {currentAvatarUrl ? (
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                className="text-xs font-semibold text-red-600 hover:text-red-700 flex items-center gap-1.5 cursor-pointer"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Remove Photo</span>
+              </button>
+            ) : (
+              <div />
+            )}
+
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsPhotoModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={() => handleSavePhoto()}
+              >
+                Save Photo
+              </Button>
+            </div>
+          </div>
+        </div>
       </Modal>
 
       {/* MODAL: ADD EXPERIENCE */}
