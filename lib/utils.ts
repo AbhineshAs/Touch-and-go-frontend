@@ -16,6 +16,19 @@ export function formatCurrencyINR(amount: number): string {
 export function formatSalaryRange(min?: number, max?: number, period: "year" | "month" = "year"): string {
   if (!min && !max) return "Competitive Compensation";
   const p = period === "year" ? "yr" : "mo";
+
+  if (period === "year" && min && max && min >= 100000 && max >= 100000) {
+    const minL = min / 100000;
+    const maxL = max / 100000;
+    const minStr = Number.isInteger(minL) ? `${minL}` : minL.toFixed(1);
+    const maxStr = Number.isInteger(maxL) ? `${maxL}` : maxL.toFixed(1);
+    return `₹${minStr} – ₹${maxStr} LPA`;
+  }
+  if (period === "year" && min && min >= 100000) {
+    const minL = min / 100000;
+    const minStr = Number.isInteger(minL) ? `${minL}` : minL.toFixed(1);
+    return `From ₹${minStr} LPA`;
+  }
   if (min && max) {
     return `${formatCurrencyINR(min)} – ${formatCurrencyINR(max)} / ${p}`;
   }

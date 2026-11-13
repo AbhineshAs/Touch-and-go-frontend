@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -27,9 +27,39 @@ interface PublicNavbarProps {
 export function PublicNavbar({ transparent }: PublicNavbarProps = {}) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isPastHero, setIsPastHero] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
 
   const isTransparentMode = transparent !== undefined ? transparent : pathname === "/";
+
+  useEffect(() => {
+    if (!isTransparentMode) return;
+
+    const hero = document.getElementById("hero-section");
+    if (!hero) {
+      // Fallback scroll listener if hero element is not mounted
+      const handleScrollFallback = () => {
+        setIsPastHero(window.scrollY > 450);
+      };
+      handleScrollFallback();
+      window.addEventListener("scroll", handleScrollFallback, { passive: true });
+      return () => window.removeEventListener("scroll", handleScrollFallback);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // When hero is intersecting under the 80px navbar, isPastHero is false
+        setIsPastHero(!entry.isIntersecting);
+      },
+      {
+        rootMargin: "-80px 0px 0px 0px",
+        threshold: 0,
+      }
+    );
+
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [isTransparentMode]);
 
   const getPortalLink = () => {
     if (!user) return "/sign-in";
@@ -80,7 +110,9 @@ export function PublicNavbar({ transparent }: PublicNavbarProps = {}) {
       className={cn(
         "sticky top-0 z-50 w-full text-[#1A2838] transition-all duration-300",
         isTransparentMode
-          ? "bg-transparent border-b border-transparent shadow-none"
+          ? isPastHero
+            ? "bg-white/95 backdrop-blur-md border-b border-[#B9D7EA] shadow-xs"
+            : "bg-transparent border-b border-transparent shadow-none"
           : "bg-white/95 backdrop-blur-md border-b border-[#B9D7EA] shadow-2xs"
       )}
     >

@@ -34,7 +34,7 @@ export function Card({
         "rounded-2xl overflow-hidden transition-all duration-200 ease-out",
         variantStyles[variant],
         hoverable &&
-          "hover:border-primary/40 hover:-translate-y-0.75 hover:shadow-[0_12px_28px_-6px_rgba(22,107,92,0.1),0_4px_10px_-2px_rgba(15,23,42,0.04)] cursor-pointer",
+          "hover:border-[#769FCD] hover:-translate-y-0.75 hover:shadow-[0_12px_28px_-6px_rgba(118,159,205,0.15),0_4px_10px_-2px_rgba(20,20,19,0.04)] cursor-pointer",
         className
       )}
       {...props}
@@ -147,7 +147,7 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        "p-5 rounded-2xl bg-surface border border-border/80 shadow-[0_2px_10px_-2px_rgba(15,23,42,0.04)] flex flex-col justify-between gap-4 hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-200",
+        "p-5 rounded-2xl bg-surface border border-border/80 shadow-[0_2px_10px_-2px_rgba(15,23,42,0.04)] flex flex-col justify-between gap-4 hover:border-[#769FCD] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-4px_rgba(118,159,205,0.12)] transition-all duration-200",
         className
       )}
     >

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "soft";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "soft" | "accent" | "touch";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -43,6 +43,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "bg-gradient-to-b from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 shadow-[0_1px_2px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.2)] border border-red-700 rounded-xl",
       soft:
         "bg-[#D6E6F2] text-[#1A2838] hover:bg-[#B9D7EA] border border-[#B9D7EA] rounded-xl",
+      accent:
+        "bg-[#769FCD] hover:bg-[#5E8BBF] active:bg-[#4A7AA8] text-white border border-[#141413] shadow-[2px_2px_0px_#141413] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none rounded-xl",
+      touch:
+        "bg-[#769FCD] hover:bg-[#5E8BBF] active:bg-[#4A7AA8] text-white border-2 border-[#141413] shadow-[3px_3px_0px_#141413] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none rounded-xl font-black tracking-wide",
     };
 
     const sizes = {

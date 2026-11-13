@@ -3,108 +3,193 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
-  Sparkles,
   Zap,
+  SlidersHorizontal,
   ShieldCheck,
+  TrendingUp,
   Building2,
-  Sliders,
   CheckCircle2,
   ArrowRight,
-  TrendingUp,
-  Cpu,
+  Lock,
   EyeOff,
   UserCheck,
-  MessageSquare,
-  Lock,
+  RotateCcw,
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { playTactileChime } from "@/lib/sound/chime";
+import { cn } from "@/lib/utils";
 
 export function ProductFeatureShowcase() {
-  const [activeTab, setActiveTab] = useState<"match" | "dashboard" | "privacy" | "employer">("match");
+  const [activeTab, setActiveTab] = useState<"match" | "privacy" | "salary" | "employer">("match");
 
   // Interactive Match Simulator State
-  const [skillWeight, setSkillWeight] = useState(90);
-  const [ctcExpectation, setCtcExpectation] = useState(32);
-  const [experience, setExperience] = useState(4);
-  const [targetLocation, setTargetLocation] = useState("Bengaluru");
+  const [skillWeight, setSkillWeight] = useState(92);
+  const [ctcExpectation, setCtcExpectation] = useState(34);
+  const [experienceLevel, setExperienceLevel] = useState<"1-2" | "3-5" | "6-8" | "9+">("3-5");
+  const [selectedHub, setSelectedHub] = useState<"Bengaluru" | "NCR" | "Hyderabad" | "Remote">("Bengaluru");
+  const [applied, setApplied] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
 
-  // Dynamic match calculation logic
+  // Dynamic match score calculation based on real parameters
   const calculateMatchScore = () => {
-    const base = 75;
-    const skillBonus = (skillWeight - 70) * 0.4;
-    const ctcAdjustment = ctcExpectation <= 35 ? 10 : 3;
-    const expAdjustment = experience >= 3 ? 8 : 4;
-    return Math.min(99, Math.max(68, Math.round(base + skillBonus + ctcAdjustment + expAdjustment)));
+    const base = 72;
+    const skillBonus = (skillWeight - 60) * 0.45;
+    const ctcAdjustment = ctcExpectation <= 36 ? 8 : ctcExpectation <= 48 ? 4 : 0;
+    const expAdjustment =
+      experienceLevel === "3-5" ? 7 : experienceLevel === "6-8" ? 9 : experienceLevel === "9+" ? 6 : 4;
+    return Math.min(99, Math.max(70, Math.round(base + skillBonus + ctcAdjustment + expAdjustment)));
   };
 
   const calculatedScore = calculateMatchScore();
 
-  return (
-    <section id="product-showcase" className="py-20 lg:py-28 bg-white text-[#1A2838] border-b border-[#B9D7EA]/80 relative overflow-hidden">
-      {/* Background Subtle Gradient Blobs */}
-      <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#769FCD]/10 via-[#B9D7EA]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#B9D7EA]/10 via-[#769FCD]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+  // Dynamic matching role count calculation
+  const matchingRolesCount = Math.max(
+    8,
+    Math.round(16 + (skillWeight - 60) * 0.25 - (ctcExpectation > 40 ? 4 : 0))
+  );
 
+  // Dynamic Advisor Feedback according to match criteria
+  const getAdvisorFeedback = () => {
+    const expText =
+      experienceLevel === "1-2"
+        ? "1–2 years"
+        : experienceLevel === "3-5"
+        ? "3–5 years"
+        : experienceLevel === "6-8"
+        ? "6–8 years"
+        : "9+ years";
+
+    if (calculatedScore >= 95) {
+      return {
+        badge: "Tier-1 Priority Match",
+        badgeColor: "bg-[#F0FDF4] text-[#15803D] border-[#15803D]",
+        headline: `Outstanding ${calculatedScore}% compatibility in ${selectedHub}!`,
+        message: `Your technical stack alignment is in the top 3% for ${selectedHub}. At ₹${ctcExpectation} LPA with ${expText} experience, you are an immediate prime match for ${matchingRolesCount} verified engineering leads. We predict direct VP interview scheduling in under 4 hours.`,
+        tags: ["Direct VP Fast-Track", `₹${ctcExpectation} LPA Verified`, `${matchingRolesCount} Direct Roles`],
+      };
+    } else if (calculatedScore >= 88) {
+      return {
+        badge: "High-Probability Alignment",
+        badgeColor: "bg-[#D6E6F2] text-[#1A2838] border-[#769FCD]",
+        headline: `Strong ${calculatedScore}% market match for ${selectedHub}`,
+        message: `Your parameters align closely with active mandates in ${selectedHub}. Hiring teams are actively seeking ${expText} engineers in this stack at ₹${ctcExpectation} LPA without recruiter phone-screen delays.`,
+        tags: ["Strong Demand", `₹${ctcExpectation} LPA Band`, `${matchingRolesCount} Active Openings`],
+      };
+    } else if (calculatedScore >= 80) {
+      return {
+        badge: "Competitive Match",
+        badgeColor: "bg-[#FFFBEB] text-[#B45309] border-[#F59E0B]",
+        headline: `Solid ${calculatedScore}% fit with ${matchingRolesCount} teams`,
+        message: `At ₹${ctcExpectation} LPA with ${expText} in ${selectedHub}, you have ${matchingRolesCount} verified opportunities. Tuning your core stack overlap slightly higher will significantly increase interview invitation speed.`,
+        tags: ["Competitive Tier", "Salary Feasible", `${matchingRolesCount} Potential Roles`],
+      };
+    } else {
+      return {
+        badge: "Selective Target Band",
+        badgeColor: "bg-[#FAF7F2] text-[#74726A] border-[#E2DDD3]",
+        headline: `Selective spread at ₹${ctcExpectation} LPA`,
+        message: `Targeting ₹${ctcExpectation} LPA with ${expText} in ${selectedHub} places you in an ambitious percentile band. Consider toggling to Remote Only or sharpening microservices overlap to maximize direct responses.`,
+        tags: ["Upper Percentile", "Consider Remote", `${matchingRolesCount} Niche Roles`],
+      };
+    }
+  };
+
+  const advisorFeedback = getAdvisorFeedback();
+
+  const handleTouchApply = () => {
+    if (applied) return;
+    setIsApplying(true);
+    playTactileChime();
+
+    setTimeout(() => {
+      setIsApplying(false);
+      setApplied(true);
+    }, 350);
+  };
+
+  const handleResetMatch = () => {
+    setSkillWeight(92);
+    setCtcExpectation(34);
+    setExperienceLevel("3-5");
+    setSelectedHub("Bengaluru");
+    setApplied(false);
+  };
+
+  return (
+    <section
+      id="product-showcase"
+      className="py-24 lg:py-32 bg-[#FAF7F2] text-[#141413] border-b border-[#E8E2D8] relative"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D6E6F2] border border-[#B9D7EA] text-xs font-extrabold text-[#1A2838] mb-4 shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-[#769FCD] animate-pulse" />
-            <span>INTERACTIVE PRODUCT EXPERIENCE</span>
+        {/* Section Header: Wide, airy, confident */}
+        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E2DDD3] text-[11px] font-mono font-bold text-[#141413] shadow-[1px_1px_0px_#141413] mb-4">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#769FCD] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#769FCD]" />
+            </span>
+            <span>MATCH ENGINE SIMULATOR</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#1A2838] leading-tight">
-            Engineered for <span className="text-[#769FCD]">zero-friction matching</span>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#141413] font-serif leading-tight">
+            See how the match happens.
           </h2>
-          <p className="text-[#1A2838]/70 font-medium text-base sm:text-lg mt-4 leading-relaxed">
-            Experience how Touch And Go replaces outdated resume portals with explainable match scoring, verified talent profiles, and 1-click recruiter connections.
+
+          <p className="text-[#5A5852] font-sans text-base sm:text-lg mt-3.5 leading-relaxed max-w-xl mx-auto">
+            Adjust criteria to test candidate-employer compatibility in real time.
           </p>
         </div>
 
-        {/* Product Navigation Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex flex-wrap items-center gap-1.5 p-1.5 bg-[#D6E6F2]/40 border border-[#B9D7EA] rounded-2xl shadow-inner max-w-full overflow-x-auto">
+        {/* Pro Segmented Tab Bar */}
+        <div className="flex justify-center mb-12 sm:mb-14">
+          <div className="inline-flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-[#E2DDD3] rounded-2xl shadow-[2px_2px_0px_#141413] max-w-full overflow-x-auto">
             <button
               onClick={() => setActiveTab("match")}
-              className={`px-5 py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center gap-2.5 transition-all cursor-pointer ${
+              className={cn(
+                "px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer select-none",
                 activeTab === "match"
-                  ? "bg-[#1A2838] text-white shadow-md border border-[#1A2838]"
-                  : "text-[#1A2838]/70 hover:text-[#1A2838] hover:bg-[#D6E6F2]/50"
-              }`}
+                  ? "bg-[#141413] text-white shadow-xs font-extrabold"
+                  : "text-[#454540] hover:text-[#141413] hover:bg-[#FAF7F2]"
+              )}
             >
-              <Zap className="w-4 h-4 text-[#B9D7EA]" />
-              <span>1-Touch Match Engine</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("dashboard")}
-              className={`px-5 py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center gap-2.5 transition-all cursor-pointer ${
-                activeTab === "dashboard"
-                  ? "bg-[#1A2838] text-white shadow-md border border-[#1A2838]"
-                  : "text-[#1A2838]/70 hover:text-[#1A2838] hover:bg-[#D6E6F2]/50"
-              }`}
-            >
-              <Cpu className="w-4 h-4 text-[#769FCD]" />
-              <span>Product Interface</span>
+              <SlidersHorizontal className="w-4 h-4 text-[#769FCD]" />
+              <span>Match Engine</span>
             </button>
 
             <button
               onClick={() => setActiveTab("privacy")}
-              className={`px-5 py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center gap-2.5 transition-all cursor-pointer ${
+              className={cn(
+                "px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer select-none",
                 activeTab === "privacy"
-                  ? "bg-[#1A2838] text-white shadow-md border border-[#1A2838]"
-                  : "text-[#1A2838]/70 hover:text-[#1A2838] hover:bg-[#D6E6F2]/50"
-              }`}
+                  ? "bg-[#141413] text-white shadow-xs font-extrabold"
+                  : "text-[#454540] hover:text-[#141413] hover:bg-[#FAF7F2]"
+              )}
             >
               <ShieldCheck className="w-4 h-4 text-[#769FCD]" />
-              <span>Privacy &amp; Salary Benchmarks</span>
+              <span>Stealth Mode</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("salary")}
+              className={cn(
+                "px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer select-none",
+                activeTab === "salary"
+                  ? "bg-[#141413] text-white shadow-xs font-extrabold"
+                  : "text-[#454540] hover:text-[#141413] hover:bg-[#FAF7F2]"
+              )}
+            >
+              <TrendingUp className="w-4 h-4 text-[#769FCD]" />
+              <span>CTC Percentiles</span>
             </button>
 
             <button
               onClick={() => setActiveTab("employer")}
-              className={`px-5 py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center gap-2.5 transition-all cursor-pointer ${
+              className={cn(
+                "px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer select-none",
                 activeTab === "employer"
-                  ? "bg-[#1A2838] text-white shadow-md border border-[#1A2838]"
-                  : "text-[#1A2838]/70 hover:text-[#1A2838] hover:bg-[#D6E6F2]/50"
-              }`}
+                  ? "bg-[#141413] text-white shadow-xs font-extrabold"
+                  : "text-[#454540] hover:text-[#141413] hover:bg-[#FAF7F2]"
+              )}
             >
               <Building2 className="w-4 h-4 text-[#769FCD]" />
               <span>Employer Console</span>
@@ -112,252 +197,391 @@ export function ProductFeatureShowcase() {
           </div>
         </div>
 
-        {/* Tab 1: Interactive Match Simulator */}
+        {/* Tab 1: Match Engine with AI Advisor Character */}
         {activeTab === "match" && (
-          <div className="bento-card p-6 sm:p-8 lg:p-10 border border-[#B9D7EA] shadow-xl bg-gradient-to-br from-white via-[#D6E6F2]/30 to-white">
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              {/* Controls Column */}
-              <div className="lg:col-span-7 flex flex-col gap-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#1A2838] text-white flex items-center justify-center font-bold shadow-md shadow-[#769FCD]/20">
-                    <Sliders className="w-5 h-5 text-[#B9D7EA]" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-extrabold text-[#1A2838]">Live Match Criteria Tuning</h3>
-                    <p className="text-xs text-[#1A2838]/70 font-medium">Adjust candidate parameters to see instant explainable match calculations</p>
-                  </div>
+          <div className="bg-white rounded-3xl border border-[#141413] shadow-[4px_4px_0px_#141413] overflow-hidden">
+            <div className="grid lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[#E8E2D8]">
+              {/* Left Column: Parameter Tuning (Airy, uncluttered) */}
+              <div className="lg:col-span-6 p-6 sm:p-10 lg:p-12 flex flex-col justify-between gap-8 bg-white">
+                {/* Header Row */}
+                <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
+                  <h3 className="text-xl sm:text-2xl font-black text-[#141413] tracking-tight font-display">
+                    Parameters
+                  </h3>
+                  <button
+                    onClick={handleResetMatch}
+                    title="Reset to default criteria"
+                    className="px-3 py-1.5 rounded-lg border border-[#E2DDD3] text-[#74726A] hover:text-[#141413] hover:bg-[#FAF7F2] transition-colors cursor-pointer text-xs flex items-center gap-1.5 font-mono font-medium"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Reset</span>
+                  </button>
                 </div>
 
-                {/* Slider 1: Skill Alignment */}
-                <div className="bg-white p-4 rounded-2xl border border-[#B9D7EA] shadow-2xs flex flex-col gap-2">
-                  <div className="flex justify-between items-center text-xs font-bold">
-                    <span className="text-[#1A2838] flex items-center gap-1.5">
-                      <Cpu className="w-3.5 h-3.5 text-[#769FCD]" />
-                      Core Tech Stack Match (React 19, Next.js, Node, System Design)
+                {/* Control 1: Tech Stack Overlap */}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-sm text-[#141413] font-sans">
+                      Core Tech Stack Overlap
                     </span>
-                    <span className="text-[#769FCD] font-mono font-extrabold">{skillWeight}%</span>
+                    <span className="font-mono font-black text-sm text-[#769FCD] bg-[#D6E6F2] border border-[#B9D7EA] px-2.5 py-0.5 rounded-lg">
+                      {skillWeight}%
+                    </span>
                   </div>
+
                   <input
                     type="range"
-                    min="50"
+                    min="60"
                     max="100"
+                    step="1"
                     value={skillWeight}
-                    onChange={(e) => setSkillWeight(Number(e.target.value))}
-                    className="w-full h-2 bg-[#D6E6F2] rounded-lg appearance-none cursor-pointer accent-[#769FCD]"
+                    onChange={(e) => {
+                      setSkillWeight(Number(e.target.value));
+                      setApplied(false);
+                    }}
+                    className="w-full h-2 bg-[#E2DDD3] rounded-lg appearance-none cursor-pointer accent-[#769FCD]"
                   />
                 </div>
 
-                {/* Slider 2: Target CTC */}
-                <div className="bg-white p-4 rounded-2xl border border-[#B9D7EA] shadow-2xs flex flex-col gap-2">
-                  <div className="flex justify-between items-center text-xs font-bold">
-                    <span className="text-[#1A2838] flex items-center gap-1.5">
-                      <TrendingUp className="w-3.5 h-3.5 text-[#769FCD]" />
-                      Target CTC Expectation (India Hubs)
+                {/* Control 2: Target Annual CTC */}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-sm text-[#141413] font-sans">
+                      Target Annual CTC
                     </span>
-                    <span className="text-[#1A2838] font-mono font-extrabold">₹{ctcExpectation} LPA</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono text-[#15803D] font-bold">
+                        {ctcExpectation <= 36 ? "✓ Within P75 Band" : "Top 5% Band"}
+                      </span>
+                      <span className="font-mono font-black text-sm text-[#141413] bg-[#FAF7F2] border border-[#E2DDD3] px-3 py-0.5 rounded-lg">
+                        ₹{ctcExpectation} LPA
+                      </span>
+                    </div>
                   </div>
+
                   <input
                     type="range"
-                    min="12"
-                    max="60"
+                    min="15"
+                    max="65"
+                    step="1"
                     value={ctcExpectation}
-                    onChange={(e) => setCtcExpectation(Number(e.target.value))}
-                    className="w-full h-2 bg-[#D6E6F2] rounded-lg appearance-none cursor-pointer accent-[#1A2838]"
+                    onChange={(e) => {
+                      setCtcExpectation(Number(e.target.value));
+                      setApplied(false);
+                    }}
+                    className="w-full h-2 bg-[#E2DDD3] rounded-lg appearance-none cursor-pointer accent-[#141413]"
                   />
                 </div>
 
-                {/* Select 3: Experience & Location */}
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="bg-white p-4 rounded-2xl border border-[#B9D7EA] shadow-2xs flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-[#1A2838]">Experience Level</label>
-                    <select
-                      value={experience}
-                      onChange={(e) => setExperience(Number(e.target.value))}
-                      className="bg-[#D6E6F2]/30 border border-[#B9D7EA] rounded-xl px-3 py-2 text-xs font-bold text-[#1A2838] focus:outline-none focus:border-[#769FCD] cursor-pointer"
-                    >
-                      <option value={1}>1 - 2 Years (Junior)</option>
-                      <option value={4}>3 - 6 Years (Mid / Senior)</option>
-                      <option value={8}>7 - 10 Years (Lead / Principal)</option>
-                    </select>
+                {/* Control 3: Experience Level */}
+                <div className="space-y-3">
+                  <label className="text-xs font-bold text-[#74726A] uppercase tracking-wider font-mono">
+                    Experience Level
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    {[
+                      { id: "1-2", label: "1 – 2 Yrs" },
+                      { id: "3-5", label: "3 – 5 Yrs" },
+                      { id: "6-8", label: "6 – 8 Yrs" },
+                      { id: "9+", label: "9+ Yrs" },
+                    ].map((lvl) => (
+                      <button
+                        key={lvl.id}
+                        type="button"
+                        onClick={() => {
+                          setExperienceLevel(lvl.id as "1-2" | "3-5" | "6-8" | "9+");
+                          setApplied(false);
+                        }}
+                        className={cn(
+                          "py-3 px-3 rounded-xl border text-center transition-all cursor-pointer select-none font-mono font-bold text-xs sm:text-sm",
+                          experienceLevel === lvl.id
+                            ? "bg-[#141413] text-white border-[#141413] shadow-[2px_2px_0px_#769FCD]"
+                            : "bg-[#FAF7F2] text-[#141413] border-[#E8E2D8] hover:bg-white"
+                        )}
+                      >
+                        {lvl.label}
+                      </button>
+                    ))}
                   </div>
+                </div>
 
-                  <div className="bg-white p-4 rounded-2xl border border-[#B9D7EA] shadow-2xs flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-[#1A2838]">Preferred Hub</label>
-                    <select
-                      value={targetLocation}
-                      onChange={(e) => setTargetLocation(e.target.value)}
-                      className="bg-[#D6E6F2]/30 border border-[#B9D7EA] rounded-xl px-3 py-2 text-xs font-bold text-[#1A2838] focus:outline-none focus:border-[#769FCD] cursor-pointer"
-                    >
-                      <option value="Bengaluru">Bengaluru (KA)</option>
-                      <option value="NCR">Gurgaon / NCR</option>
-                      <option value="Remote">Remote (India)</option>
-                      <option value="Mumbai">Mumbai (MH)</option>
-                    </select>
+                {/* Control 4: Target Hub */}
+                <div className="space-y-3">
+                  <label className="text-xs font-bold text-[#74726A] uppercase tracking-wider font-mono">
+                    Hiring Hub
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    {[
+                      { id: "Bengaluru", label: "Bengaluru" },
+                      { id: "NCR", label: "NCR / Gurgaon" },
+                      { id: "Hyderabad", label: "Hyderabad" },
+                      { id: "Remote", label: "Remote Only" },
+                    ].map((hub) => (
+                      <button
+                        key={hub.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedHub(hub.id as "Bengaluru" | "NCR" | "Hyderabad" | "Remote");
+                          setApplied(false);
+                        }}
+                        className={cn(
+                          "py-3 px-3 rounded-xl border text-center transition-all cursor-pointer select-none font-sans font-bold text-xs sm:text-sm",
+                          selectedHub === hub.id
+                            ? "bg-[#141413] text-white border-[#141413] shadow-[2px_2px_0px_#769FCD]"
+                            : "bg-[#FAF7F2] text-[#141413] border-[#E8E2D8] hover:bg-white"
+                        )}
+                      >
+                        {hub.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
 
-              {/* Real-Time Live Result Display */}
-              <div className="lg:col-span-5 bg-[#1A2838] text-white p-6 sm:p-8 rounded-3xl border border-[#B9D7EA]/20 shadow-2xl flex flex-col justify-between relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#769FCD]/10 rounded-full blur-2xl pointer-events-none" />
-
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#B9D7EA]">Match Score Breakdown</span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D6E6F2]/10 text-[#B9D7EA] border border-[#B9D7EA]/30 text-[11px] font-bold">
-                      <span className="w-2 h-2 rounded-full bg-[#769FCD] animate-ping" />
-                      Live AI Calculated
+              {/* Right Column: AI Advisor Character with Dynamic Matching Message */}
+              <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 bg-[#FAF7F2] flex flex-col justify-between gap-6">
+                {/* Metric Summary Header */}
+                <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-4xl sm:text-5xl font-black font-display text-[#141413] tracking-tight">
+                      {calculatedScore}%
+                    </span>
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#769FCD]">
+                      Vector Fit
                     </span>
                   </div>
 
-                  {/* Score Gauge */}
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-6xl font-black tracking-tight text-white font-mono">{calculatedScore}%</span>
-                    <span className="text-sm font-bold text-[#B9D7EA]">Overlapping Fit Score</span>
+                  <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-white border border-[#E2DDD3] text-[#141413] shadow-xs">
+                    {matchingRolesCount} Active Roles · {selectedHub}
+                  </span>
+                </div>
+
+                {/* Character + Dynamic Assessment Speech Card */}
+                <div className="bg-white rounded-2xl border border-[#E2DDD3] p-5 sm:p-6 shadow-[0_4px_24px_rgba(26,40,56,0.06)] flex flex-col sm:flex-row items-center sm:items-start gap-5 my-auto">
+                  {/* Character Portrait with Status Badge */}
+                  <div className="relative shrink-0 flex flex-col items-center">
+                    <div className="w-24 h-28 sm:w-28 sm:h-32 rounded-2xl overflow-hidden border-2 border-[#141413] shadow-[3px_3px_0px_#769FCD] bg-[#F5EFEB]">
+                      <img
+                        src="/images/advisor-character.jpg"
+                        alt="Aria - AI Career Advisor"
+                        className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    {/* Live Status Pill */}
+                    <span className="mt-2 px-2.5 py-0.5 rounded-full bg-[#141413] text-white text-[10px] font-mono font-bold flex items-center gap-1.5 shadow-xs whitespace-nowrap">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                      <span>ARIA · ADVISOR</span>
+                    </span>
                   </div>
 
-                  <p className="text-xs text-[#D6E6F2]/80 leading-relaxed font-medium mb-6">
-                    Candidate profile demonstrates <span className="text-white font-bold">{calculatedScore}% compatibility</span> with pre-vetted Techcy Routes &amp; WhiteTrack hiring criteria in {targetLocation}.
-                  </p>
-
-                  {/* Breakdown Bars */}
-                  <div className="flex flex-col gap-3 text-xs mb-8">
+                  {/* Dynamic Advisor Speech Bubble */}
+                  <div className="flex-1 flex flex-col justify-between text-left">
                     <div>
-                      <div className="flex justify-between text-[#B9D7EA] mb-1 font-semibold">
-                        <span>Technical Skills Vector</span>
-                        <span className="text-white font-bold">{skillWeight}%</span>
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <span className="font-bold text-xs text-[#141413] font-sans">
+                          AI Co-Pilot Assessment
+                        </span>
+                        <span
+                          className={cn(
+                            "px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold border",
+                            advisorFeedback.badgeColor
+                          )}
+                        >
+                          {advisorFeedback.badge}
+                        </span>
                       </div>
-                      <div className="w-full h-1.5 bg-[#141F2C] rounded-full overflow-hidden">
-                        <div className="h-full bg-[#769FCD] transition-all duration-300" style={{ width: `${skillWeight}%` }} />
-                      </div>
+
+                      <h4 className="font-bold text-sm sm:text-base text-[#141413] mb-1.5 font-sans leading-snug">
+                        {advisorFeedback.headline}
+                      </h4>
+
+                      <p className="text-xs sm:text-[13px] text-[#5A5852] leading-relaxed font-sans mb-3">
+                        {advisorFeedback.message}
+                      </p>
                     </div>
 
-                    <div>
-                      <div className="flex justify-between text-[#B9D7EA] mb-1 font-semibold">
-                        <span>Salary Benchmark Fit</span>
-                        <span className="text-[#D6E6F2] font-bold">{ctcExpectation <= 35 ? "100% Market Match" : "88% Stretch"}</span>
-                      </div>
-                      <div className="w-full h-1.5 bg-[#141F2C] rounded-full overflow-hidden">
-                        <div className="h-full bg-[#B9D7EA] transition-all duration-300" style={{ width: ctcExpectation <= 35 ? "100%" : "88%" }} />
-                      </div>
+                    {/* Dynamic Key Insight Tags */}
+                    <div className="flex flex-wrap gap-1.5 pt-2.5 border-t border-[#E8E2D8]">
+                      {advisorFeedback.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[10px] font-mono px-2.5 py-0.5 rounded-md bg-[#FAF7F2] border border-[#E8E2D8] text-[#454540] font-medium"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
 
-                <Link
-                  href="/sign-up?role=candidate"
-                  className="w-full py-3.5 rounded-2xl bg-[#769FCD] hover:bg-[#1A2838] border border-[#B9D7EA]/30 text-white font-extrabold text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <Zap className="w-4 h-4 text-[#B9D7EA]" />
-                  <span>1-Touch Apply to Matches</span>
-                </Link>
+                {/* Primary Action Button */}
+                <div className="pt-1">
+                  {applied ? (
+                    <div className="p-4 rounded-xl bg-[#F0FDF4] border-2 border-[#15803D] text-center animate-in fade-in zoom-in-95 duration-200">
+                      <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#15803D]">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>DISPATCHED TO {matchingRolesCount} VERIFIED TEAMS IN {selectedHub.toUpperCase()}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={handleTouchApply}
+                      variant="touch"
+                      size="lg"
+                      isLoading={isApplying}
+                      className="w-full py-4 text-base font-extrabold shadow-[3px_3px_0px_#141413] active:shadow-none"
+                    >
+                      <Zap className="w-4 h-4 mr-2 fill-current" />
+                      <span>Touch to Apply ({matchingRolesCount} Matches)</span>
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Tab 2: Product Dashboard Image Showcase */}
-        {activeTab === "dashboard" && (
-          <div className="bento-card p-4 sm:p-6 lg:p-8 border border-[#B9D7EA] shadow-2xl bg-[#1A2838] text-white">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4 border-b border-[#B9D7EA]/20 pb-4">
-              <div>
-                <span className="text-xs font-mono font-bold text-[#B9D7EA] uppercase tracking-wider">Candidate &amp; Recruiter Talent Hub</span>
-                <h3 className="text-xl font-extrabold text-white mt-1">Real-time candidate profile &amp; hiring analytics view</h3>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-full bg-[#D6E6F2]/10 text-[#B9D7EA] border border-[#B9D7EA]/30 text-xs font-bold flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#769FCD]" />
-                  <span>Full Match Transparency</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Generated Product Dashboard Mockup Image */}
-            <div className="relative rounded-2xl overflow-hidden border border-[#B9D7EA]/20 shadow-2xl group">
-              <img
-                src="/product-dashboard-preview.jpg"
-                alt="Touch And Go Talent Hub Dashboard Interface"
-                className="w-full h-auto object-cover rounded-2xl transition-transform duration-500 group-hover:scale-[1.01]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#141F2C]/90 via-transparent to-transparent pointer-events-none" />
-
-              <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center justify-between gap-4 pointer-events-auto">
-                <div className="bg-[#1A2838]/90 backdrop-blur-md p-3 px-4 rounded-xl border border-[#B9D7EA]/30 text-xs font-bold text-white flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#769FCD] animate-ping" />
-                  <span>Interactive Talent Dashboard View</span>
-                </div>
-                <Link
-                  href="/candidate/dashboard"
-                  className="px-5 py-2.5 rounded-xl bg-[#769FCD] hover:bg-[#1A2838] text-white text-xs font-extrabold shadow-md flex items-center gap-1.5 transition-all border border-[#B9D7EA]/30"
-                >
-                  <span>Explore Candidate Console</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: Privacy & Salary Benchmarks */}
+        {/* Tab 2: Stealth Privacy Mode */}
         {activeTab === "privacy" && (
-          <div className="bento-card p-6 sm:p-8 lg:p-10 border border-[#B9D7EA] shadow-xl bg-white">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="bg-white rounded-3xl border border-[#141413] shadow-[4px_4px_0px_#141413] p-8 sm:p-12">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] border border-[#B9D7EA] text-[#1A2838] flex items-center justify-center font-bold shadow-xs mb-4">
-                  <ShieldCheck className="w-6 h-6 text-[#769FCD]" />
+                <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] border border-[#B9D7EA] text-[#769FCD] flex items-center justify-center font-bold mb-5 shadow-[2px_2px_0px_#141413]">
+                  <ShieldCheck className="w-6 h-6" />
                 </div>
-                <h3 className="text-2xl font-black text-[#1A2838] mb-3">Anonymous Candidate Privacy Control</h3>
-                <p className="text-[#1A2838]/70 text-sm leading-relaxed mb-6 font-medium">
-                  Keep your current employer unaware of your active search. Your profile stays completely anonymous until you approve a recruiter&apos;s direct match request.
+                <h3 className="text-2xl sm:text-3xl font-black text-[#141413] mb-3 tracking-tight font-serif">
+                  Stealth Search. Current Employer Shielded.
+                </h3>
+                <p className="text-[#5A5852] text-base leading-relaxed mb-8 font-sans">
+                  Look for higher CTC bands without risking your current job. Your profile, resume,
+                  and contact details stay completely anonymous until you approve a direct match.
                 </p>
 
-                <div className="space-y-4 text-xs font-bold text-[#1A2838]">
-                  <div className="flex items-center gap-3 p-3.5 bg-[#D6E6F2]/30 rounded-xl border border-[#B9D7EA]/80">
-                    <EyeOff className="w-5 h-5 text-[#769FCD] shrink-0" />
-                    <span>Auto-block your current company domain from viewing profile</span>
+                <div className="space-y-3.5 text-xs sm:text-sm font-mono">
+                  <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E2D8]">
+                    <EyeOff className="w-4 h-4 text-[#769FCD] shrink-0" />
+                    <span className="text-[#141413] font-medium">
+                      Auto-block current employer corporate domains from profile visibility
+                    </span>
                   </div>
-                  <div className="flex items-center gap-3 p-3.5 bg-[#D6E6F2]/30 rounded-xl border border-[#B9D7EA]/80">
-                    <Lock className="w-5 h-5 text-[#1A2838] shrink-0" />
-                    <span>Mask full name, email &amp; phone until 1-touch consent</span>
+                  <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E2D8]">
+                    <Lock className="w-4 h-4 text-[#141413] shrink-0" />
+                    <span className="text-[#141413] font-medium">
+                      Name, phone, and GitHub handle stay masked until you grant consent
+                    </span>
                   </div>
-                  <div className="flex items-center gap-3 p-3.5 bg-[#D6E6F2]/30 rounded-xl border border-[#B9D7EA]/80">
-                    <TrendingUp className="w-5 h-5 text-[#769FCD] shrink-0" />
-                    <span>Real-time market salary benchmark comparison across Indian tech hubs</span>
+                  <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E2D8]">
+                    <TrendingUp className="w-4 h-4 text-[#15803D] shrink-0" />
+                    <span className="text-[#141413] font-medium">
+                      Receive inbound salary offers without your current manager knowing
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#1A2838] text-white p-6 rounded-3xl border border-[#B9D7EA]/20 shadow-xl flex flex-col gap-6">
-                <div className="flex items-center justify-between border-b border-[#B9D7EA]/20 pb-4">
-                  <span className="text-xs font-bold uppercase text-[#B9D7EA]">Bengaluru Senior Full-Stack CTC Distribution</span>
-                  <span className="text-[11px] font-mono font-bold text-[#B9D7EA] bg-[#D6E6F2]/10 border border-[#B9D7EA]/30 px-2 py-0.5 rounded">95th Percentile</span>
+              {/* Stealth Console Visualizer */}
+              <div className="bg-[#FAF7F2] p-6 sm:p-8 rounded-2xl border border-[#E8E2D8] shadow-[2px_2px_0px_#141413] flex flex-col gap-5">
+                <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
+                  <span className="text-xs font-mono font-bold text-[#141413] uppercase">
+                    Active Privacy Rules
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-[#F0FDF4] text-[#15803D] border border-[#15803D]">
+                    100% SHIELDED
+                  </span>
                 </div>
 
-                {/* Salary Bars */}
-                <div className="space-y-4 text-xs">
+                <div className="bg-white p-4 rounded-xl border border-[#E8E2D8] space-y-2 text-xs sm:text-sm">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-[#141413]">Domain Exclusion Blacklist</span>
+                    <span className="text-emerald-700 font-mono font-bold text-xs">Active</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <span className="px-2.5 py-1 rounded bg-[#FAF7F2] border border-[#E8E2D8] text-xs font-mono">
+                      @current-employer.com (Blocked)
+                    </span>
+                    <span className="px-2.5 py-1 rounded bg-[#FAF7F2] border border-[#E8E2D8] text-xs font-mono">
+                      @subsidiary-group.in (Blocked)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-xl border border-[#E8E2D8] text-xs sm:text-sm">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-bold text-[#141413]">Candidate Mask ID</span>
+                    <span className="font-mono text-xs text-[#74726A]">#TAG-BLR-8924</span>
+                  </div>
+                  <p className="text-xs text-[#74726A]">
+                    Employers view: &ldquo;Senior Distributed Systems Engineer (7y exp) • 96% Match&rdquo;
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: CTC Percentile Distributions */}
+        {activeTab === "salary" && (
+          <div className="bg-white rounded-3xl border border-[#141413] shadow-[4px_4px_0px_#141413] p-8 sm:p-12">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] border border-[#B9D7EA] text-[#769FCD] flex items-center justify-center font-bold mb-5 shadow-[2px_2px_0px_#141413]">
+                  <TrendingUp className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-black text-[#141413] mb-3 tracking-tight font-serif">
+                  Transparent Indian Tech CTC Distributions
+                </h3>
+                <p className="text-[#5A5852] text-base leading-relaxed mb-8 font-sans">
+                  No more &ldquo;competitive salary as per industry standard&rdquo; vague promises. Every
+                  role publishes verified CTC percentiles upfront before you tap apply.
+                </p>
+
+                <div className="p-5 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] text-xs sm:text-sm space-y-2">
+                  <div className="font-bold text-[#141413]">💡 Transparent Benchmark Guarantee:</div>
+                  <p className="text-[#454540] leading-relaxed">
+                    Employers on Touch And Go commit to the published CTC bracket upfront. No lowball counter-offers at the final round.
+                  </p>
+                </div>
+              </div>
+
+              {/* Real Distribution Chart */}
+              <div className="bg-[#FAF7F2] p-6 sm:p-8 rounded-2xl border border-[#E8E2D8] shadow-[2px_2px_0px_#141413] flex flex-col gap-5">
+                <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
+                  <span className="text-xs font-mono font-bold text-[#141413] uppercase">
+                    Bengaluru SDE-3 (4–7 Yrs) CTC Bands
+                  </span>
+                  <span className="font-mono text-xs font-bold text-[#769FCD]">2026 Verified</span>
+                </div>
+
+                <div className="space-y-4 text-xs sm:text-sm">
                   <div>
-                    <div className="flex justify-between text-[#B9D7EA] mb-1 font-semibold">
-                      <span>Market Average (3-6 yrs)</span>
-                      <span className="text-white font-bold">₹22 LPA</span>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-medium text-[#454540]">Traditional Portal Average</span>
+                      <span className="font-mono font-bold text-[#141413]">₹22.5 LPA</span>
                     </div>
-                    <div className="w-full h-3 bg-[#141F2C] rounded-full overflow-hidden">
-                      <div className="h-full bg-[#769FCD]/50" style={{ width: "55%" }} />
+                    <div className="w-full h-2 rounded-full bg-[#E2DDD3] overflow-hidden">
+                      <div className="h-full bg-[#74726A]" style={{ width: "45%" }} />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-[#B9D7EA] mb-1 font-semibold">
-                      <span>Touch And Go Verified Matches</span>
-                      <span className="text-white font-extrabold">₹34 - ₹42 LPA</span>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-medium text-[#454540]">TAG Median Benchmark (P50)</span>
+                      <span className="font-mono font-bold text-[#141413]">₹34.2 LPA</span>
                     </div>
-                    <div className="w-full h-3 bg-[#141F2C] rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-[#769FCD] to-[#B9D7EA]" style={{ width: "90%" }} />
+                    <div className="w-full h-2 rounded-full bg-[#E2DDD3] overflow-hidden">
+                      <div className="h-full bg-[#141413]" style={{ width: "70%" }} />
                     </div>
                   </div>
-                </div>
 
-                <div className="p-4 bg-[#141F2C] rounded-2xl border border-[#B9D7EA]/20 text-xs text-[#D6E6F2]/90 font-medium">
-                  💡 <span className="font-bold text-white">Salary Guarantee:</span> Employers on Touch And Go pledge non-negotiable transparent CTC benchmarks upfront.
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-bold text-[#769FCD]">TAG Tier-1 FinTech / High-Bar (P90)</span>
+                      <span className="font-mono font-black text-[#769FCD]">₹48.0 LPA</span>
+                    </div>
+                    <div className="w-full h-2.5 rounded-full bg-[#E2DDD3] overflow-hidden">
+                      <div className="h-full bg-[#769FCD]" style={{ width: "95%" }} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -366,77 +590,78 @@ export function ProductFeatureShowcase() {
 
         {/* Tab 4: Employer Console */}
         {activeTab === "employer" && (
-          <div className="bento-card p-6 sm:p-8 lg:p-10 border border-[#B9D7EA] shadow-xl bg-white">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="bg-white rounded-3xl border border-[#141413] shadow-[4px_4px_0px_#141413] p-8 sm:p-12">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] border border-[#B9D7EA] text-[#769FCD] flex items-center justify-center font-bold shadow-xs mb-4">
-                  <Building2 className="w-6 h-6 text-[#1A2838]" />
+                <div className="w-12 h-12 rounded-2xl bg-[#FAF7F2] border border-[#141413] text-[#141413] flex items-center justify-center font-bold mb-5 shadow-[2px_2px_0px_#141413]">
+                  <Building2 className="w-6 h-6 text-[#769FCD]" />
                 </div>
-                <h3 className="text-2xl font-black text-[#1A2838] mb-3">Recruiter &amp; Hiring Manager Console</h3>
-                <p className="text-[#1A2838]/70 text-sm leading-relaxed mb-6 font-medium">
-                  Cut time-to-hire by 75%. Post structured job requirements and receive pre-filtered candidate matches ranked by explainable match vectors.
+                <h3 className="text-2xl sm:text-3xl font-black text-[#141413] mb-3 tracking-tight font-serif">
+                  Direct Founder &amp; Engineering Lead Console
+                </h3>
+                <p className="text-[#5A5852] text-base leading-relaxed mb-8 font-sans">
+                  Skip the 1,000-resume spam pile. Set structured vector thresholds and get a ranked
+                  feed of candidates who meet your criteria and accepted your salary benchmark.
                 </p>
 
-                <div className="space-y-3.5 text-xs font-bold text-[#1A2838]">
+                <div className="space-y-3.5 text-xs sm:text-sm font-mono">
                   <div className="flex items-center gap-3">
                     <UserCheck className="w-4 h-4 text-[#769FCD] shrink-0" />
-                    <span>Instant candidate shortlisting without manual resume scanning</span>
+                    <span>0 screening agency fees · Direct-to-candidate connection</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <MessageSquare className="w-4 h-4 text-[#1A2838] shrink-0" />
-                    <span>Direct chat &amp; 1-click interview scheduling</span>
+                    <Lock className="w-4 h-4 text-[#141413] shrink-0" />
+                    <span>1-click interview invitation dispatch with calendar sync</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <ShieldCheck className="w-4 h-4 text-[#769FCD] shrink-0" />
-                    <span>Verified corporate domain onboarding for employers</span>
+                    <ShieldCheck className="w-4 h-4 text-[#15803D] shrink-0" />
+                    <span>Corporate domain validation required for all hiring teams</span>
                   </div>
                 </div>
 
                 <div className="mt-8">
                   <Link
-                    href="/sign-up?role=employer"
-                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-extrabold text-xs sm:text-sm shadow-md transition-all cursor-pointer"
+                    href="/employer/jobs/new"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#141413] hover:bg-[#769FCD] text-white font-extrabold text-sm shadow-[2px_2px_0px_#141413] transition-all cursor-pointer"
                   >
-                    <span>Post Job &amp; Access Candidates</span>
+                    <span>Post Role &amp; View Matching Talent</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
 
-              <div className="bg-[#D6E6F2]/30 p-6 rounded-3xl border border-[#B9D7EA] shadow-inner flex flex-col gap-4">
-                <div className="flex items-center justify-between text-xs font-bold text-[#1A2838]">
-                  <span>Employer Shortlist Pipeline</span>
-                  <span className="text-[#769FCD] font-mono">14 Active Candidates</span>
+              {/* Employer Pipeline Preview */}
+              <div className="bg-[#FAF7F2] p-6 sm:p-8 rounded-2xl border border-[#E8E2D8] shadow-[2px_2px_0px_#141413] flex flex-col gap-4">
+                <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8] text-xs font-mono font-bold">
+                  <span>Inbound Matched Talent Feed</span>
+                  <span className="text-[#769FCD]">4 New Pre-Screened</span>
                 </div>
 
-                {/* Candidate Mock Cards */}
-                <div className="bg-white p-4 rounded-2xl border border-[#B9D7EA] shadow-2xs flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#1A2838] text-white font-black text-sm flex items-center justify-center">
-                      AK
+                <div className="p-4 bg-white rounded-xl border border-[#E8E2D8] flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-bold text-[#141413]">
+                      Lead Systems Architect (6y exp)
                     </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#1A2838]">Arjun K. • Staff Engineer</div>
-                      <div className="text-[11px] text-[#1A2838]/60 font-medium">8 yrs exp • React, Next.js, Go</div>
+                    <div className="text-xs text-[#74726A] font-mono mt-0.5">
+                      React 19, Next.js, Go • Bengaluru
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full bg-[#D6E6F2] text-[#1A2838] font-mono font-bold text-xs border border-[#B9D7EA]">
-                    98% Match
+                  <span className="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
+                    98.4% Match
                   </span>
                 </div>
 
-                <div className="bg-white p-4 rounded-2xl border border-[#B9D7EA] shadow-2xs flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#769FCD] text-white font-black text-sm flex items-center justify-center">
-                      PS
+                <div className="p-4 bg-white rounded-xl border border-[#E8E2D8] flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-bold text-[#141413]">
+                      Staff Backend Engineer (7y exp)
                     </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#1A2838]">Pooja S. • AI Lead</div>
-                      <div className="text-[11px] text-[#1A2838]/60 font-medium">6 yrs exp • Python, LLMs, RAG</div>
+                    <div className="text-xs text-[#74726A] font-mono mt-0.5">
+                      Kafka, High Throughput, Go • Hybrid
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full bg-[#D6E6F2] text-[#1A2838] font-mono font-bold text-xs border border-[#B9D7EA]">
-                    95% Match
+                  <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
+                    96.8% Match
                   </span>
                 </div>
               </div>

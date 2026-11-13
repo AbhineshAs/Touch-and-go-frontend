@@ -412,12 +412,21 @@ function AuthContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-between items-center bg-[#F4F8FB] px-4 py-8 sm:py-12 text-slate-900 font-sans">
-      <div className="w-full max-w-[400px] flex flex-col gap-5 my-auto">
+    <div className="min-h-screen flex flex-col justify-between items-center bg-[#FAF7F2] px-4 py-10 sm:py-14 text-[#141413] font-sans relative overflow-x-hidden">
+      {/* Subtle architectural dot grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-40"
+        style={{
+          backgroundImage: "radial-gradient(#CBD5E1 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+
+      <div className="w-full max-w-[440px] flex flex-col gap-6 my-auto relative z-10">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center gap-1.5">
-          <TagLogo height={40} />
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mt-1">
+          <TagLogo height={44} />
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#141413] font-display mt-2">
             {activeTab === "signup"
               ? selectedRole === "candidate"
                 ? "Candidate Registration"
@@ -434,7 +443,7 @@ function AuthContent() {
                       ? "Password reset complete"
                       : "Reset your password"}
           </h1>
-          <p className="text-xs text-slate-500 font-normal max-w-sm leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#5A5852] font-sans font-normal max-w-sm leading-relaxed mt-1">
             {activeTab === "signup"
               ? selectedRole === "candidate"
                 ? "Enter your details to create your candidate profile and discover matched opportunities"
@@ -454,19 +463,19 @@ function AuthContent() {
         </div>
 
         {/* Main Card */}
-        <div className="p-6 sm:p-7 flex flex-col gap-4 bg-white border border-[#B9D7EA] rounded-3xl shadow-[0_12px_35px_-8px_rgba(26,40,56,0.08)]">
+        <div className="p-6 sm:p-8 flex flex-col gap-5 bg-white border border-[#E2DDD3] rounded-3xl shadow-[0_16px_40px_rgba(20,20,19,0.06)]">
           {activeTab !== "forgot_password" && (
             <>
               {/* Main Auth Mode Switcher */}
-              <div className="grid grid-cols-2 p-1 bg-[#D6E6F2]/50 rounded-xl gap-1">
+              <div className="grid grid-cols-2 p-1.5 bg-[#FAF7F2] border border-[#E2DDD3] rounded-2xl gap-1">
                 <button
                   type="button"
                   onClick={() => switchMode("signup")}
                   className={cn(
-                    "flex items-center justify-center py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer",
+                    "flex items-center justify-center py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer font-sans",
                     activeTab === "signup"
-                      ? "bg-white text-slate-900 shadow-xs"
-                      : "text-slate-500 hover:text-slate-800"
+                      ? "bg-[#141413] text-white shadow-xs"
+                      : "text-[#74726A] hover:text-[#141413] hover:bg-white/60"
                   )}
                 >
                   Sign Up
@@ -475,10 +484,10 @@ function AuthContent() {
                   type="button"
                   onClick={() => switchMode("login")}
                   className={cn(
-                    "flex items-center justify-center py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer",
+                    "flex items-center justify-center py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer font-sans",
                     activeTab === "login"
-                      ? "bg-white text-slate-900 shadow-xs"
-                      : "text-slate-500 hover:text-slate-800"
+                      ? "bg-[#141413] text-white shadow-xs"
+                      : "text-[#74726A] hover:text-[#141413] hover:bg-white/60"
                   )}
                 >
                   Log In
@@ -486,31 +495,31 @@ function AuthContent() {
               </div>
 
               {/* Sub Role Selector */}
-              <div className="flex items-center justify-center gap-1.5 p-0.5 bg-[#D6E6F2]/30 rounded-lg border border-[#B9D7EA]/60">
+              <div className="flex items-center justify-center gap-1.5 p-1 bg-white border border-[#E2DDD3] rounded-xl">
                 <button
                   type="button"
                   onClick={() => handleRoleChange("candidate")}
                   className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs transition-all cursor-pointer",
+                    "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer font-sans",
                     selectedRole === "candidate"
-                      ? "bg-white text-[#1A2838] shadow-2xs font-semibold border border-[#B9D7EA]/50"
-                      : "text-slate-500 hover:text-slate-700 font-medium"
+                      ? "bg-[#D6E6F2] text-[#141413] border border-[#769FCD] shadow-2xs"
+                      : "text-[#74726A] hover:text-[#141413] hover:bg-[#FAF7F2] font-medium"
                   )}
                 >
-                  <User className="w-3.5 h-3.5" />
+                  <User className="w-3.5 h-3.5 text-[#769FCD]" />
                   <span>Job Seeker</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => handleRoleChange("employer")}
                   className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs transition-all cursor-pointer",
+                    "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer font-sans",
                     selectedRole === "employer"
-                      ? "bg-white text-[#1A2838] shadow-2xs font-semibold border border-[#B9D7EA]/50"
-                      : "text-slate-500 hover:text-slate-700 font-medium"
+                      ? "bg-[#D6E6F2] text-[#141413] border border-[#769FCD] shadow-2xs"
+                      : "text-[#74726A] hover:text-[#141413] hover:bg-[#FAF7F2] font-medium"
                   )}
                 >
-                  <Building2 className="w-3.5 h-3.5" />
+                  <Building2 className="w-3.5 h-3.5 text-[#769FCD]" />
                   <span>Company</span>
                 </button>
               </div>
@@ -518,7 +527,7 @@ function AuthContent() {
           )}
 
           {authError && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-semibold">
+            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-semibold font-sans">
               {authError}
             </div>
           )}
@@ -527,10 +536,10 @@ function AuthContent() {
           {activeTab === "signup" && (
             <>
               {selectedRole === "candidate" ? (
-                <form onSubmit={candidateSignUpForm.handleSubmit(onCandidateSignUpSubmit)} className="flex flex-col gap-3.5">
+                <form onSubmit={candidateSignUpForm.handleSubmit(onCandidateSignUpSubmit)} className="flex flex-col gap-4">
                   <Input
                     label="Full Name"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     placeholder="e.g. Ananya Sharma"
                     error={candidateSignUpForm.formState.errors.fullName?.message}
                     {...candidateSignUpForm.register("fullName")}
@@ -538,7 +547,7 @@ function AuthContent() {
 
                   <Input
                     label="Email Address"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type="email"
                     placeholder="you@example.com"
                     error={candidateSignUpForm.formState.errors.email?.message}
@@ -546,11 +555,11 @@ function AuthContent() {
                   />
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-slate-800 select-none">Phone Number</label>
-                    <div className="flex h-10 rounded-lg border border-[#B9D7EA] bg-white overflow-hidden focus-within:border-[#769FCD] focus-within:ring-2 focus-within:ring-[#769FCD]/20 transition-all">
+                    <label className="text-xs font-bold text-[#141413] select-none font-sans">Phone Number</label>
+                    <div className="flex h-11 rounded-xl border border-[#E2DDD3] bg-white overflow-hidden focus-within:border-[#769FCD] focus-within:ring-2 focus-within:ring-[#769FCD]/20 transition-all">
                       <select
                         {...candidateSignUpForm.register("countryCode")}
-                        className="h-full px-2.5 bg-[#D6E6F2]/30/70 border-r border-[#B9D7EA] text-xs font-medium text-slate-700 outline-none cursor-pointer hover:bg-slate-100 transition-colors"
+                        className="h-full px-3 bg-[#FAF7F2] border-r border-[#E2DDD3] text-xs font-mono font-bold text-[#141413] outline-none cursor-pointer hover:bg-white transition-colors"
                       >
                         {COUNTRY_CODES.map((c) => (
                           <option key={c.code} value={c.code}>
@@ -562,7 +571,7 @@ function AuthContent() {
                         type="tel"
                         placeholder="98765 43210"
                         {...candidateSignUpForm.register("phone")}
-                        className="flex-1 h-full px-3 text-xs font-medium text-slate-900 placeholder:text-slate-400 outline-none bg-transparent"
+                        className="flex-1 h-full px-3.5 text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#8A8A85] outline-none bg-transparent font-sans"
                       />
                     </div>
                     {candidateSignUpForm.formState.errors.phone && (
@@ -574,7 +583,7 @@ function AuthContent() {
 
                   <Input
                     label="Password"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type={showCandidatePassword ? "text" : "password"}
                     placeholder="••••••••"
                     error={candidateSignUpForm.formState.errors.password?.message}
@@ -583,7 +592,7 @@ function AuthContent() {
                       <button
                         type="button"
                         onClick={() => setShowCandidatePassword(!showCandidatePassword)}
-                        className="p-1 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
                         tabIndex={-1}
                         aria-label={showCandidatePassword ? "Hide password" : "Show password"}
                       >
@@ -595,7 +604,7 @@ function AuthContent() {
 
                   <Input
                     label="Confirm Password"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type={showCandidateConfirmPassword ? "text" : "password"}
                     placeholder="••••••••"
                     error={candidateSignUpForm.formState.errors.confirmPassword?.message}
@@ -603,7 +612,7 @@ function AuthContent() {
                       <button
                         type="button"
                         onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
-                        className="p-1 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
                         tabIndex={-1}
                         aria-label={showCandidateConfirmPassword ? "Hide password" : "Show password"}
                       >
@@ -616,13 +625,13 @@ function AuthContent() {
                   <div className="pt-1">
                     <Checkbox
                       label={
-                        <span className="text-xs text-slate-500 leading-relaxed font-normal">
+                        <span className="text-xs text-[#5A5852] leading-relaxed font-normal">
                           I agree to the{" "}
-                          <Link href="/trust" target="_blank" className="text-[#1A2838] hover:underline font-medium">
+                          <Link href="/trust" target="_blank" className="text-[#141413] font-bold hover:underline">
                             Terms of Service
                           </Link>{" "}
                           and{" "}
-                          <Link href="/trust" target="_blank" className="text-[#1A2838] hover:underline font-medium">
+                          <Link href="/trust" target="_blank" className="text-[#141413] font-bold hover:underline">
                             Privacy Policy
                           </Link>
                         </span>
@@ -641,17 +650,17 @@ function AuthContent() {
 
                   <button
                     type="submit"
-                    className="w-full h-10 rounded-lg bg-[#1A2838] hover:bg-[#769FCD] active:bg-[#141F2C] text-white font-medium text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-1"
+                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 font-sans"
                   >
                     <span>Agree &amp; Join</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
               ) : (
-                <form onSubmit={employerSignUpForm.handleSubmit(onEmployerSignUpSubmit)} className="flex flex-col gap-3.5">
+                <form onSubmit={employerSignUpForm.handleSubmit(onEmployerSignUpSubmit)} className="flex flex-col gap-4">
                   <Input
                     label="Full Name"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     placeholder="e.g. Vikramaditya Nair"
                     error={employerSignUpForm.formState.errors.fullName?.message}
                     {...employerSignUpForm.register("fullName")}
@@ -659,7 +668,7 @@ function AuthContent() {
 
                   <Input
                     label="Company Work Email"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type="email"
                     placeholder="name@company.com"
                     error={employerSignUpForm.formState.errors.email?.message}
@@ -669,7 +678,7 @@ function AuthContent() {
 
                   <Input
                     label="Create Password"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type={showEmployerPassword ? "text" : "password"}
                     placeholder="••••••••"
                     error={employerSignUpForm.formState.errors.password?.message}
@@ -678,7 +687,7 @@ function AuthContent() {
                       <button
                         type="button"
                         onClick={() => setShowEmployerPassword(!showEmployerPassword)}
-                        className="p-1 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
                         tabIndex={-1}
                         aria-label={showEmployerPassword ? "Hide password" : "Show password"}
                       >
@@ -690,7 +699,7 @@ function AuthContent() {
 
                   <Input
                     label="Confirm Password"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type={showEmployerConfirmPassword ? "text" : "password"}
                     placeholder="••••••••"
                     error={employerSignUpForm.formState.errors.confirmPassword?.message}
@@ -698,7 +707,7 @@ function AuthContent() {
                       <button
                         type="button"
                         onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
-                        className="p-1 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
                         tabIndex={-1}
                         aria-label={showEmployerConfirmPassword ? "Hide password" : "Show password"}
                       >
@@ -711,13 +720,13 @@ function AuthContent() {
                   <div className="pt-1">
                     <Checkbox
                       label={
-                        <span className="text-xs text-slate-500 font-normal">
+                        <span className="text-xs text-[#5A5852] font-normal leading-relaxed">
                           I agree to the{" "}
-                          <Link href="/trust" className="text-[#1A2838] hover:underline font-medium">
+                          <Link href="/trust" className="text-[#141413] font-bold hover:underline">
                             Terms of Service
                           </Link>{" "}
                           and{" "}
-                          <Link href="/trust" className="text-[#1A2838] hover:underline font-medium">
+                          <Link href="/trust" className="text-[#141413] font-bold hover:underline">
                             Responsible AI Charter
                           </Link>
                         </span>
@@ -736,20 +745,20 @@ function AuthContent() {
 
                   <button
                     type="submit"
-                    className="w-full h-10 rounded-lg bg-[#1A2838] hover:bg-[#769FCD] active:bg-[#141F2C] text-white font-medium text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-1"
+                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 font-sans"
                   >
                     <span>Create Account &amp; Verify Email</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
               )}
 
-              <div className="pt-3 border-t border-slate-100 text-center text-xs text-slate-500 font-normal">
+              <div className="pt-4 border-t border-[#E8E2D8] text-center text-xs text-[#5A5852] font-sans">
                 Already on TAG?{" "}
                 <button
                   type="button"
                   onClick={() => switchMode("login")}
-                  className="font-semibold text-[#1A2838] hover:underline cursor-pointer"
+                  className="font-bold text-[#141413] hover:text-[#769FCD] transition-colors cursor-pointer underline underline-offset-4"
                 >
                   Sign in
                 </button>
@@ -761,10 +770,10 @@ function AuthContent() {
           {activeTab === "login" && (
             <>
               {selectedRole === "candidate" ? (
-                <form onSubmit={candidateLoginForm.handleSubmit(onCandidateLoginSubmit)} className="flex flex-col gap-3.5">
+                <form onSubmit={candidateLoginForm.handleSubmit(onCandidateLoginSubmit)} className="flex flex-col gap-4">
                   <Input
                     label="Email Address"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type="email"
                     placeholder="you@example.com"
                     error={candidateLoginForm.formState.errors.email?.message}
@@ -773,7 +782,7 @@ function AuthContent() {
 
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-slate-800">Password</label>
+                      <label className="text-xs font-bold text-[#141413] select-none font-sans">Password</label>
                       <button
                         type="button"
                         onClick={() => {
@@ -783,7 +792,7 @@ function AuthContent() {
                           if (currentEmail) setForgotEmail(currentEmail);
                           setActiveTab("forgot_password");
                         }}
-                        className="text-xs font-semibold text-[#1A2838] hover:underline cursor-pointer"
+                        className="text-xs font-bold text-[#769FCD] hover:text-[#141413] transition-colors cursor-pointer"
                       >
                         Forgot password?
                       </button>
@@ -796,7 +805,7 @@ function AuthContent() {
                         <button
                           type="button"
                           onClick={() => setShowCandidateLoginPassword(!showCandidateLoginPassword)}
-                          className="text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                          className="text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
                           tabIndex={-1}
                           aria-label={showCandidateLoginPassword ? "Hide password" : "Show password"}
                         >
@@ -814,17 +823,17 @@ function AuthContent() {
                   <button
                     type="submit"
                     disabled={candidateLoginForm.formState.isSubmitting}
-                    className="w-full h-10 rounded-lg bg-[#1A2838] hover:bg-[#769FCD] active:bg-[#141F2C] text-white font-medium text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-1 disabled:opacity-50"
+                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
                   >
                     <span>{candidateLoginForm.formState.isSubmitting ? "Signing In..." : "Sign In"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
               ) : (
-                <form onSubmit={employerLoginForm.handleSubmit(onEmployerLoginSubmit)} className="flex flex-col gap-3.5">
+                <form onSubmit={employerLoginForm.handleSubmit(onEmployerLoginSubmit)} className="flex flex-col gap-4">
                   <Input
                     label="Company Email"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type="email"
                     placeholder="name@company.com"
                     error={employerLoginForm.formState.errors.email?.message}
@@ -833,7 +842,7 @@ function AuthContent() {
 
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-slate-800">Password</label>
+                      <label className="text-xs font-bold text-[#141413] select-none font-sans">Password</label>
                       <button
                         type="button"
                         onClick={() => {
@@ -843,7 +852,7 @@ function AuthContent() {
                           if (currentEmail) setForgotEmail(currentEmail);
                           setActiveTab("forgot_password");
                         }}
-                        className="text-xs font-semibold text-[#1A2838] hover:underline cursor-pointer"
+                        className="text-xs font-bold text-[#769FCD] hover:text-[#141413] transition-colors cursor-pointer"
                       >
                         Forgot password?
                       </button>
@@ -856,7 +865,7 @@ function AuthContent() {
                         <button
                           type="button"
                           onClick={() => setShowEmployerPassword(!showEmployerPassword)}
-                          className="text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                          className="text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
                           tabIndex={-1}
                           aria-label={showEmployerPassword ? "Hide password" : "Show password"}
                         >
@@ -874,20 +883,20 @@ function AuthContent() {
                   <button
                     type="submit"
                     disabled={employerLoginForm.formState.isSubmitting}
-                    className="w-full h-10 rounded-lg bg-[#1A2838] hover:bg-[#769FCD] active:bg-[#141F2C] text-white font-medium text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-1 disabled:opacity-50"
+                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
                   >
                     <span>{employerLoginForm.formState.isSubmitting ? "Signing In..." : "Sign In"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
               )}
 
-              <div className="pt-3 border-t border-slate-100 text-center text-xs text-slate-500 font-normal">
+              <div className="pt-4 border-t border-[#E8E2D8] text-center text-xs text-[#5A5852] font-sans">
                 New to TAG?{" "}
                 <button
                   type="button"
                   onClick={() => switchMode("signup")}
-                  className="font-semibold text-[#1A2838] hover:underline cursor-pointer"
+                  className="font-bold text-[#141413] hover:text-[#769FCD] transition-colors cursor-pointer underline underline-offset-4"
                 >
                   Join now
                 </button>
@@ -899,7 +908,7 @@ function AuthContent() {
           {activeTab === "forgot_password" && (
             <div className="flex flex-col gap-4">
               {/* Clean Top Navigation */}
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
                 <button
                   type="button"
                   onClick={() => {
@@ -907,13 +916,13 @@ function AuthContent() {
                     setForgotStep("email");
                     setAuthError(null);
                   }}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#74726A] hover:text-[#141413] transition-colors cursor-pointer font-sans"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back to Sign In</span>
                 </button>
                 {forgotStep !== "success" && (
-                  <span className="text-[11px] font-semibold text-slate-400">
+                  <span className="text-[11px] font-mono font-bold text-[#74726A]">
                     Step {forgotStep === "email" ? "1" : forgotStep === "otp" ? "2" : "3"} of 3
                   </span>
                 )}
@@ -921,10 +930,10 @@ function AuthContent() {
 
               {/* STEP 1: ENTER EMAIL */}
               {forgotStep === "email" && (
-                <form onSubmit={handleSendForgotOtp} className="flex flex-col gap-3.5">
+                <form onSubmit={handleSendForgotOtp} className="flex flex-col gap-4">
                   <Input
                     label="Email Address"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type="email"
                     placeholder="name@example.com"
                     value={forgotEmail}
@@ -937,7 +946,7 @@ function AuthContent() {
                   />
 
                   {authError && (
-                    <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
+                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
                       {authError}
                     </div>
                   )}
@@ -945,7 +954,7 @@ function AuthContent() {
                   <button
                     type="submit"
                     disabled={isSendingForgotOtp}
-                    className="w-full h-10 rounded-lg bg-[#1A2838] hover:bg-[#769FCD] active:bg-[#141F2C] text-white font-medium text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-1 disabled:opacity-50"
+                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
                   >
                     <span>{isSendingForgotOtp ? "Sending Code..." : "Send Verification Code"}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -955,7 +964,7 @@ function AuthContent() {
 
               {/* STEP 2: ENTER OTP */}
               {forgotStep === "otp" && (
-                <form onSubmit={handleVerifyForgotOtp} className="flex flex-col gap-3.5">
+                <form onSubmit={handleVerifyForgotOtp} className="flex flex-col gap-4">
                   {/* 6 Digit Input Grid */}
                   <div className="flex justify-between gap-1.5 sm:gap-2">
                     {forgotOtp.map((digit, idx) => (
@@ -972,13 +981,13 @@ function AuthContent() {
                         onKeyDown={(e) => handleForgotOtpKeyDown(idx, e)}
                         onPaste={idx === 0 ? handleForgotOtpPaste : undefined}
                         aria-label={`Digit ${idx + 1}`}
-                        className="w-10 h-12 sm:w-11 sm:h-13 text-center text-lg font-bold rounded-lg border border-[#B9D7EA] bg-white text-slate-900 focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20 transition-all"
+                        className="w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-bold rounded-xl border border-[#E2DDD3] bg-white text-[#141413] focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20 transition-all font-mono"
                       />
                     ))}
                   </div>
 
                   {forgotOtpError && (
-                    <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
+                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
                       {forgotOtpError}
                     </div>
                   )}
@@ -986,27 +995,27 @@ function AuthContent() {
                   <button
                     type="submit"
                     disabled={isVerifyingForgotOtp}
-                    className="w-full h-10 rounded-lg bg-[#1A2838] hover:bg-[#769FCD] active:bg-[#141F2C] text-white font-medium text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-1 disabled:opacity-50"
+                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
                   >
                     <span>{isVerifyingForgotOtp ? "Verifying..." : "Verify Code"}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
 
-                  <div className="flex items-center justify-between text-xs pt-1.5 border-t border-slate-100">
+                  <div className="flex items-center justify-between text-xs pt-3 border-t border-[#E8E2D8]">
                     <button
                       type="button"
                       onClick={() => setForgotStep("email")}
-                      className="text-slate-500 hover:text-slate-800 transition-colors cursor-pointer text-xs"
+                      className="text-[#74726A] hover:text-[#141413] transition-colors cursor-pointer text-xs font-medium"
                     >
                       Change Email
                     </button>
                     {forgotResendCooldown > 0 ? (
-                      <span className="text-slate-400 text-xs">Resend in {forgotResendCooldown}s</span>
+                      <span className="text-[#74726A] text-xs font-mono">Resend in {forgotResendCooldown}s</span>
                     ) : (
                       <button
                         type="button"
                         onClick={handleResendForgotOtp}
-                        className="font-semibold text-[#1A2838] hover:underline cursor-pointer flex items-center gap-1 text-xs"
+                        className="font-bold text-[#141413] hover:text-[#769FCD] cursor-pointer flex items-center gap-1 text-xs"
                       >
                         <RotateCcw className="w-3 h-3" />
                         <span>Resend Code</span>
@@ -1018,10 +1027,10 @@ function AuthContent() {
 
               {/* STEP 3: CREATE NEW PASSWORD */}
               {forgotStep === "reset_password" && (
-                <form onSubmit={handleResetPassword} className="flex flex-col gap-3.5">
+                <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
                   <Input
                     label="New Password"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type={showForgotNewPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={forgotNewPassword}
@@ -1034,7 +1043,7 @@ function AuthContent() {
                       <button
                         type="button"
                         onClick={() => setShowForgotNewPassword(!showForgotNewPassword)}
-                        className="text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
                         tabIndex={-1}
                       >
                         {showForgotNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1045,7 +1054,7 @@ function AuthContent() {
 
                   <Input
                     label="Confirm New Password"
-                    labelClassName="text-xs font-bold text-slate-800"
+                    labelClassName="text-xs font-bold text-[#141413]"
                     type={showForgotConfirmPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={forgotConfirmPassword}
@@ -1057,7 +1066,7 @@ function AuthContent() {
                       <button
                         type="button"
                         onClick={() => setShowForgotConfirmPassword(!showForgotConfirmPassword)}
-                        className="text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
                         tabIndex={-1}
                       >
                         {showForgotConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1067,7 +1076,7 @@ function AuthContent() {
                   />
 
                   {forgotPasswordError && (
-                    <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
+                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
                       {forgotPasswordError}
                     </div>
                   )}
@@ -1075,7 +1084,7 @@ function AuthContent() {
                   <button
                     type="submit"
                     disabled={isResettingPassword}
-                    className="w-full h-10 rounded-lg bg-[#1A2838] hover:bg-[#769FCD] active:bg-[#141F2C] text-white font-medium text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-1 disabled:opacity-50"
+                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
                   >
                     <span>{isResettingPassword ? "Saving..." : "Save New Password"}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1086,12 +1095,12 @@ function AuthContent() {
               {/* STEP 4: SUCCESS */}
               {forgotStep === "success" && (
                 <div className="py-2 text-center flex flex-col items-center gap-3">
-                  <div className="w-11 h-11 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] border border-[#769FCD] text-[#769FCD] flex items-center justify-center shadow-xs">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-sm font-bold text-slate-900">Password Reset Complete</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed max-w-xs">
+                    <h3 className="text-base font-bold text-[#141413] font-display">Password Reset Complete</h3>
+                    <p className="text-xs text-[#5A5852] leading-relaxed max-w-xs font-sans">
                       Your password has been updated. You can now sign in with your new password.
                     </p>
                   </div>
@@ -1106,7 +1115,7 @@ function AuthContent() {
                       setActiveTab("login");
                       setForgotStep("email");
                     }}
-                    className="w-full h-10 rounded-lg bg-[#1A2838] hover:bg-[#769FCD] active:bg-[#141F2C] text-white font-medium text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-2"
+                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-3 font-sans"
                   >
                     <span>Sign In to Account</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1119,23 +1128,23 @@ function AuthContent() {
 
         {/* Page Footer / Sponsors (Outside Card) */}
         <footer className="text-center pt-2 pb-2 space-y-1.5">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+          <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#74726A]">
             Official Platform Sponsors
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-slate-400">
-            <a href="https://www.whitetracktech.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-600 transition-colors">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-mono font-medium text-[#74726A]">
+            <a href="https://www.whitetracktech.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#141413] transition-colors">
               WhiteTrack Technologies
             </a>
-            <span className="text-slate-300">•</span>
-            <a href="https://www.whiteaurax.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-600 transition-colors">
+            <span className="text-[#D0CBC0]">•</span>
+            <a href="https://www.whiteaurax.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#141413] transition-colors">
               WhiteAurax
             </a>
-            <span className="text-slate-300">•</span>
-            <a href="https://zynorixglobal.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-600 transition-colors">
+            <span className="text-[#D0CBC0]">•</span>
+            <a href="https://zynorixglobal.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#141413] transition-colors">
               Zynorix Global
             </a>
-            <span className="text-slate-300">•</span>
-            <a href="https://www.whitetracktech.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-600 transition-colors">
+            <span className="text-[#D0CBC0]">•</span>
+            <a href="https://www.whitetracktech.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#141413] transition-colors">
               Techcy Routes
             </a>
           </div>

@@ -20,14 +20,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className={cn("text-xs font-semibold text-slate-700 select-none", labelClassName)}>
+          <label htmlFor={inputId} className={cn("text-xs font-bold text-[#141413] select-none font-sans", labelClassName)}>
             {label}
             {props.required && <span className="text-red-500 ml-0.5">*</span>}
           </label>
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <div className="absolute left-3 text-slate-400 pointer-events-none flex items-center justify-center">
+            <div className="absolute left-3 text-[#74726A] pointer-events-none flex items-center justify-center">
               {leftIcon}
             </div>
           )}
@@ -35,7 +35,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             className={cn(
-              "w-full h-10 rounded-lg bg-white border border-[#B9D7EA] px-3.5 text-xs font-medium text-[#1A2838] placeholder:text-slate-400 transition-colors duration-150 focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20 disabled:bg-[#D6E6F2]/30 disabled:text-slate-400 disabled:cursor-not-allowed",
+              "w-full h-11 rounded-xl bg-white border border-[#E2DDD3] px-3.5 text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#8A8A85] transition-colors duration-150 focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20 disabled:bg-[#FAF7F2] disabled:text-[#74726A] disabled:cursor-not-allowed font-sans",
               leftIcon && "pl-9",
               rightIcon && "pr-9",
               error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
@@ -44,7 +44,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <div className="absolute right-3 text-slate-400 flex items-center justify-center">
+            <div className="absolute right-3 text-[#74726A] flex items-center justify-center">
               {rightIcon}
             </div>
           )}

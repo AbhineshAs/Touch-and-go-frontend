@@ -2,83 +2,71 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Sparkles, Building2, UserCheck, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, Zap, ShieldCheck, Clock } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { playTactileChime } from "@/lib/sound/chime";
 
 export function LandingCtaBanner() {
   return (
-    <section className="py-16 sm:py-24 bg-[#1A2838] text-[#D6E6F2] relative overflow-hidden border-t border-[#769FCD]/20">
-      {/* Background Ambient Glows & Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#769fcd10_1px,transparent_1px),linear-gradient(to_bottom,#769fcd10_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[#769FCD]/20 blur-[120px] pointer-events-none rounded-full" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-[#B9D7EA]/20 blur-[120px] pointer-events-none rounded-full" />
+    <section className="py-20 sm:py-28 lg:py-32 bg-[#141413] text-[#FAF9F6] relative overflow-hidden border-t border-[#262624]">
+      {/* Subtle architectural grain / grid lines (no blurry glow orbs) */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="relative rounded-3xl p-8 sm:p-14 lg:p-16 overflow-hidden bg-gradient-to-br from-[#141F2C] via-[#1A2838] to-[#141F2C] border border-[#769FCD]/40 shadow-[0_20px_60px_-15px_rgba(26,40,56,0.5)] backdrop-blur-xl">
-          
-          {/* Decorative Corner Sheens */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-[#B9D7EA]/20 via-[#769FCD]/10 to-transparent blur-2xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#769FCD]/20 via-[#B9D7EA]/10 to-transparent blur-2xl pointer-events-none" />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        {/* Subtle Live Badge (No "Revolution" fluff) */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono font-bold text-[#A8A49C] mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#769FCD]" />
+          <span>DIRECT TECH RECRUITMENT • INDIA</span>
+        </div>
 
-          <div className="relative max-w-4xl mx-auto text-center">
-            {/* Live Status Pill Badge */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#D6E6F2]/10 border border-[#769FCD]/40 text-xs font-bold text-[#B9D7EA] mb-8 backdrop-blur-md shadow-inner">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#769FCD] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B9D7EA]" />
-              </span>
-              <Sparkles className="w-3.5 h-3.5 text-[#B9D7EA]" />
-              <span className="tracking-wide uppercase">Join The Touch &amp; Go Recruitment Revolution</span>
-            </div>
+        {/* Big Typographic Block: One confident, benefit-led headline */}
+        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-[-0.035em] text-[#FAF9F6] font-display leading-[1.05] max-w-4xl mx-auto">
+          Your next tech role is one tap away.
+        </h2>
 
-            {/* Main Title */}
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-6 text-white leading-[1.15]">
-              Ready for your{" "}
-              <span className="bg-gradient-to-r from-[#B9D7EA] via-white to-[#769FCD] bg-clip-text text-transparent drop-shadow-sm">
-                Touch And Go
-              </span>{" "}
-              career breakthrough?
-            </h2>
+        {/* Subtext: Plain, honest, confident */}
+        <p className="text-base sm:text-xl text-[#A8A49C] font-sans font-normal mt-6 mb-10 max-w-2xl mx-auto leading-relaxed">
+          Skip recruiter phone screens and resume black holes. Connect directly with hiring
+          leads at India&apos;s fastest-growing tech teams with transparent CTC upfront.
+        </p>
 
-            {/* Subtext */}
-            <p className="text-base sm:text-xl text-[#D6E6F2]/80 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-              Connect instantly with <strong className="text-white font-semibold">50,000+ top candidates</strong> and <strong className="text-white font-semibold">1,200+ verified tech employers</strong> across India building the future of hiring.
-            </p>
+        {/* Single Primary Action (No secondary button box) */}
+        <div className="flex flex-col items-center justify-center gap-4">
+          <Link href="/sign-up?role=candidate" onClick={() => playTactileChime()}>
+            <Button
+              variant="touch"
+              size="lg"
+              className="bg-[#769FCD] hover:bg-[#5E8BBF] active:bg-[#4A7AA8] text-white px-8 sm:px-10 py-4 sm:py-4.5 text-base sm:text-lg font-black shadow-[3px_3px_0px_#FAF9F6] hover:shadow-[4px_4px_0px_#FAF9F6] active:shadow-none border-2 border-white/90"
+            >
+              <span>Get Matched in 1 Touch</span>
+              <ArrowRight className="w-5 h-5 ml-2.5" />
+            </Button>
+          </Link>
 
-            {/* CTA Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-lg mx-auto mb-12">
-              <Link href="/sign-up?role=candidate" className="w-full sm:w-auto flex-1 group">
-                <button className="w-full py-4 px-8 rounded-2xl bg-white hover:bg-[#D6E6F2] text-[#1A2838] font-extrabold text-base shadow-[0_10px_30px_-5px_rgba(255,255,255,0.3)] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3 cursor-pointer border border-white/50">
-                  <UserCheck className="w-5 h-5 text-[#1A2838]" />
-                  <span>Create Free Profile</span>
-                  <ArrowRight className="w-5 h-5 text-[#1A2838] group-hover:translate-x-1.5 transition-transform duration-200" />
-                </button>
-              </Link>
-              
-              <Link href="/sign-up?role=employer" className="w-full sm:w-auto flex-1 group">
-                <button className="w-full py-4 px-8 rounded-2xl bg-[#769FCD] hover:bg-[#5E8BBF] active:scale-[0.98] text-white font-extrabold text-base border border-[#769FCD]/40 backdrop-blur-md shadow-lg transition-all duration-200 flex items-center justify-center gap-3 cursor-pointer">
-                  <Building2 className="w-5 h-5 text-[#B9D7EA]" />
-                  <span>Hire Top Talent</span>
-                  <ArrowRight className="w-5 h-5 text-[#B9D7EA] group-hover:translate-x-1.5 transition-transform duration-200" />
-                </button>
-              </Link>
-            </div>
+          {/* Quiet text link for employers underneath */}
+          <Link
+            href="/sign-up?role=employer"
+            className="text-xs sm:text-sm text-[#A8A49C] hover:text-white transition-colors underline underline-offset-4 font-mono font-medium pt-1"
+          >
+            Hiring engineers or designers? Post a role in 2 minutes &rarr;
+          </Link>
+        </div>
 
-            {/* Feature Highlights Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-[#769FCD]/20 max-w-3xl mx-auto">
-              <div className="flex items-center justify-center gap-2.5 py-2 px-3 rounded-xl bg-white/[0.06] border border-white/10 text-xs font-semibold text-[#D6E6F2] backdrop-blur-xs">
-                <Zap className="w-4 h-4 text-[#B9D7EA] shrink-0" />
-                <span>1-Touch Instant Apply</span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 py-2 px-3 rounded-xl bg-white/[0.06] border border-white/10 text-xs font-semibold text-[#D6E6F2] backdrop-blur-xs">
-                <ShieldCheck className="w-4 h-4 text-[#769FCD] shrink-0" />
-                <span>100% Verified Employers</span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 py-2 px-3 rounded-xl bg-white/[0.06] border border-white/10 text-xs font-semibold text-[#D6E6F2] backdrop-blur-xs">
-                <CheckCircle2 className="w-4 h-4 text-[#B9D7EA] shrink-0" />
-                <span>Zero Recruiter Spam</span>
-              </div>
-            </div>
-
+        {/* Quiet Trust Markers (No colorful pills or cards) */}
+        <div className="mt-14 pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-[#74726A]">
+          <div className="flex items-center gap-2">
+            <Zap className="w-3.5 h-3.5 text-[#769FCD]" />
+            <span>1-Touch Direct Apply</span>
+          </div>
+          <span className="hidden sm:inline text-white/20">•</span>
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#15803D]" />
+            <span>100% Anonymous Until You Approve</span>
+          </div>
+          <span className="hidden sm:inline text-white/20">•</span>
+          <div className="flex items-center gap-2">
+            <Clock className="w-3.5 h-3.5 text-[#769FCD]" />
+            <span>4-Hour Median First Response</span>
           </div>
         </div>
       </div>

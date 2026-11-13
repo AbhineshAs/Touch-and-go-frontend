@@ -24,7 +24,7 @@ import {
   TrendingUp,
   Award,
   Sparkles,
-  Home,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
@@ -52,8 +52,31 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
   const applicationsCount = candidateRecord?.applications.length || 0;
   const savedJobsCount = candidateRecord?.savedJobIds.length || 0;
 
+  const getPageTitle = (path: string): string => {
+    const parts = path.split("/").filter(Boolean);
+    const last = parts[parts.length - 1] || "dashboard";
+    const titleMap: Record<string, string> = {
+      candidate: "Candidate Hub",
+      dashboard: "Overview",
+      jobs: "Find Jobs",
+      recommended: "Recommended Roles",
+      applications: "Applications",
+      saved: "Saved Jobs",
+      resume: "Resume Studio",
+      profile: "Profile & Identity",
+      agent: "Candidate AI Agent",
+      assistant: "RAG Assistant",
+      "interview-simulator": "AI Interviewer",
+      "career-intelligence": "Career Intelligence",
+      assessments: "Skill Assessments",
+      notifications: "Notifications",
+    };
+    return titleMap[last] || last.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+
+  const pageTitle = getPageTitle(pathname);
+
   const coreNavItems: NavItem[] = [
-    { label: "Candidate Hub", href: "/candidate", icon: <Home className="w-4 h-4" /> },
     { label: "Overview", href: "/candidate/dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
     { label: "Find Jobs", href: "/candidate/jobs", icon: <Search className="w-4 h-4" /> },
     { label: "Recommended", href: "/candidate/recommended", icon: <Compass className="w-4 h-4" /> },
@@ -81,7 +104,7 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
     {
       label: "Candidate AI Agent",
       href: "/candidate/agent",
-      icon: <Bot className="w-4 h-4 text-[#1A2838]" />,
+      icon: <Bot className="w-4 h-4 text-[#769FCD]" />,
       badge: "6 Agents",
       highlight: true,
     },
@@ -103,32 +126,32 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
     {
       label: "Skill Assessments",
       href: "/candidate/assessments",
-      icon: <Award className="w-4 h-4 text-[#1A2838]" />,
+      icon: <Award className="w-4 h-4 text-[#769FCD]" />,
     },
   ];
 
   return (
     <ProtectedRoute allowedRoles={["candidate", "admin"]}>
-      <div className="min-h-screen lg:h-screen flex flex-col lg:flex-row bg-[#F4F8FB] text-[#1A2838] lg:overflow-hidden font-sans">
+      <div className="min-h-screen lg:h-screen flex flex-col lg:flex-row bg-[#FAF7F2] text-[#141413] lg:overflow-hidden font-sans selection:bg-[#D6E6F2] selection:text-[#141413]">
         {/* Mobile Top Bar */}
-        <header className="lg:hidden h-16 bg-white border-b border-[#B9D7EA] px-4 flex items-center justify-between sticky top-0 z-30 shadow-2xs">
+        <header className="lg:hidden h-16 bg-white border-b border-[#E8E2D8] px-4 flex items-center justify-between sticky top-0 z-30 shadow-2xs">
           <TagLogo href="/candidate/dashboard" height={36} />
 
           <div className="flex items-center gap-2">
             <Link
               href="/candidate/notifications"
-              className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 relative"
+              className="p-2 rounded-xl text-[#74726A] hover:bg-[#FAF7F2] relative"
               aria-label="Notifications"
             >
-              <Bell className="w-5 h-5 text-[#1A2838]" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#1A2838]" />
+              <Bell className="w-5 h-5 text-[#141413]" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#769FCD]" />
             </Link>
             <button
               onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-              className="p-2 rounded-xl text-slate-600 hover:bg-slate-100"
+              className="p-2 rounded-xl text-[#74726A] hover:bg-[#FAF7F2] border border-[#E8E2D8]"
               aria-label="Toggle navigation menu"
             >
-              {mobileSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileSidebarOpen ? <X className="w-5 h-5 text-[#141413]" /> : <Menu className="w-5 h-5 text-[#141413]" />}
             </button>
           </div>
         </header>
@@ -136,7 +159,7 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
         {/* Mobile Backdrop Overlay */}
         {mobileSidebarOpen && (
           <div
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 lg:hidden transition-opacity"
+            className="fixed inset-0 bg-[#141413]/40 backdrop-blur-xs z-30 lg:hidden transition-opacity"
             onClick={() => setMobileSidebarOpen(false)}
             aria-hidden="true"
           />
@@ -145,57 +168,56 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
         {/* Sidebar (Desktop + Mobile Drawer) */}
         <aside
           className={cn(
-            "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-[#B9D7EA] flex flex-col justify-between p-4.5 transition-transform duration-200 shadow-2xs",
+            "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-[#E8E2D8] flex flex-col justify-between p-4.5 transition-transform duration-200 shadow-2xs",
             "lg:static lg:h-full lg:w-64 lg:shrink-0 lg:translate-x-0 overflow-y-auto",
             mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-5">
             {/* Brand header */}
-            <div className="flex items-center justify-between px-2 pt-1.5">
+            <div className="flex items-center justify-between px-1.5 pt-1">
               <TagLogo href="/candidate/dashboard" height={38} />
               <button
                 onClick={() => setMobileSidebarOpen(false)}
-                className="lg:hidden p-1 text-slate-400 hover:text-slate-900"
+                className="lg:hidden p-1 text-[#74726A] hover:text-[#141413]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Quick Status Pill */}
-            <div className="mx-2 px-3 py-2 rounded-xl bg-[#D6E6F2] border border-[#B9D7EA] flex items-center justify-between text-xs">
-              <span className="text-[#1A2838] font-bold">Candidate Portal</span>
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1A2838] bg-white px-2 py-0.5 rounded-full border border-[#B9D7EA]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#769FCD] animate-pulse" />
+            <div className="mx-1 px-3 py-2 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] flex items-center justify-between text-xs">
+              <span className="text-[#141413] font-black font-display">Candidate Portal</span>
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Open to Work
               </span>
             </div>
 
             {/* Core Navigation Links */}
             <div className="flex flex-col gap-1">
-              <span className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+              <span className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[#74726A]">
                 Job Seeker Workflow
               </span>
-              <nav className="flex flex-col gap-1 mt-1">
+              <nav className="flex flex-col gap-0.5 mt-1">
                 {coreNavItems.map((item) => {
                   const isActive =
                     pathname === item.href ||
-                    (item.href !== "/candidate" && item.href !== "/candidate/dashboard" && pathname.startsWith(item.href)) ||
-                    (item.href === "/candidate" && pathname === "/candidate");
+                    (item.href !== "/candidate/dashboard" && pathname.startsWith(item.href));
                   return (
                     <Link
                       key={item.label}
                       href={item.href}
                       onClick={() => setMobileSidebarOpen(false)}
                       className={cn(
-                        "flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-150 relative",
+                        "flex items-center justify-between px-3.5 py-2.25 rounded-xl text-xs font-semibold transition-all duration-150 relative",
                         isActive
-                          ? "bg-[#D6E6F2] text-[#1A2838] shadow-2xs border border-[#B9D7EA]"
-                          : "text-slate-700 hover:text-[#1A2838] hover:bg-slate-100/80 border border-transparent"
+                          ? "bg-[#FAF7F2] text-[#141413] font-bold shadow-2xs border border-[#E8E2D8]"
+                          : "text-[#5A5850] hover:text-[#141413] hover:bg-[#FAF7F2]"
                       )}
                     >
                       <div className="flex items-center gap-3">
-                        <span className={cn(isActive ? "text-[#1A2838]" : "text-slate-400")}>
+                        <span className={cn(isActive ? "text-[#769FCD]" : "text-[#74726A]")}>
                           {item.icon}
                         </span>
                         <span>{item.label}</span>
@@ -203,17 +225,17 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
                       {item.badge !== undefined && (
                         <span
                           className={cn(
-                            "text-[10px] px-2 py-0.5 rounded-full font-bold",
+                            "text-[10px] font-mono px-2 py-0.5 rounded-full font-bold",
                             isActive
-                              ? "bg-[#1A2838] text-white"
-                              : "bg-slate-100 text-slate-600 border border-[#B9D7EA]"
+                              ? "bg-[#D6E6F2] text-[#141413] border border-[#B9D7EA]"
+                              : "bg-[#FAF7F2] text-[#74726A] border border-[#E8E2D8]"
                           )}
                         >
                           {item.badge}
                         </span>
                       )}
                       {isActive && (
-                        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#1A2838]" />
+                        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#769FCD]" />
                       )}
                     </Link>
                   );
@@ -222,12 +244,12 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* AI Intelligence & Autonomous Workflows */}
-            <div className="flex flex-col gap-1 pt-2 border-t border-[#B9D7EA]/60">
-              <span className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+            <div className="flex flex-col gap-1 pt-2 border-t border-[#E8E2D8]">
+              <span className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[#74726A] flex items-center justify-between">
                 <span>AI &amp; Career Suite</span>
-                <Sparkles className="w-3 h-3 text-[#1A2838]" />
+                <Sparkles className="w-3 h-3 text-[#769FCD]" />
               </span>
-              <nav className="flex flex-col gap-1 mt-1">
+              <nav className="flex flex-col gap-0.5 mt-1">
                 {aiNavItems.map((item) => {
                   const isActive = pathname === item.href || pathname.startsWith(item.href);
                   return (
@@ -236,23 +258,25 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
                       href={item.href}
                       onClick={() => setMobileSidebarOpen(false)}
                       className={cn(
-                        "flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-150 relative",
+                        "flex items-center justify-between px-3.5 py-2.25 rounded-xl text-xs font-semibold transition-all duration-150 relative",
                         isActive
-                          ? "bg-gradient-to-r from-[#D6E6F2] to-[#B9D7EA]/40 text-[#1A2838] shadow-2xs border border-[#B9D7EA]"
-                          : "text-slate-700 hover:text-[#1A2838] hover:bg-slate-100/80 border border-transparent"
+                          ? "bg-[#FAF7F2] text-[#141413] font-bold shadow-2xs border border-[#E8E2D8]"
+                          : "text-[#5A5850] hover:text-[#141413] hover:bg-[#FAF7F2]"
                       )}
                     >
                       <div className="flex items-center gap-3">
-                        <span>{item.icon}</span>
+                        <span className={cn(isActive ? "text-[#769FCD]" : "text-[#74726A]")}>
+                          {item.icon}
+                        </span>
                         <span>{item.label}</span>
                       </div>
                       {item.badge && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full font-extrabold bg-[#B9D7EA] text-[#1A2838] border border-[#B9D7EA]">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold bg-[#D6E6F2] text-[#141413] border border-[#B9D7EA]">
                           {item.badge}
                         </span>
                       )}
                       {isActive && (
-                        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#1A2838]" />
+                        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#769FCD]" />
                       )}
                     </Link>
                   );
@@ -262,41 +286,41 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Bottom User Profile Card */}
-          <div className="flex flex-col gap-1.5 pt-4 border-t border-[#B9D7EA]">
+          <div className="flex flex-col gap-1.5 pt-4 border-t border-[#E8E2D8]">
             <Link
               href="/candidate/notifications"
               onClick={() => setMobileSidebarOpen(false)}
               className={cn(
-                "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 relative",
+                "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 relative",
                 pathname === "/candidate/notifications"
-                  ? "bg-[#D6E6F2] text-[#1A2838] shadow-2xs border border-[#B9D7EA]"
-                  : "text-slate-700 hover:text-[#1A2838] hover:bg-slate-100/80"
+                  ? "bg-[#FAF7F2] text-[#141413] font-bold border border-[#E8E2D8]"
+                  : "text-[#5A5850] hover:text-[#141413] hover:bg-[#FAF7F2]"
               )}
             >
               <div className="flex items-center gap-3">
-                <Bell className={cn("w-4 h-4", pathname === "/candidate/notifications" ? "text-[#1A2838]" : "text-slate-400")} />
+                <Bell className={cn("w-4 h-4", pathname === "/candidate/notifications" ? "text-[#769FCD]" : "text-[#74726A]")} />
                 <span>Notifications</span>
               </div>
-              <span className="w-2 h-2 rounded-full bg-[#1A2838] shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-[#769FCD] shrink-0" />
             </Link>
 
             <Link
               href="/candidate/settings"
               onClick={() => setMobileSidebarOpen(false)}
               className={cn(
-                "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 relative",
+                "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 relative",
                 pathname === "/candidate/settings"
-                  ? "bg-[#D6E6F2] text-[#1A2838] shadow-2xs border border-[#B9D7EA]"
-                  : "text-slate-700 hover:text-[#1A2838] hover:bg-slate-100/80"
+                  ? "bg-[#FAF7F2] text-[#141413] font-bold border border-[#E8E2D8]"
+                  : "text-[#5A5850] hover:text-[#141413] hover:bg-[#FAF7F2]"
               )}
             >
               <div className="flex items-center gap-3">
-                <Settings className={cn("w-4 h-4", pathname === "/candidate/settings" ? "text-[#1A2838]" : "text-slate-400")} />
+                <Settings className={cn("w-4 h-4", pathname === "/candidate/settings" ? "text-[#769FCD]" : "text-[#74726A]")} />
                 <span>Settings &amp; Privacy</span>
               </div>
             </Link>
 
-            <div className="flex items-center justify-between p-2.5 mt-2 rounded-2xl bg-[#D6E6F2]/30 border border-[#B9D7EA]">
+            <div className="flex items-center justify-between p-2.5 mt-2 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
               <Link
                 href="/candidate/profile"
                 onClick={() => setMobileSidebarOpen(false)}
@@ -306,18 +330,18 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
                   <img
                     src={candidateAvatar}
                     alt={candidateName}
-                    className="w-9 h-9 rounded-full object-cover shrink-0 border border-[#B9D7EA]"
+                    className="w-9 h-9 rounded-full object-cover shrink-0 border border-[#E8E2D8]"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-[#1A2838] text-white flex items-center justify-center font-bold text-sm shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-[#141413] text-white flex items-center justify-center font-bold text-xs shrink-0">
                     {candidateName.charAt(0).toUpperCase()}
                   </div>
                 )}
                 <div className="flex flex-col min-w-0">
-                  <span className="text-xs font-extrabold text-slate-900 truncate group-hover:text-[#1A2838] transition-colors">
+                  <span className="text-xs font-bold text-[#141413] truncate group-hover:text-[#769FCD] transition-colors">
                     {candidateName}
                   </span>
-                  <span className="text-[11px] text-slate-500 font-medium truncate">
+                  <span className="text-[10px] font-mono text-[#74726A] truncate">
                     {candidateEmail}
                   </span>
                 </div>
@@ -329,7 +353,7 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
                 }}
                 title="Sign Out"
                 type="button"
-                className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer shrink-0 ml-1"
+                className="p-1.5 text-[#74726A] hover:text-red-600 rounded-lg hover:bg-white transition-colors cursor-pointer shrink-0 ml-1"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -337,32 +361,80 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
 
-        {/* Main Page Area */}
-        <div className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
-          <header className="hidden lg:flex h-16 bg-white border-b border-[#B9D7EA] px-8 items-center justify-between sticky top-0 z-20 shadow-2xs">
-            <div className="flex items-center gap-3 text-xs text-slate-500">
-              <span className="font-extrabold text-slate-900 capitalize">Candidate Workspace</span>
-              <span>/</span>
-              <span className="capitalize font-bold text-[#1A2838]">{pathname.split("/").pop() || "Dashboard"}</span>
+        {/* Main Page Area with Isolated Content Scroll (Eliminating Scrollbar-Header Bleed) */}
+        <div className="flex-1 lg:h-full flex flex-col min-w-0 lg:overflow-hidden">
+          <header className="hidden lg:flex h-16 bg-white/95 backdrop-blur-md border-b border-[#E8E2D8] px-6 lg:px-8 items-center justify-between shrink-0 z-20 shadow-2xs">
+            {/* Left: Breadcrumbs & Status */}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 text-xs">
+                <Link
+                  href="/candidate/dashboard"
+                  className="font-medium text-[#74726A] hover:text-[#141413] transition-colors"
+                >
+                  Candidate Workspace
+                </Link>
+                <span className="text-[#C5BEB3] font-mono">/</span>
+                <span className="font-bold text-[#141413] tracking-tight">
+                  {pageTitle}
+                </span>
+              </div>
+
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/80">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Active Session
+              </span>
             </div>
 
-            <div className="flex items-center gap-4">
-              <Link href="/jobs" className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#D6E6F2]/30 border border-[#B9D7EA] hover:border-[#769FCD] text-xs font-semibold text-[#1A2838] transition-colors">
-                <Search className="w-3.5 h-3.5 text-[#1A2838]" />
-                <span>Explore Marketplace Jobs...</span>
+            {/* Right: Search, Notifications, Profile Mini-Pill */}
+            <div className="flex items-center gap-3.5">
+              <Link
+                href="/candidate/jobs"
+                className="group flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-[#FAF7F2] hover:bg-white border border-[#E8E2D8] hover:border-[#769FCD] text-xs text-[#74726A] hover:text-[#141413] transition-all duration-150 shadow-2xs w-64"
+              >
+                <Search className="w-3.5 h-3.5 text-[#769FCD] group-hover:scale-105 transition-transform" />
+                <span className="truncate">Explore Marketplace Jobs...</span>
+                <kbd className="ml-auto text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-white border border-[#E8E2D8] text-[#74726A] group-hover:border-[#769FCD]/40 transition-colors shadow-2xs">
+                  ⌘K
+                </kbd>
               </Link>
 
               <Link
                 href="/candidate/notifications"
-                className="p-2 rounded-xl text-slate-600 hover:bg-slate-100 relative"
+                className="p-2 rounded-xl text-[#74726A] hover:text-[#141413] hover:bg-[#FAF7F2] border border-[#E8E2D8] hover:border-[#769FCD]/40 relative transition-all"
+                title="Notifications"
               >
-                <Bell className="w-4 h-4 text-[#1A2838]" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#1A2838]" />
+                <Bell className="w-4 h-4" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#769FCD] ring-2 ring-white" />
+              </Link>
+
+              <div className="h-4 w-px bg-[#E8E2D8]" />
+
+              <Link
+                href="/candidate/profile"
+                className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-xl bg-[#FAF7F2] hover:bg-white border border-[#E8E2D8] hover:border-[#769FCD] transition-all group"
+                title="View Profile"
+              >
+                {candidateAvatar ? (
+                  <img
+                    src={candidateAvatar}
+                    alt={candidateName}
+                    className="w-6 h-6 rounded-lg object-cover border border-[#E8E2D8]"
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded-lg bg-[#141413] text-white flex items-center justify-center font-bold text-[10px] group-hover:bg-[#769FCD] transition-colors">
+                    {candidateName.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="text-xs font-bold text-[#141413] max-w-[110px] truncate group-hover:text-[#769FCD] transition-colors">
+                  {candidateName}
+                </span>
               </Link>
             </div>
           </header>
 
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">{children}</main>
+          <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto scroll-smooth">
+            {children}
+          </main>
         </div>
       </div>
     </ProtectedRoute>

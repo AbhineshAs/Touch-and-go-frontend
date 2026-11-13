@@ -26,9 +26,17 @@ export function TagLogo({
     <div className={cn("inline-flex items-center gap-2.5 group cursor-pointer shrink-0", className)}>
       {!imgError ? (
         <img
-          src="/tag-logo.png"
+          src="/tag-logo-transparent.png"
           alt="Touch And Go"
-          onError={() => setImgError(true)}
+          onError={(e) => {
+            // Fallback to standard tag-logo.png if transparent asset fails
+            const target = e.currentTarget;
+            if (target.src.endsWith("/tag-logo-transparent.png")) {
+              target.src = "/tag-logo.png";
+            } else {
+              setImgError(true);
+            }
+          }}
           style={{ height: `${height}px`, width: width ? `${width}px` : "auto" }}
           className="object-contain transition-transform duration-200 group-hover:scale-105 max-w-[180px]"
         />

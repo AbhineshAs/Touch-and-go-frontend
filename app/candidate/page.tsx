@@ -111,11 +111,11 @@ export default function CandidatePage() {
   if (!candidateRecord) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] text-[#1A2838] flex items-center justify-center font-black text-xl">
+        <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] text-[#141413] flex items-center justify-center font-black text-xl">
           TAG
         </div>
-        <h2 className="text-xl font-bold text-[#1A2838]">Candidate Experience Portal Demo</h2>
-        <p className="text-xs text-[#1A2838]/70 max-w-md">
+        <h2 className="text-xl font-bold text-[#141413]">Candidate Experience Portal Demo</h2>
+        <p className="text-xs text-[#141413]/70 max-w-md">
           Experience the full candidate workflow, AI resume parser, match engine, interview simulator, and autonomous AI agents.
         </p>
         <div className="flex items-center gap-3 mt-2">
@@ -147,7 +147,7 @@ export default function CandidatePage() {
     { name: "Profile Agent", icon: <User className="w-4 h-4 text-[#769FCD]" />, desc: "Manages identity, bio, and skills sync" },
     { name: "Resume Agent", icon: <FileText className="w-4 h-4 text-[#769FCD]" />, desc: "Extracts data, parses PDFs & optimizes ATS" },
     { name: "Job Agent", icon: <Search className="w-4 h-4 text-[#769FCD]" />, desc: "Matches jobs, evaluates compatibility" },
-    { name: "Skill Agent", icon: <Award className="w-4 h-4 text-[#1A2838]" />, desc: "Detects skill gaps & verifies badges" },
+    { name: "Skill Agent", icon: <Award className="w-4 h-4 text-[#141413]" />, desc: "Detects skill gaps & verifies badges" },
     { name: "Interview Agent", icon: <Mic className="w-4 h-4 text-[#769FCD]" />, desc: "Simulates STAR interviews & scores" },
     { name: "Career Agent", icon: <TrendingUp className="w-4 h-4 text-[#769FCD]" />, desc: "Builds 12-month career growth roadmaps" },
   ];
@@ -258,71 +258,72 @@ export default function CandidatePage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-16">
-      {/* Top Banner & Profile Overview */}
-      <div className="relative rounded-3xl bg-[#1A2838] text-white p-6 sm:p-8 shadow-xl overflow-hidden border border-[#B9D7EA]/30">
-        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-96 h-96 bg-[#769FCD]/10 rounded-full blur-3xl pointer-events-none" />
-        
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-          <div className="flex items-start sm:items-center gap-4">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#769FCD] p-0.5 shadow-md shrink-0">
-              <div className="w-full h-full rounded-[14px] bg-[#141F2C] flex items-center justify-center text-white font-extrabold text-2xl">
-                {candidateRecord.identity.fullName.charAt(0)}
-              </div>
+      {/* 1. Clean, Minimal Editorial Profile Header */}
+      <div className="bg-white border border-[#E2DDD3] rounded-3xl p-6 sm:p-8 shadow-[0_4px_24px_rgba(26,40,56,0.04)]">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          {/* Identity Section */}
+          <div className="flex items-start sm:items-center gap-4 sm:gap-5">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#141413] text-white flex items-center justify-center font-black text-2xl font-display shadow-2xs shrink-0 border border-[#E8E2D8]">
+              {candidateRecord.identity.fullName.charAt(0)}
             </div>
 
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-[#141413] font-display">
                   {candidateRecord.identity.fullName}
                 </h1>
-                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#D6E6F2]/10 text-[#B9D7EA] border border-[#B9D7EA]/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#769FCD] animate-pulse" />
-                  Candidate Portal
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-mono font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Open to Opportunities</span>
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-[#D6E6F2]/80 mt-1 font-medium">
+              <p className="text-xs sm:text-sm text-[#74726A] font-medium">
                 {candidateRecord.profile.headline}
               </p>
-              <div className="flex items-center gap-3 text-xs text-[#B9D7EA] mt-2 flex-wrap">
+              <div className="flex items-center gap-3 text-xs text-[#74726A] mt-1 flex-wrap font-mono">
                 <span className="flex items-center gap-1">
                   <MapPin className="w-3.5 h-3.5 text-[#769FCD]" />
-                  {candidateRecord.profile.location || "Bengaluru, India"}
+                  <span>{candidateRecord.profile.location || "Bengaluru, India"}</span>
                 </span>
+                <span>•</span>
                 <span className="flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#769FCD]" />
-                  ATS Score: <strong className="text-white">94%</strong>
+                  <span>ATS Score: <strong className="text-[#141413] font-black">94%</strong></span>
                 </span>
+                <span>•</span>
+                <span className="text-[#769FCD] font-bold">1-Touch Stealth Active</span>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 min-w-[240px] bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+          {/* Profile Health Mini-Panel */}
+          <div className="flex flex-col gap-2.5 min-w-[280px] bg-[#FAF7F2] p-4.5 rounded-2xl border border-[#E8E2D8]">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-[#D6E6F2] font-semibold">Profile Completeness</span>
-              <span className="font-extrabold text-[#B9D7EA]">{profileScore}%</span>
+              <span className="text-[#141413] font-bold font-display">Profile Readiness</span>
+              <span className="font-mono font-black text-[#769FCD]">{profileScore}%</span>
             </div>
-            <div className="w-full bg-[#141F2C] rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-[#E8E2D8] rounded-full h-2 overflow-hidden">
               <div
                 className="bg-[#769FCD] h-2 rounded-full transition-all duration-500"
                 style={{ width: `${profileScore}%` }}
               />
             </div>
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-[11px] text-[#D6E6F2]/60">Applications: {applications.length}</span>
-              <span className="text-[11px] text-[#D6E6F2]/60">Saved Jobs: {savedJobIds.length}</span>
-              <span className="text-[11px] text-[#B9D7EA] font-bold">Matched: {matchedJobs.length}</span>
+            <div className="flex items-center justify-between pt-1 text-[11px] font-mono text-[#74726A]">
+              <span>Applications: <strong className="text-[#141413]">{applications.length}</strong></span>
+              <span>Saved: <strong className="text-[#141413]">{savedJobIds.length}</strong></span>
+              <span className="text-[#769FCD] font-bold">Matched: {matchedJobs.length}</span>
             </div>
           </div>
         </div>
 
-        {/* Stepper Workflow Diagram */}
-        <div className="mt-8 pt-6 border-t border-[#B9D7EA]/20">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#B9D7EA] flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-[#769FCD]" />
-              End-to-End Candidate Workflow Stepper
+        {/* Minimalist Workflow Progression Track */}
+        <div className="mt-6 pt-5 border-t border-[#E8E2D8]">
+          <div className="flex items-center justify-between mb-3 text-xs">
+            <span className="font-mono font-bold text-[11px] uppercase tracking-wider text-[#74726A] flex items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5 text-[#769FCD] fill-[#769FCD]" />
+              Candidate Progression Pipeline
             </span>
-            <span className="text-[11px] text-[#D6E6F2]/70">Click step to view workflow panel</span>
+            <span className="text-[11px] font-mono text-[#74726A]">Tap stage to jump</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
@@ -335,22 +336,28 @@ export default function CandidatePage() {
                     setCurrentStep(stepItem.step);
                     setActiveTab(stepItem.tab as any);
                   }}
-                  className={`flex flex-col text-left p-3 rounded-xl border transition-all text-xs cursor-pointer ${
+                  className={`flex flex-col text-left p-3 rounded-2xl border transition-all text-xs cursor-pointer ${
                     isActive
-                      ? "bg-[#769FCD]/30 border-[#769FCD] text-white shadow-md ring-1 ring-[#769FCD]"
-                      : "bg-[#141F2C] border-[#B9D7EA]/20 text-[#D6E6F2]/70 hover:border-[#769FCD] hover:text-white"
+                      ? "bg-[#141413] border-[#141413] text-white shadow-xs"
+                      : "bg-[#FAF7F2] border-[#E8E2D8] text-[#5A5850] hover:border-[#769FCD] hover:text-[#141413]"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${
-                      isActive ? "bg-[#769FCD] text-white" : "bg-[#1A2838] text-[#B9D7EA]"
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                      isActive ? "bg-white/20 text-white" : "bg-white text-[#74726A] border border-[#E8E2D8]"
                     }`}>
-                      STEP 0{stepItem.step}
+                      0{stepItem.step}
                     </span>
-                    {isActive && <CheckCircle2 className="w-3.5 h-3.5 text-[#B9D7EA]" />}
+                    {isActive ? (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#769FCD]" />
+                    ) : (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#D8D2C6]" />
+                    )}
                   </div>
-                  <span className="font-bold text-xs">{stepItem.label}</span>
-                  <span className="text-[10px] text-[#D6E6F2]/60 truncate">{stepItem.description}</span>
+                  <span className="font-bold text-xs mt-0.5">{stepItem.label}</span>
+                  <span className={`text-[10px] truncate mt-0.5 ${isActive ? "text-white/70" : "text-[#74726A]"}`}>
+                    {stepItem.description}
+                  </span>
                 </button>
               );
             })}
@@ -358,36 +365,34 @@ export default function CandidatePage() {
         </div>
       </div>
 
-      {/* Main Tab Navigation Header */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-[#B9D7EA]">
+      {/* 2. Clean Streamlined Tab Bar */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none p-1.5 rounded-2xl bg-white border border-[#E8E2D8] shadow-2xs">
         {[
           { id: "overview", label: "Overview & Launchpad", icon: <BarChart3 className="w-4 h-4" /> },
           { id: "profile", label: "Profile & Experience", icon: <User className="w-4 h-4" /> },
-          { id: "resume", label: "Resume Hub & Parsing", icon: <FileText className="w-4 h-4" /> },
-          { id: "jobs", label: "Search & Apply Jobs", icon: <Search className="w-4 h-4" /> },
-          { id: "agent", label: "Candidate AI Agent", icon: <Bot className="w-4 h-4 text-[#769FCD]" />, badge: "6 Agents" },
-          { id: "matching", label: "AI Job Matching", icon: <Sparkles className="w-4 h-4 text-[#769FCD]" /> },
-          { id: "career", label: "Career Intelligence", icon: <TrendingUp className="w-4 h-4 text-[#769FCD]" /> },
-          { id: "assessments", label: "Skill Assessments", icon: <Award className="w-4 h-4 text-[#1A2838]" /> },
-          { id: "interview", label: "AI Interviewer", icon: <Mic className="w-4 h-4 text-[#769FCD]" /> },
-          { id: "rag", label: "RAG Assistant", icon: <BrainCircuit className="w-4 h-4 text-[#769FCD]" /> },
+          { id: "resume", label: "Resume Hub", icon: <FileText className="w-4 h-4" /> },
+          { id: "jobs", label: "Job Search & Apply", icon: <Search className="w-4 h-4" /> },
+          { id: "agent", label: "Candidate AI Agent", icon: <Bot className="w-4 h-4" />, badge: "6 Agents" },
+          { id: "matching", label: "AI Job Matching", icon: <Sparkles className="w-4 h-4" /> },
+          { id: "interview", label: "AI Interviewer", icon: <Mic className="w-4 h-4" /> },
+          { id: "rag", label: "RAG Assistant", icon: <BrainCircuit className="w-4 h-4" /> },
         ].map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 isActive
-                  ? "bg-[#1A2838] text-white shadow-md border border-[#1A2838]"
-                  : "bg-white text-[#1A2838] hover:bg-[#D6E6F2]/30 border border-[#B9D7EA]"
+                  ? "bg-[#141413] text-white shadow-xs"
+                  : "text-[#74726A] hover:text-[#141413] hover:bg-[#FAF7F2]"
               }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
               {tab.badge && (
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold ${
-                  isActive ? "bg-[#769FCD] text-white" : "bg-[#D6E6F2] text-[#1A2838]"
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${
+                  isActive ? "bg-[#769FCD] text-white" : "bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8]"
                 }`}>
                   {tab.badge}
                 </span>
@@ -401,178 +406,202 @@ export default function CandidatePage() {
 
       {/* 1. OVERVIEW & LAUNCHPAD TAB */}
       {activeTab === "overview" && (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8">
+          {/* Top Trio Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-6 bg-[#D6E6F2]/30 border border-[#B9D7EA] flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-extrabold uppercase text-[#1A2838]">AI Match Engine</span>
-                  <Sparkles className="w-5 h-5 text-[#769FCD]" />
+            {/* Card 1: Match Engine */}
+            <div className="bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-3xl p-6 sm:p-7 shadow-[0_4px_24px_rgba(26,40,56,0.04)] hover:shadow-[0_12px_32px_rgba(118,159,205,0.12)] transition-all hover:-translate-y-0.5 flex flex-col justify-between gap-5 group">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#74726A]">
+                    AI Match Engine
+                  </span>
+                  <div className="w-9 h-9 rounded-xl bg-[#D6E6F2] border border-[#E8E2D8] flex items-center justify-center text-[#769FCD] group-hover:scale-105 transition-transform">
+                    <Sparkles className="w-4.5 h-4.5" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-[#1A2838]">{matchedJobs.length} High-Match Jobs</h3>
-                <p className="text-xs text-[#1A2838]/70 mt-1">
-                  Jobs with over 85% skill alignment based on your candidate profile.
+                <h3 className="text-2xl font-black text-[#141413] font-display mt-1">
+                  {matchedJobs.length} High-Match Jobs
+                </h3>
+                <p className="text-xs text-[#5A5850] leading-relaxed">
+                  Roles exceeding 85% criteria vector overlap based on your verified tech stack.
                 </p>
               </div>
-              <Button
-                variant="primary"
-                size="sm"
-                className="mt-4 w-full"
+              <button
+                className="w-full py-2.5 rounded-xl bg-[#141413] hover:bg-[#769FCD] text-white font-extrabold text-xs shadow-[2px_2px_0px_#769FCD] hover:shadow-[3px_3px_0px_#5E8BBF] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 onClick={() => setActiveTab("jobs")}
               >
-                Browse Matched Jobs <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
-            </Card>
+                <span>Browse Matched Jobs</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
 
-            <Card className="p-6 bg-[#D6E6F2]/30 border border-[#B9D7EA] flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-extrabold uppercase text-[#1A2838]">Autonomous Agent</span>
-                  <Bot className="w-5 h-5 text-[#769FCD]" />
+            {/* Card 2: Autonomous Agent */}
+            <div className="bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-3xl p-6 sm:p-7 shadow-[0_4px_24px_rgba(26,40,56,0.04)] hover:shadow-[0_12px_32px_rgba(118,159,205,0.12)] transition-all hover:-translate-y-0.5 flex flex-col justify-between gap-5 group">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#74726A]">
+                    Autonomous Agent
+                  </span>
+                  <div className="w-9 h-9 rounded-xl bg-[#D6E6F2] border border-[#E8E2D8] flex items-center justify-center text-[#769FCD] group-hover:scale-105 transition-transform">
+                    <Bot className="w-4.5 h-4.5" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-[#1A2838]">Candidate AI Agent</h3>
-                <p className="text-xs text-[#1A2838]/70 mt-1">
-                  6 coordinated sub-agents running autonomous career workflows.
+                <h3 className="text-2xl font-black text-[#141413] font-display mt-1">
+                  Candidate AI Agent
+                </h3>
+                <p className="text-xs text-[#5A5850] leading-relaxed">
+                  6 coordinated sub-agents executing profile sync, resume ATS optimization, and match screening.
                 </p>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4 w-full"
+              <button
+                className="w-full py-2.5 rounded-xl bg-[#FAF7F2] hover:bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8] hover:border-[#769FCD] font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 onClick={() => setActiveTab("agent")}
               >
-                Launch Agent Console <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
-            </Card>
+                <span>Launch Agent Console</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#769FCD]" />
+              </button>
+            </div>
 
-            <Card className="p-6 bg-[#D6E6F2]/30 border border-[#B9D7EA] flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-extrabold uppercase text-[#1A2838]">Interactive Prep</span>
-                  <Mic className="w-5 h-5 text-[#769FCD]" />
+            {/* Card 3: Interactive Prep */}
+            <div className="bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-3xl p-6 sm:p-7 shadow-[0_4px_24px_rgba(26,40,56,0.04)] hover:shadow-[0_12px_32px_rgba(118,159,205,0.12)] transition-all hover:-translate-y-0.5 flex flex-col justify-between gap-5 group">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#74726A]">
+                    Interactive Prep
+                  </span>
+                  <div className="w-9 h-9 rounded-xl bg-[#D6E6F2] border border-[#E8E2D8] flex items-center justify-center text-[#769FCD] group-hover:scale-105 transition-transform">
+                    <Mic className="w-4.5 h-4.5" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-[#1A2838]">AI Interview Simulator</h3>
-                <p className="text-xs text-[#1A2838]/70 mt-1">
-                  Practice STAR interview questions with real-time feedback.
+                <h3 className="text-2xl font-black text-[#141413] font-display mt-1">
+                  AI Interview Simulator
+                </h3>
+                <p className="text-xs text-[#5A5850] leading-relaxed">
+                  Practice STAR interview questions with real-time feedback, speech analysis, and scoring.
                 </p>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4 w-full"
+              <button
+                className="w-full py-2.5 rounded-xl bg-[#FAF7F2] hover:bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8] hover:border-[#769FCD] font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 onClick={() => setActiveTab("interview")}
               >
-                Start Practice Session <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
-            </Card>
+                <span>Start Practice Session</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#769FCD]" />
+              </button>
+            </div>
           </div>
 
-          {/* Quick Action Feature Grid */}
+          {/* Quick Action Navigation Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               {
                 title: "Candidate Profile",
                 desc: "Personal info, experience, education & skills CRUD",
-                icon: <User className="w-5 h-5 text-[#769FCD]" />,
+                icon: <User className="w-4.5 h-4.5 text-[#769FCD]" />,
                 tab: "profile",
               },
               {
                 title: "Resume Manager",
                 desc: "Upload, view, download, replace & delete resume",
-                icon: <FileText className="w-5 h-5 text-[#769FCD]" />,
+                icon: <FileText className="w-4.5 h-4.5 text-[#769FCD]" />,
                 tab: "resume",
               },
               {
                 title: "Job Search & Apply",
                 desc: "Filter by location, job type, salary & skills",
-                icon: <Search className="w-5 h-5 text-[#769FCD]" />,
+                icon: <Search className="w-4.5 h-4.5 text-[#769FCD]" />,
                 tab: "jobs",
               },
               {
                 title: "RAG Career Assistant",
                 desc: "RAG-grounded candidate Q&A knowledge base",
-                icon: <BrainCircuit className="w-5 h-5 text-[#769FCD]" />,
+                icon: <BrainCircuit className="w-4.5 h-4.5 text-[#769FCD]" />,
                 tab: "rag",
               },
             ].map((feature, i) => (
-              <Card
+              <div
                 key={i}
-                className="p-5 hover:shadow-md transition-all cursor-pointer border-[#B9D7EA] flex flex-col justify-between"
+                className="bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-2xl p-5 shadow-2xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between gap-4 group"
                 onClick={() => setActiveTab(feature.tab as any)}
               >
-                <div className="flex items-start gap-3">
-                  <div className="p-2.5 rounded-xl bg-[#D6E6F2]">{feature.icon}</div>
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E2D8] group-hover:bg-[#D6E6F2]/40 transition-colors">
+                    {feature.icon}
+                  </div>
                   <div>
-                    <h4 className="font-bold text-sm text-[#1A2838]">{feature.title}</h4>
-                    <p className="text-xs text-[#1A2838]/70 mt-1 leading-relaxed">{feature.desc}</p>
+                    <h4 className="font-black text-sm text-[#141413] font-display group-hover:text-[#769FCD] transition-colors">
+                      {feature.title}
+                    </h4>
+                    <p className="text-xs text-[#5A5850] mt-1 leading-relaxed">{feature.desc}</p>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center justify-between text-xs text-[#769FCD] font-bold">
+                <div className="flex items-center justify-between text-xs text-[#769FCD] font-mono font-bold pt-2 border-t border-[#E8E2D8]/60">
                   <span>Open Tool</span>
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
 
           {/* Recent Applications Tracker */}
-          <Card className="p-6 border-[#B9D7EA]">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-extrabold text-base text-[#1A2838] flex items-center gap-2">
-                <FileText className="w-5 h-5 text-[#769FCD]" />
-                Application Tracking Pipeline
-              </h3>
-              <span className="text-xs text-[#1A2838]/60">Total Applied: {applications.length}</span>
+          <div className="bg-white border border-[#E2DDD3] rounded-3xl p-6 sm:p-7 shadow-[0_4px_24px_rgba(26,40,56,0.04)] flex flex-col gap-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4.5 h-4.5 text-[#769FCD]" />
+                <h3 className="font-black text-base text-[#141413] font-display">
+                  Application Tracking Pipeline
+                </h3>
+              </div>
+              <span className="text-xs font-mono font-bold text-[#74726A]">
+                Total Applied: <strong className="text-[#141413]">{applications.length}</strong>
+              </span>
             </div>
 
             {applications.length === 0 ? (
-              <div className="p-8 text-center bg-[#D6E6F2]/20 rounded-2xl border border-dashed border-[#B9D7EA]">
-                <p className="text-xs text-[#1A2838]/60">No job applications submitted yet.</p>
-                <Button
-                  size="sm"
-                  variant="primary"
-                  className="mt-3"
+              <div className="p-8 text-center bg-[#FAF7F2] rounded-2xl border border-dashed border-[#E8E2D8] flex flex-col items-center gap-3">
+                <p className="text-xs text-[#74726A] font-medium">No job applications submitted yet.</p>
+                <button
+                  className="px-4 py-2 rounded-xl bg-[#141413] hover:bg-[#769FCD] text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
                   onClick={() => setActiveTab("jobs")}
                 >
-                  Explore Jobs & Apply
-                </Button>
+                  Explore Jobs &amp; Apply
+                </button>
               </div>
             ) : (
               <div className="flex flex-col gap-3">
                 {applications.map((app) => (
                   <div
                     key={app.id}
-                    className="p-4 rounded-xl border border-[#B9D7EA] bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                    className="p-4 rounded-2xl border border-[#E8E2D8] bg-[#FAF7F2] hover:border-[#769FCD] flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-[#D6E6F2] text-[#1A2838] flex items-center justify-center font-bold text-sm">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-[#141413] text-white flex items-center justify-center font-black text-sm font-display">
                         {app.jobTitle.charAt(0)}
                       </div>
                       <div>
-                        <h4 className="font-bold text-sm text-[#1A2838]">{app.jobTitle}</h4>
-                        <p className="text-xs text-[#1A2838]/60">
+                        <h4 className="font-bold text-sm text-[#141413]">{app.jobTitle}</h4>
+                        <p className="text-xs font-mono text-[#74726A]">
                           {app.organizationName} • Applied {formatRelativeTime(app.appliedAt)}
                         </p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-xs px-3 py-1 rounded-full font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
+                      <span className="text-xs px-3 py-1 rounded-full font-mono font-bold bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8]">
                         {app.stage.toUpperCase()}
                       </span>
-                      <Button
-                        size="sm"
-                        variant="outline"
+                      <button
+                        className="px-3.5 py-1.5 rounded-xl border border-[#E8E2D8] hover:border-[#769FCD] bg-white text-xs font-bold text-[#141413] transition-colors cursor-pointer"
                         onClick={() => router.push(`/candidate/applications`)}
                       >
                         Details
-                      </Button>
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-          </Card>
+          </div>
         </div>
       )}
 
@@ -657,9 +686,9 @@ export default function CandidatePage() {
           </Card>
 
           {/* Work Experience CRUD */}
-          <Card className="p-6 border-[#B9D7EA]">
+          <Card className="p-6 border-[#E8E2D8]">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-extrabold text-base text-[#1A2838] flex items-center gap-2">
+              <h3 className="font-extrabold text-base text-[#141413] flex items-center gap-2">
                 <Briefcase className="w-5 h-5 text-[#769FCD]" />
                 Work Experience (CRUD)
               </h3>
@@ -672,15 +701,15 @@ export default function CandidatePage() {
               {candidateRecord.profile.experience.map((exp) => (
                 <div
                   key={exp.id}
-                  className="p-4 rounded-xl border border-[#B9D7EA] bg-white flex items-start justify-between gap-4"
+                  className="p-4 rounded-xl border border-[#E8E2D8] bg-white flex items-start justify-between gap-4"
                 >
                   <div>
-                    <h4 className="font-bold text-sm text-[#1A2838]">{exp.title}</h4>
+                    <h4 className="font-bold text-sm text-[#141413]">{exp.title}</h4>
                     <p className="text-xs font-semibold text-[#769FCD]">{exp.company}</p>
-                    <span className="text-[11px] text-[#1A2838]/60">
+                    <span className="text-[11px] text-[#141413]/60">
                       {exp.startDate} – {exp.endDate || "Present"}
                     </span>
-                    <p className="text-xs text-[#1A2838]/70 mt-2 leading-relaxed">{exp.description}</p>
+                    <p className="text-xs text-[#141413]/70 mt-2 leading-relaxed">{exp.description}</p>
                   </div>
                   <button
                     onClick={() => deleteExperience(exp.id)}
@@ -811,8 +840,8 @@ export default function CandidatePage() {
             )}
 
             {/* Resume Preview Window */}
-            <div className="p-6 rounded-2xl bg-[#1A2838] text-white font-mono text-xs leading-relaxed overflow-x-auto border border-[#B9D7EA]/30 shadow-inner">
-              <div className="flex items-center justify-between pb-3 border-b border-[#B9D7EA]/20 mb-4 font-sans text-xs">
+            <div className="p-6 rounded-2xl bg-[#1A2838] text-white font-mono text-xs leading-relaxed overflow-x-auto border border-[#E8E2D8]/30 shadow-inner">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]/20 mb-4 font-sans text-xs">
                 <span className="text-[#B9D7EA] font-bold flex items-center gap-1.5">
                   <FileText className="w-4 h-4 text-[#769FCD]" />
                   {`${(candidateRecord?.identity.fullName || "Candidate").replace(/\s+/g, "_")}_Resume.pdf`}
@@ -833,7 +862,7 @@ export default function CandidatePage() {
                 {candidateRecord.profile.skills.map((s, idx) => {
                   const sName = typeof s === "string" ? s : s.name;
                   return (
-                    <span key={sName || idx} className="px-2 py-0.5 rounded bg-[#141F2C] text-[#B9D7EA] border border-[#B9D7EA]/20 font-sans text-[11px]">
+                    <span key={sName || idx} className="px-2 py-0.5 rounded bg-[#141F2C] text-[#B9D7EA] border border-[#E8E2D8]/20 font-sans text-[11px]">
                       {sName}
                     </span>
                   );
@@ -842,15 +871,15 @@ export default function CandidatePage() {
 
               <div className="text-[#B9D7EA] mb-2">// ATS COMPATIBILITY METRICS</div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-sans mt-2">
-                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#B9D7EA]/20">
+                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#E8E2D8]/20">
                   <span className="text-[#D6E6F2]/70 text-[10px]">Readability Index</span>
                   <span className="text-white font-extrabold text-sm block">98/100</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#B9D7EA]/20">
+                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#E8E2D8]/20">
                   <span className="text-[#D6E6F2]/70 text-[10px]">Keyword Match Rate</span>
                   <span className="text-[#B9D7EA] font-extrabold text-sm block">92%</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#B9D7EA]/20">
+                <div className="p-3 rounded-xl bg-[#141F2C] border border-[#E8E2D8]/20">
                   <span className="text-[#D6E6F2]/70 text-[10px]">Format Compliance</span>
                   <span className="text-white font-extrabold text-sm block">Passed</span>
                 </div>
@@ -984,8 +1013,8 @@ export default function CandidatePage() {
       {/* 5. CANDIDATE AI AGENT TAB */}
       {activeTab === "agent" && (
         <div className="flex flex-col gap-6">
-          <Card className="p-6 bg-[#1A2838] text-white border-[#B9D7EA]/30">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#B9D7EA]/20">
+          <Card className="p-6 bg-[#1A2838] text-white border-[#E8E2D8]/30">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#E8E2D8]/20">
               <div>
                 <div className="flex items-center gap-2">
                   <Bot className="w-6 h-6 text-[#769FCD]" />
@@ -996,12 +1025,12 @@ export default function CandidatePage() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 bg-[#141F2C] p-1.5 rounded-xl border border-[#B9D7EA]/20">
+              <div className="flex items-center gap-2 bg-[#141F2C] p-1.5 rounded-xl border border-[#E8E2D8]/20">
                 <span className="text-xs text-[#D6E6F2]/70 pl-2">Active Sub-Agent:</span>
                 <select
                   value={selectedAgent}
                   onChange={(e) => setSelectedAgent(e.target.value)}
-                  className="bg-[#1A2838] text-[#D6E6F2] text-xs font-bold px-3 py-1.5 rounded-lg border border-[#B9D7EA]/30 focus:outline-none cursor-pointer"
+                  className="bg-[#1A2838] text-[#D6E6F2] text-xs font-bold px-3 py-1.5 rounded-lg border border-[#E8E2D8]/30 focus:outline-none cursor-pointer"
                 >
                   {subAgents.map((sa) => (
                     <option key={sa.name} value={sa.name}>
@@ -1023,7 +1052,7 @@ export default function CandidatePage() {
                     className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                       isSel
                         ? "bg-[#769FCD]/30 border-[#769FCD] text-white shadow-lg ring-1 ring-[#769FCD]"
-                        : "bg-[#141F2C] border-[#B9D7EA]/20 text-[#D6E6F2]/70 hover:bg-[#769FCD]/10 hover:text-white"
+                        : "bg-[#141F2C] border-[#E8E2D8]/20 text-[#D6E6F2]/70 hover:bg-[#769FCD]/10 hover:text-white"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -1088,10 +1117,10 @@ export default function CandidatePage() {
                       <h4 className="font-bold text-sm text-slate-900">{matchedJob.title}</h4>
                       <MatchBadge score={matchScore} />
                     </div>
-                    <p className="text-xs text-[#1A2838]/70 font-medium mb-3">{matchedJob.organizationName} • {matchedJob.location}</p>
+                    <p className="text-xs text-[#141413]/70 font-medium mb-3">{matchedJob.organizationName} • {matchedJob.location}</p>
 
-                    <div className="p-3 rounded-xl bg-white border border-[#B9D7EA] text-xs text-[#1A2838] leading-relaxed mb-3">
-                      <strong className="text-[#1A2838] block mb-1">💡 Match Reason:</strong>
+                    <div className="p-3 rounded-xl bg-white border border-[#E8E2D8] text-xs text-[#141413] leading-relaxed mb-3">
+                      <strong className="text-[#141413] block mb-1">💡 Match Reason:</strong>
                       "{matchItem.matchReasons[0] || 'Strong overlap in React, TypeScript, and micro-frontend architecture.'}"
                     </div>
                   </div>
@@ -1108,31 +1137,31 @@ export default function CandidatePage() {
 
       {/* 7. CAREER INTELLIGENCE TAB */}
       {activeTab === "career" && (
-        <Card className="p-6 border-[#B9D7EA]">
-          <h3 className="font-extrabold text-base text-[#1A2838] mb-4 flex items-center gap-2">
+        <Card className="p-6 border-[#E8E2D8]">
+          <h3 className="font-extrabold text-base text-[#141413] mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[#769FCD]" />
             Skill Gap & 12-Month Career Progression Roadmap
           </h3>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="p-4 rounded-xl bg-[#D6E6F2]/40 border border-[#B9D7EA]">
-              <h4 className="font-bold text-xs text-[#1A2838] uppercase">Target Role</h4>
-              <p className="text-lg font-black text-[#1A2838] mt-1">Staff Frontend Architect</p>
+            <div className="p-4 rounded-xl bg-[#D6E6F2]/40 border border-[#E8E2D8]">
+              <h4 className="font-bold text-xs text-[#141413] uppercase">Target Role</h4>
+              <p className="text-lg font-black text-[#141413] mt-1">Staff Frontend Architect</p>
               <span className="text-xs text-[#769FCD] mt-2 block font-semibold">Estimated Timeline: 12 Months</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#D6E6F2]/30 border border-[#B9D7EA]">
-              <h4 className="font-bold text-xs text-[#1A2838] uppercase">Skill Gap Identified</h4>
+            <div className="p-4 rounded-xl bg-[#D6E6F2]/30 border border-[#E8E2D8]">
+              <h4 className="font-bold text-xs text-[#141413] uppercase">Skill Gap Identified</h4>
               <div className="flex flex-wrap gap-1.5 mt-2">
-                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA] text-xs font-bold">GraphQL Federation</span>
-                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA] text-xs font-bold">WebAssembly</span>
-                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA] text-xs font-bold">Performance CWV</span>
+                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8] text-xs font-bold">GraphQL Federation</span>
+                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8] text-xs font-bold">WebAssembly</span>
+                <span className="px-2 py-0.5 rounded bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8] text-xs font-bold">Performance CWV</span>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#D6E6F2]/40 border border-[#B9D7EA]">
-              <h4 className="font-bold text-xs text-[#1A2838] uppercase">Projected Compensation Increase</h4>
-              <p className="text-lg font-black text-[#1A2838] mt-1">+35% (₹38L – ₹48L PA)</p>
+            <div className="p-4 rounded-xl bg-[#D6E6F2]/40 border border-[#E8E2D8]">
+              <h4 className="font-bold text-xs text-[#141413] uppercase">Projected Compensation Increase</h4>
+              <p className="text-lg font-black text-[#141413] mt-1">+35% (₹38L – ₹48L PA)</p>
               <span className="text-xs text-[#769FCD] mt-2 block font-semibold">Based on India Tech Report 2026</span>
             </div>
           </div>
@@ -1141,8 +1170,8 @@ export default function CandidatePage() {
 
       {/* 8. SKILL ASSESSMENTS TAB */}
       {activeTab === "assessments" && (
-        <Card className="p-6 border-[#B9D7EA]">
-          <h3 className="font-extrabold text-base text-[#1A2838] mb-4 flex items-center gap-2">
+        <Card className="p-6 border-[#E8E2D8]">
+          <h3 className="font-extrabold text-base text-[#141413] mb-4 flex items-center gap-2">
             <Award className="w-5 h-5 text-[#769FCD]" />
             Skill Assessments & Verified Badges
           </h3>
@@ -1153,10 +1182,10 @@ export default function CandidatePage() {
               { title: "TypeScript & Type Safety", duration: "12 Mins", questions: "8 MCQs", status: "Verified 92%" },
               { title: "Frontend Performance & CWV", duration: "20 Mins", questions: "12 MCQs", status: "Take Quiz" },
             ].map((quiz, idx) => (
-              <div key={idx} className="p-4 rounded-xl border border-[#B9D7EA] bg-white flex flex-col justify-between">
+              <div key={idx} className="p-4 rounded-xl border border-[#E8E2D8] bg-white flex flex-col justify-between">
                 <div>
-                  <h4 className="font-bold text-sm text-[#1A2838]">{quiz.title}</h4>
-                  <p className="text-xs text-[#1A2838]/60 mt-1">{quiz.duration} • {quiz.questions}</p>
+                  <h4 className="font-bold text-sm text-[#141413]">{quiz.title}</h4>
+                  <p className="text-xs text-[#141413]/60 mt-1">{quiz.duration} • {quiz.questions}</p>
                 </div>
                 <Button size="sm" variant={quiz.status.includes("Verified") ? "outline" : "primary"} className="mt-4 w-full">
                   {quiz.status}
@@ -1169,13 +1198,13 @@ export default function CandidatePage() {
 
       {/* 9. AI INTERVIEW SIMULATOR TAB */}
       {activeTab === "interview" && (
-        <Card className="p-6 border-[#B9D7EA]">
-          <h3 className="font-extrabold text-base text-[#1A2838] mb-4 flex items-center gap-2">
+        <Card className="p-6 border-[#E8E2D8]">
+          <h3 className="font-extrabold text-base text-[#141413] mb-4 flex items-center gap-2">
             <Mic className="w-5 h-5 text-[#769FCD]" />
             AI STAR Method Interview Simulator
           </h3>
-          <div className="p-6 rounded-2xl bg-[#1A2838] text-white flex flex-col items-center justify-center text-center gap-4 border border-[#B9D7EA]/30">
-            <div className="w-16 h-16 rounded-full bg-[#769FCD]/30 border border-[#B9D7EA]/40 flex items-center justify-center text-[#B9D7EA] animate-pulse">
+          <div className="p-6 rounded-2xl bg-[#1A2838] text-white flex flex-col items-center justify-center text-center gap-4 border border-[#E8E2D8]/30">
+            <div className="w-16 h-16 rounded-full bg-[#769FCD]/30 border border-[#E8E2D8]/40 flex items-center justify-center text-[#B9D7EA] animate-pulse">
               <Mic className="w-8 h-8" />
             </div>
             <div>
@@ -1193,16 +1222,16 @@ export default function CandidatePage() {
 
       {/* 10. RAG CAREER ASSISTANT TAB */}
       {activeTab === "rag" && (
-        <Card className="p-6 border-[#B9D7EA]">
-          <h3 className="font-extrabold text-base text-[#1A2838] mb-4 flex items-center gap-2">
+        <Card className="p-6 border-[#E8E2D8]">
+          <h3 className="font-extrabold text-base text-[#141413] mb-4 flex items-center gap-2">
             <BrainCircuit className="w-5 h-5 text-[#769FCD]" />
             RAG Grounded Career Assistant
           </h3>
-          <div className="p-4 rounded-2xl bg-[#1A2838] text-white font-mono text-xs flex flex-col gap-3 border border-[#B9D7EA]/30">
+          <div className="p-4 rounded-2xl bg-[#1A2838] text-white font-mono text-xs flex flex-col gap-3 border border-[#E8E2D8]/30">
             <div className="p-3 rounded-xl bg-[#141F2C] text-[#D6E6F2]">
               💬 <strong className="text-[#B9D7EA]">Candidate:</strong> "What salary expectation should I set for a Senior Frontend role in Bengaluru?"
             </div>
-            <div className="p-3 rounded-xl bg-[#D6E6F2]/10 border border-[#B9D7EA]/30 text-[#D6E6F2]">
+            <div className="p-3 rounded-xl bg-[#D6E6F2]/10 border border-[#E8E2D8]/30 text-[#D6E6F2]">
               🤖 <strong className="text-[#B9D7EA]">RAG Assistant:</strong> Based on the <em>[India Tech Compensation Report 2026]</em>, candidate with 4+ years in React/Next.js commands ₹28L – ₹36L base salary.
             </div>
           </div>

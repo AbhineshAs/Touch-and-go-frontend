@@ -114,18 +114,18 @@ export function SkillBadge({ name, verified, years, className }: SkillBadgeProps
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 text-xs font-semibold px-2.75 py-1 rounded-lg bg-surface text-text-primary border border-border/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)] hover:border-primary/50 transition-all duration-150 cursor-default",
-        verified && "border-primary/35 bg-primary-soft/40 text-primary-dark",
+        "inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#FAF7F2] text-[#141413] border border-[#E8E2D8] hover:border-[#769FCD] hover:bg-[#D6E6F2]/30 transition-all duration-150 cursor-default shadow-2xs",
+        verified && "border-[#769FCD]/40 bg-[#D6E6F2]/40 text-[#141413]",
         className
       )}
     >
       <span>{name}</span>
       {years !== undefined && (
-        <span className="text-text-muted font-normal text-[11px]">({years}y)</span>
+        <span className="text-[#74726A] font-normal text-[11px]">({years}y)</span>
       )}
       {verified && (
         <span title="Verified in structured work history" className="inline-flex">
-          <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#769FCD] shrink-0" />
         </span>
       )}
     </span>
@@ -143,10 +143,10 @@ export function MatchBadge({ score, size = "md", className }: MatchBadgeProps) {
   const isMid = score >= 50 && score < 75;
 
   const bg = isHigh
-    ? "bg-[#D6E6F2] text-[#1A2838] border-[#B9D7EA] font-bold shadow-2xs"
+    ? "bg-[#D6E6F2] text-[#141413] border-[#B9D7EA] font-bold shadow-2xs"
     : isMid
-    ? "bg-[#D6E6F2]/60 text-[#1A2838] border-[#B9D7EA]/60 font-semibold"
-    : "bg-slate-100 text-slate-700 border-slate-200";
+    ? "bg-[#D6E6F2]/60 text-[#141413] border-[#B9D7EA]/60 font-semibold"
+    : "bg-[#FAF7F2] text-[#74726A] border-[#E8E2D8]";
 
   const sizes = {
     sm: "text-[11px] px-2.5 py-0.75",
