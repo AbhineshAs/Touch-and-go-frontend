@@ -1,15 +1,16 @@
 import { Application, ApplicationStage } from "@/types";
 import { MOCK_APPLICATIONS, MOCK_PIPELINE_APPLICANTS } from "@/lib/mocks/data";
+import { mockDelay } from "./delay";
 
 let applicationsState: Application[] = [...MOCK_PIPELINE_APPLICANTS];
 
 export async function getApplications(candidateId: string = "prof_cand_01"): Promise<Application[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  await mockDelay(150);
   return applicationsState.filter((a) => a.candidateId === candidateId);
 }
 
 export async function getApplication(id: string): Promise<Application | null> {
-  await new Promise((r) => setTimeout(r, 180));
+  await mockDelay(120);
   const app = applicationsState.find((a) => a.id === id);
   return app ? { ...app } : null;
 }
@@ -33,7 +34,7 @@ export async function submitApplication(
     screeningAnswers: { questionId: string; question: string; answer: string }[];
   }
 ): Promise<Application> {
-  await new Promise((r) => setTimeout(r, 550));
+  await mockDelay(200);
   const newApp: Application = {
     id: `app_${Date.now()}`,
     jobId,
@@ -80,7 +81,7 @@ export async function submitApplication(
 }
 
 export async function withdrawApplication(id: string): Promise<boolean> {
-  await new Promise((r) => setTimeout(r, 300));
+  await mockDelay(150);
   const app = applicationsState.find((a) => a.id === id);
   if (!app) return false;
   app.stage = "Closed";
@@ -97,7 +98,7 @@ export async function withdrawApplication(id: string): Promise<boolean> {
 }
 
 export async function getApplicantsForJob(jobId: string): Promise<Application[]> {
-  await new Promise((r) => setTimeout(r, 220));
+  await mockDelay(120);
   return applicationsState.filter((a) => a.jobId === jobId);
 }
 
@@ -106,7 +107,7 @@ export async function updateApplicationStage(
   stage: ApplicationStage,
   note?: string
 ): Promise<Application> {
-  await new Promise((r) => setTimeout(r, 300));
+  await mockDelay(150);
   const appIndex = applicationsState.findIndex((a) => a.id === applicationId);
   if (appIndex === -1) throw new Error("Application not found");
 
@@ -142,7 +143,7 @@ export async function addRecruiterNote(
   content: string,
   authorName: string = "Vikramaditya Nair"
 ): Promise<Application> {
-  await new Promise((r) => setTimeout(r, 250));
+  await mockDelay(120);
   const appIndex = applicationsState.findIndex((a) => a.id === applicationId);
   if (appIndex === -1) throw new Error("Application not found");
 

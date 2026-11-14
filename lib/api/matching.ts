@@ -1,8 +1,9 @@
 import { MatchResult } from "@/types";
 import { MOCK_MATCH_RESULTS } from "@/lib/mocks/data";
+import { mockDelay } from "./delay";
 
 export async function getMatchEvidence(candidateId: string, jobId: string): Promise<MatchResult> {
-  await new Promise((r) => setTimeout(r, 220));
+  await mockDelay(150);
 
   if (MOCK_MATCH_RESULTS[jobId]) {
     return { ...MOCK_MATCH_RESULTS[jobId] };
@@ -66,7 +67,7 @@ export async function submitMatchFeedback(
   relevant: boolean,
   reason?: string
 ): Promise<{ success: boolean; message: string }> {
-  await new Promise((r) => setTimeout(r, 300));
+  await mockDelay(150);
   return {
     success: true,
     message: relevant

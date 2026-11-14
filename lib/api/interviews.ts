@@ -1,10 +1,11 @@
 import { Interview, InterviewScorecard } from "@/types";
 import { MOCK_INTERVIEWS } from "@/lib/mocks/data";
+import { mockDelay } from "./delay";
 
 let interviewsState: Interview[] = [...MOCK_INTERVIEWS];
 
 export async function getInterviews(): Promise<Interview[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  await mockDelay(150);
   return [...interviewsState];
 }
 
@@ -24,7 +25,7 @@ export async function scheduleInterview(
     candidateNote?: string;
   }
 ): Promise<Interview> {
-  await new Promise((r) => setTimeout(r, 450));
+  await mockDelay(200);
   const newInterview: Interview = {
     id: `int_${Date.now()}`,
     applicationId: payload.applicationId,
@@ -50,7 +51,7 @@ export async function submitScorecard(
   interviewId: string,
   scorecard: InterviewScorecard
 ): Promise<Interview> {
-  await new Promise((r) => setTimeout(r, 350));
+  await mockDelay(150);
   const index = interviewsState.findIndex((i) => i.id === interviewId);
   if (index === -1) throw new Error("Interview not found");
 

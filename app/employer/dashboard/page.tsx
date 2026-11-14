@@ -23,16 +23,17 @@ import {
   CheckCircle2,
   Video,
 } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+import dynamic from "next/dynamic";
 import { Job, Application, Interview } from "@/types";
+
+const PipelineChart = dynamic(() => import("@/components/employer/PipelineChart"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[240px] flex items-center justify-center bg-[#FAF7F2] rounded-xl border border-[#E8E2D8] animate-pulse text-xs text-[#74726A] font-mono">
+      Loading analytics engine...
+    </div>
+  ),
+});
 import { getEmployerJobs } from "@/lib/api/jobs";
 import { getApplicantsForJob } from "@/lib/api/applications";
 import { getInterviews } from "@/lib/api/interviews";
@@ -209,38 +210,9 @@ export default function EmployerDashboardPage() {
             </Link>
           </div>
 
-          {/* Recharts Bar Chart */}
+          {/* Dynamically Loaded Pipeline Funnel Chart */}
           <div className="h-64 w-full pt-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={funnelData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E8E2D8" />
-                <XAxis
-                  dataKey="stage"
-                  tick={{ fontSize: 11, fill: "#74726A", fontWeight: 600, fontFamily: "var(--font-mono, monospace)" }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis
-                  tick={{ fontSize: 11, fill: "#74726A", fontWeight: 600, fontFamily: "var(--font-mono, monospace)" }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <Tooltip
-                  cursor={{ fill: "rgba(118, 159, 205, 0.08)" }}
-                  contentStyle={{
-                    backgroundColor: "#141413",
-                    borderRadius: "12px",
-                    border: "1px solid #2A2A28",
-                    color: "#FFFFFF",
-                    fontSize: "12px",
-                    fontFamily: "var(--font-mono, monospace)",
-                    boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3)",
-                  }}
-                  itemStyle={{ color: "#769FCD" }}
-                />
-                <Bar dataKey="count" fill="#769FCD" radius={[6, 6, 0, 0]} maxBarSize={44} />
-              </BarChart>
-            </ResponsiveContainer>
+            <PipelineChart data={funnelData} />
           </div>
 
           {/* Quick Conversion Summary Strip */}

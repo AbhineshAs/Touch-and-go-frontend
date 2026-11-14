@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface TagLogoProps {
@@ -22,21 +23,20 @@ export function TagLogo({
 }: TagLogoProps) {
   const [imgError, setImgError] = useState(false);
 
+  // Compute proportional width based on 2:1 / 2.8:1 banner aspect ratio
+  const computedWidth = width || Math.round(height * 2.8);
+
   const logoContent = (
     <div className={cn("inline-flex items-center gap-2.5 group cursor-pointer shrink-0", className)}>
       {!imgError ? (
-        <img
-          src="/tag-logo-transparent.png"
+        <Image
+          src="/tag-logo-transparent.webp"
           alt="Touch And Go"
-          onError={(e) => {
-            // Fallback to standard tag-logo.png if transparent asset fails
-            const target = e.currentTarget;
-            if (target.src.endsWith("/tag-logo-transparent.png")) {
-              target.src = "/tag-logo.png";
-            } else {
-              setImgError(true);
-            }
-          }}
+          width={computedWidth}
+          height={height}
+          priority
+          sizes="(max-width: 768px) 140px, 180px"
+          onError={() => setImgError(true)}
           style={{ height: `${height}px`, width: width ? `${width}px` : "auto" }}
           className="object-contain transition-transform duration-200 group-hover:scale-105 max-w-[180px]"
         />

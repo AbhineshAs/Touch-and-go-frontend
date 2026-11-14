@@ -1,18 +1,19 @@
 import { CandidateProfile } from "@/types";
 import { MOCK_CANDIDATE_PROFILE } from "@/lib/mocks/data";
+import { mockDelay } from "./delay";
 
 let candidateProfileState: CandidateProfile = { ...MOCK_CANDIDATE_PROFILE };
 let savedJobsState: string[] = ["job_01", "job_06"];
 
 export async function getCandidateProfile(): Promise<CandidateProfile> {
-  await new Promise((r) => setTimeout(r, 200));
+  await mockDelay(200);
   return { ...candidateProfileState };
 }
 
 export async function updateCandidateProfile(
   updates: Partial<CandidateProfile>
 ): Promise<CandidateProfile> {
-  await new Promise((r) => setTimeout(r, 350));
+  await mockDelay(150);
   candidateProfileState = {
     ...candidateProfileState,
     ...updates,
@@ -21,12 +22,12 @@ export async function updateCandidateProfile(
 }
 
 export async function getSavedJobIds(): Promise<string[]> {
-  await new Promise((r) => setTimeout(r, 150));
+  await mockDelay(100);
   return [...savedJobsState];
 }
 
 export async function toggleSaveJob(jobId: string): Promise<{ saved: boolean; savedIds: string[] }> {
-  await new Promise((r) => setTimeout(r, 200));
+  await mockDelay(100);
   if (savedJobsState.includes(jobId)) {
     savedJobsState = savedJobsState.filter((id) => id !== jobId);
     return { saved: false, savedIds: [...savedJobsState] };
@@ -73,21 +74,23 @@ export async function parseResumeFile(
   fileName: string,
   onStageChange?: (stage: "Uploading" | "Scanning" | "Extracting" | "Structuring" | "Ready for review") => void
 ): Promise<ExtractedResumePayload> {
-  // Simulates the 5 processing stages with realistic asynchronous delays
+  // Simulates processing stages with snappy asynchronous cadence
+  const stepDelay = (ms: number) => new Promise((r) => setTimeout(r, Math.min(ms, 120)));
+
   onStageChange?.("Uploading");
-  await new Promise((r) => setTimeout(r, 600));
+  await stepDelay(100);
 
   onStageChange?.("Scanning");
-  await new Promise((r) => setTimeout(r, 700));
+  await stepDelay(120);
 
   onStageChange?.("Extracting");
-  await new Promise((r) => setTimeout(r, 900));
+  await stepDelay(150);
 
   onStageChange?.("Structuring");
-  await new Promise((r) => setTimeout(r, 700));
+  await stepDelay(120);
 
   onStageChange?.("Ready for review");
-  await new Promise((r) => setTimeout(r, 400));
+  await stepDelay(80);
 
   return {
     fullName: "Ananya Sharma",

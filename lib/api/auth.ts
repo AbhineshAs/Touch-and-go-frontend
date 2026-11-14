@@ -1,5 +1,6 @@
 import { User, UserRole } from "@/types";
 import { MOCK_USERS } from "@/lib/mocks/data";
+import { mockDelay } from "./delay";
 
 export const AUTH_TOKEN_KEY = "tag_auth_token";
 export const AUTH_USER_KEY = "tag_auth_user";
@@ -42,12 +43,12 @@ export function updateStoredUser(fields: Partial<User>): User | null {
 }
 
 export async function getCurrentUser(): Promise<User | null> {
-  await new Promise((r) => setTimeout(r, 60));
+  await mockDelay(50);
   return getStoredUser();
 }
 
 export async function switchActiveRole(role: UserRole): Promise<User> {
-  await new Promise((r) => setTimeout(r, 100));
+  await mockDelay(100);
   const user = MOCK_USERS[role];
   const token = `tag_jwt_${Date.now()}_${role}`;
   if (typeof window !== "undefined") {
@@ -65,7 +66,7 @@ export async function signIn(
   email: string,
   role: UserRole
 ): Promise<{ user: User; token: string }> {
-  await new Promise((r) => setTimeout(r, 300));
+  await mockDelay(150);
   const baseMock = MOCK_USERS[role];
   const isDefaultDemoEmail = Boolean(baseMock && baseMock.email.toLowerCase() === email.toLowerCase());
   const userName = isDefaultDemoEmail
@@ -101,7 +102,7 @@ export async function signUp(data: {
   email: string;
   role: UserRole;
 }): Promise<{ user: User; token: string }> {
-  await new Promise((r) => setTimeout(r, 400));
+  await mockDelay(200);
   const baseMock = MOCK_USERS[data.role];
   const user: User = {
     id: `usr_${Date.now()}`,
@@ -128,7 +129,7 @@ export async function signUp(data: {
 }
 
 export async function signOut(): Promise<void> {
-  await new Promise((r) => setTimeout(r, 150));
+  await mockDelay(100);
   if (typeof window !== "undefined") {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);

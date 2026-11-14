@@ -1,5 +1,6 @@
 import { Job, JobStatus, WorkMode, EmploymentType, ExperienceLevel } from "@/types";
 import { MOCK_JOBS } from "@/lib/mocks/data";
+import { mockDelay } from "./delay";
 
 let jobsState: Job[] = [...MOCK_JOBS];
 
@@ -15,7 +16,7 @@ export interface JobFilterParams {
 }
 
 export async function getJobs(filters?: JobFilterParams): Promise<Job[]> {
-  await new Promise((r) => setTimeout(r, 220));
+  await mockDelay(150);
   let results = [...jobsState].filter((j) => j.status === "Published");
 
   if (!filters) return results;
@@ -62,27 +63,27 @@ export async function getJobs(filters?: JobFilterParams): Promise<Job[]> {
 }
 
 export async function getJobBySlug(slug: string): Promise<Job | null> {
-  await new Promise((r) => setTimeout(r, 180));
+  await mockDelay(120);
   const job = jobsState.find((j) => j.slug === slug || j.id === slug);
   return job ? { ...job } : null;
 }
 
 export async function getRecommendedJobs(): Promise<Job[]> {
-  await new Promise((r) => setTimeout(r, 250));
+  await mockDelay(150);
   return jobsState
     .filter((j) => j.status === "Published" && (j.matchScore || 0) >= 60)
     .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
 }
 
 export async function getEmployerJobs(organizationId: string = "org_razorwave"): Promise<Job[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  await mockDelay(120);
   return jobsState.filter((j) => j.organizationId === organizationId);
 }
 
 export async function createJob(
   jobData: Partial<Job>
 ): Promise<Job> {
-  await new Promise((r) => setTimeout(r, 450));
+  await mockDelay(200);
   const id = `job_${Date.now()}`;
   const slug = (jobData.title || "new-job")
     .toLowerCase()
@@ -127,7 +128,7 @@ export async function createJob(
 }
 
 export async function updateJobStatus(jobId: string, status: JobStatus): Promise<Job> {
-  await new Promise((r) => setTimeout(r, 250));
+  await mockDelay(150);
   const index = jobsState.findIndex((j) => j.id === jobId);
   if (index === -1) throw new Error("Job not found");
   jobsState[index] = {

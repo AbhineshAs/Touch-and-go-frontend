@@ -1,20 +1,37 @@
 import React from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import dynamic from "next/dynamic";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Footer } from "@/components/layout/Footer";
 import { NaukriHero } from "@/components/landing/NaukriHero";
 import { ProductMetrics } from "@/components/landing/ProductMetrics";
-import { ProductFeatureShowcase } from "@/components/landing/ProductFeatureShowcase";
-import { ProductBentoGrid } from "@/components/landing/ProductBentoGrid";
-import { LandingActivityMarquee } from "@/components/landing/LandingActivityMarquee";
 import { NaukriJobCategories } from "@/components/landing/NaukriJobCategories";
-import { NaukriFeaturedCompanies } from "@/components/landing/NaukriFeaturedCompanies";
 import { NaukriJobGrid } from "@/components/landing/NaukriJobGrid";
-import { LandingTestimonials } from "@/components/landing/LandingTestimonials";
-import { LandingCtaBanner } from "@/components/landing/LandingCtaBanner";
-import { LandingStickyBar } from "@/components/landing/LandingStickyBar";
 import { ClientAuthRedirect } from "@/components/auth/ClientAuthRedirect";
+
+// Below-the-fold deferred chunks to optimize initial bundle size, FCP and LCP
+const ProductFeatureShowcase = dynamic(
+  () => import("@/components/landing/ProductFeatureShowcase").then((m) => m.ProductFeatureShowcase)
+);
+const ProductBentoGrid = dynamic(
+  () => import("@/components/landing/ProductBentoGrid").then((m) => m.ProductBentoGrid)
+);
+const LandingActivityMarquee = dynamic(
+  () => import("@/components/landing/LandingActivityMarquee").then((m) => m.LandingActivityMarquee)
+);
+const NaukriFeaturedCompanies = dynamic(
+  () => import("@/components/landing/NaukriFeaturedCompanies").then((m) => m.NaukriFeaturedCompanies)
+);
+const LandingTestimonials = dynamic(
+  () => import("@/components/landing/LandingTestimonials").then((m) => m.LandingTestimonials)
+);
+const LandingCtaBanner = dynamic(
+  () => import("@/components/landing/LandingCtaBanner").then((m) => m.LandingCtaBanner)
+);
+const LandingStickyBar = dynamic(
+  () => import("@/components/landing/LandingStickyBar").then((m) => m.LandingStickyBar)
+);
 
 export const metadata = {
   title: "TAG — Touch And Go | AI-Assisted Tech Recruitment Platform",

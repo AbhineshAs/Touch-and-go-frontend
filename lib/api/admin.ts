@@ -11,6 +11,7 @@ import {
   MOCK_MODERATION_REPORTS,
   MOCK_TAXONOMY,
 } from "@/lib/mocks/data";
+import { mockDelay } from "./delay";
 
 let orgsVerificationState: Organization[] = [...MOCK_ORGANIZATIONS];
 let auditLogsState: AuditEvent[] = [...MOCK_AUDIT_LOGS];
@@ -18,7 +19,7 @@ let moderationState: ModerationReport[] = [...MOCK_MODERATION_REPORTS];
 let taxonomyState: TaxonomyItem[] = [...MOCK_TAXONOMY];
 
 export async function getVerificationQueue(): Promise<Organization[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  await mockDelay(150);
   return [...orgsVerificationState];
 }
 
@@ -27,7 +28,7 @@ export async function updateVerificationStatus(
   status: VerificationStatus,
   notes: string
 ): Promise<Organization> {
-  await new Promise((r) => setTimeout(r, 400));
+  await mockDelay(200);
   const index = orgsVerificationState.findIndex((o) => o.id === organizationId);
   if (index === -1) throw new Error("Organization not found");
 
@@ -63,12 +64,12 @@ export async function updateVerificationStatus(
 }
 
 export async function getAuditLogs(): Promise<AuditEvent[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  await mockDelay(120);
   return [...auditLogsState];
 }
 
 export async function getModerationReports(): Promise<ModerationReport[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  await mockDelay(120);
   return [...moderationState];
 }
 
@@ -77,7 +78,7 @@ export async function updateModerationStatus(
   status: ModerationReport["status"],
   notes?: string
 ): Promise<ModerationReport> {
-  await new Promise((r) => setTimeout(r, 300));
+  await mockDelay(150);
   const index = moderationState.findIndex((m) => m.id === reportId);
   if (index === -1) throw new Error("Report not found");
 
@@ -108,7 +109,7 @@ export async function updateModerationStatus(
 }
 
 export async function getTaxonomy(): Promise<TaxonomyItem[]> {
-  await new Promise((r) => setTimeout(r, 180));
+  await mockDelay(100);
   return [...taxonomyState];
 }
 
@@ -118,7 +119,7 @@ export async function addTaxonomyItem(item: {
   category?: string;
   aliases: string[];
 }): Promise<TaxonomyItem> {
-  await new Promise((r) => setTimeout(r, 350));
+  await mockDelay(150);
   const newItem: TaxonomyItem = {
     id: `tax_${Date.now()}`,
     type: item.type,
@@ -136,7 +137,7 @@ export async function addTaxonomyItem(item: {
 }
 
 export async function deprecateTaxonomyItem(id: string): Promise<TaxonomyItem> {
-  await new Promise((r) => setTimeout(r, 300));
+  await mockDelay(150);
   const index = taxonomyState.findIndex((t) => t.id === id);
   if (index === -1) throw new Error("Taxonomy item not found");
 
