@@ -6,7 +6,6 @@ import { Sparkles, ArrowLeft, RotateCcw, FileText, CheckCircle2 } from "lucide-r
 import { ResumeModeSelector } from "@/components/resume/ResumeModeSelector";
 import { ATSResumeUploader, ATSAnalysisPayload } from "@/components/resume/ATSResumeUploader";
 import { ATSFeatureSummary } from "@/components/resume/ATSFeatureSummary";
-import { ATSQuickActions } from "@/components/resume/ATSQuickActions";
 import { ATSScoreReport, ATSReportData } from "@/components/resume/ATSScoreReport";
 import { cn } from "@/lib/utils";
 
@@ -249,14 +248,14 @@ export default function CandidateResumePage() {
             {analysisReport ? (
               <ATSScoreReport report={analysisReport} onReset={handleResetAnalysis} />
             ) : (
-              /* Two-Column Layout Grid matching Image 3 */
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Left Column (7 cols): Upload & Text Area */}
+              /* Balanced Two-Column Studio Layout with Zero Void */
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                {/* Left Column (7 cols): Upload & Input Card */}
                 <div className="lg:col-span-7 flex flex-col gap-6">
                   <ATSResumeUploader onAnalyze={handleRunAnalysis} isAnalyzing={isAnalyzing} />
                 </div>
 
-                {/* Right Column (5 cols): Insights & Quick Actions */}
+                {/* Right Column (5 cols): Diagnostic Companion & Actions */}
                 <div className="lg:col-span-5 flex flex-col gap-6">
                   <ATSFeatureSummary
                     onSampleScan={() =>
@@ -286,7 +285,6 @@ Senior Full Stack Engineer | NovaScale Technologies | 2022 - Present
                       })
                     }
                   />
-                  <ATSQuickActions />
                 </div>
               </div>
             )}
