@@ -599,7 +599,7 @@ export default function CandidateProfilePage() {
       <Card className="p-6 bg-surface border-border flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-bold text-text-primary">
-            Technical & Domain Skills ({profile?.skills?.length || 0})
+            Skills ({profile?.skills?.length || 0})
           </h2>
           <Button
             size="sm"
@@ -1129,7 +1129,7 @@ export default function CandidateProfilePage() {
       <Modal
         isOpen={isSkillModalOpen}
         onClose={() => setIsSkillModalOpen(false)}
-        title="Add Technical Skill"
+        title="Add Skill"
         size="sm"
       >
         <form onSubmit={handleAddSkillSubmit} className="flex flex-col gap-4">

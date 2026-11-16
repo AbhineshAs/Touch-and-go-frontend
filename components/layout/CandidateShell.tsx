@@ -17,14 +17,6 @@ import {
   X,
   LogOut,
   Briefcase,
-  FileEdit,
-  Bot,
-  BrainCircuit,
-  Mic,
-  TrendingUp,
-  Award,
-  ShieldCheck,
-  Cpu,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
@@ -98,36 +90,6 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
       icon: <FileText className="w-4 h-4" />,
     },
     { label: "Profile", href: "/candidate/profile", icon: <User className="w-4 h-4" /> },
-  ];
-
-  const aiNavItems: NavItem[] = [
-    {
-      label: "Candidate AI Agent",
-      href: "/candidate/agent",
-      icon: <Bot className="w-4 h-4 text-[#769FCD]" />,
-      badge: "6 Agents",
-      highlight: true,
-    },
-    {
-      label: "RAG Assistant",
-      href: "/candidate/assistant",
-      icon: <BrainCircuit className="w-4 h-4 text-[#769FCD]" />,
-    },
-    {
-      label: "AI Interviewer",
-      href: "/candidate/interview-simulator",
-      icon: <Mic className="w-4 h-4 text-[#769FCD]" />,
-    },
-    {
-      label: "Career Intelligence",
-      href: "/candidate/career-intelligence",
-      icon: <TrendingUp className="w-4 h-4 text-[#769FCD]" />,
-    },
-    {
-      label: "Skill Assessments",
-      href: "/candidate/assessments",
-      icon: <Award className="w-4 h-4 text-[#769FCD]" />,
-    },
   ];
 
   return (
@@ -231,47 +193,6 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
                               : "bg-[#FAF7F2] text-[#74726A] border border-[#E8E2D8]"
                           )}
                         >
-                          {item.badge}
-                        </span>
-                      )}
-                      {isActive && (
-                        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#769FCD]" />
-                      )}
-                    </Link>
-                  );
-                })}
-              </nav>
-            </div>
-
-            {/* AI Intelligence & Autonomous Workflows */}
-            <div className="flex flex-col gap-1 pt-2 border-t border-[#E8E2D8]">
-              <span className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[#74726A] flex items-center justify-between">
-                <span>AI &amp; Career Suite</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#769FCD]" />
-              </span>
-              <nav className="flex flex-col gap-0.5 mt-1">
-                {aiNavItems.map((item) => {
-                  const isActive = pathname === item.href || pathname.startsWith(item.href);
-                  return (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setMobileSidebarOpen(false)}
-                      className={cn(
-                        "flex items-center justify-between px-3.5 py-2.25 rounded-xl text-xs font-semibold transition-all duration-150 relative",
-                        isActive
-                          ? "bg-[#FAF7F2] text-[#141413] font-bold shadow-2xs border border-[#E8E2D8]"
-                          : "text-[#5A5850] hover:text-[#141413] hover:bg-[#FAF7F2]"
-                      )}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className={cn(isActive ? "text-[#769FCD]" : "text-[#74726A]")}>
-                          {item.icon}
-                        </span>
-                        <span>{item.label}</span>
-                      </div>
-                      {item.badge && (
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold bg-[#D6E6F2] text-[#141413] border border-[#B9D7EA]">
                           {item.badge}
                         </span>
                       )}
