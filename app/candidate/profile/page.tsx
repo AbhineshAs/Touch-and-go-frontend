@@ -13,7 +13,6 @@ import {
   MapPin,
   Building2,
   GraduationCap,
-  Sparkles,
   Plus,
   Edit2,
   Trash2,

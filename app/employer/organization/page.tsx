@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
-import { ShieldCheck, Building2, MapPin, Globe, CheckCircle2, ArrowRight, Sparkles, LayoutDashboard } from "lucide-react";
+import { ShieldCheck, Building2, MapPin, Globe, CheckCircle2, ArrowRight, LayoutDashboard } from "lucide-react";
 import { Organization } from "@/types";
 import { getOrganization, updateOrganization } from "@/lib/api/employers";
 import { LoadingState } from "@/components/ui/States";
@@ -93,7 +93,7 @@ export default function EmployerOrganizationPage() {
         <div className="p-4 sm:p-5 rounded-2xl bg-primary-soft/50 border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
             <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center shrink-0 mt-0.5">
-              <Sparkles className="w-5 h-5" />
+              <Building2 className="w-5 h-5" />
             </div>
             <div className="flex flex-col gap-1">
               <h2 className="text-sm font-bold text-text-primary">

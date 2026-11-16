@@ -22,7 +22,7 @@ import {
   ShieldCheck,
   Building2,
   GraduationCap,
-  Sparkles,
+  Target,
   UserCheck,
   XCircle,
   FileText,
@@ -212,7 +212,7 @@ export default function CandidateDetailPage() {
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary" />
+              <Target className="w-5 h-5 text-primary" />
               <h2 className="text-lg font-bold text-text-primary">
                 Candidate Criteria Alignment ({matchResult.overallAlignment}%)
               </h2>

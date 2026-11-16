@@ -10,7 +10,6 @@ import {
   ArrowRight,
   ChevronRight,
   Video,
-  Sparkles,
   Pause,
   Play,
 } from "lucide-react";

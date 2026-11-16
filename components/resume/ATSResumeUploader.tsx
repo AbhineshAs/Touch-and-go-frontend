@@ -6,7 +6,6 @@ import {
   FileText,
   X,
   AlertCircle,
-  Sparkles,
   Loader2,
   Briefcase,
   Zap,
@@ -15,6 +14,7 @@ import {
   CheckCircle2,
   UserCheck,
   Code2,
+  ScanLine,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -557,7 +557,7 @@ export function ATSResumeUploader({
           </>
         ) : (
           <>
-            <Sparkles className="w-4 h-4 text-[#B9D7EA]" />
+            <ScanLine className="w-4 h-4 text-[#B9D7EA]" />
             <span>Run ATS Scan &amp; Calculate Score</span>
             <ArrowRight className="w-4 h-4 text-[#B9D7EA]" />
           </>

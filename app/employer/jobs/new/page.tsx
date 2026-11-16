@@ -17,7 +17,7 @@ import {
   ShieldCheck,
   Building2,
   MapPin,
-  Sparkles,
+  SlidersHorizontal,
 } from "lucide-react";
 import { createJob } from "@/lib/api/jobs";
 import { formatSalaryRange } from "@/lib/utils";
@@ -168,13 +168,12 @@ export default function JobBuilderPage() {
               key={s.num}
               type="button"
               onClick={() => setCurrentStep(s.num)}
-              className={`flex flex-col items-center text-center p-2 rounded-lg transition-colors cursor-pointer ${
-                isCurrent
-                  ? "bg-primary text-white font-semibold shadow-xs"
-                  : isPassed
+              className={`flex flex-col items-center text-center p-2 rounded-lg transition-colors cursor-pointer ${isCurrent
+                ? "bg-primary text-white font-semibold shadow-xs"
+                : isPassed
                   ? "text-primary hover:bg-primary-soft/40"
                   : "text-text-muted hover:text-text-primary"
-              }`}
+                }`}
             >
               <span className="text-xs">{isPassed ? "✓" : s.num}</span>
               <span className="text-[10px] hidden sm:block truncate w-full">{s.name}</span>
@@ -441,7 +440,7 @@ export default function JobBuilderPage() {
         {currentStep === 5 && (
           <Card className="p-6 sm:p-8 bg-surface border-border flex flex-col gap-6">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary" />
+              <SlidersHorizontal className="w-5 h-5 text-primary" />
               <h2 className="text-base font-bold text-text-primary">
                 Step 5 — Explainable Match Configuration
               </h2>

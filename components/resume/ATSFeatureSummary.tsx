@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import {
   Award,
-  Sparkles,
   ShieldCheck,
   Zap,
   Target,
@@ -18,6 +17,7 @@ import {
   KeyRound,
   Eye,
   FileText,
+  TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/Modal";
@@ -212,7 +212,7 @@ ${candidateName}`;
 
           <div className="flex items-start gap-3 p-3 rounded-2xl bg-[#F4F8FB] border border-[#B9D7EA]/70">
             <div className="w-8 h-8 rounded-xl bg-white border border-[#B9D7EA] flex items-center justify-center shrink-0 shadow-2xs">
-              <Sparkles className="w-4 h-4 text-[#769FCD]" />
+              <TrendingUp className="w-4 h-4 text-[#769FCD]" />
             </div>
             <div className="flex flex-col">
               <span className="text-xs font-bold text-[#1A2838]">
@@ -304,7 +304,7 @@ ${candidateName}`;
                 <span>Generating tailored letter...</span>
               ) : (
                 <>
-                  <Sparkles className="w-3.5 h-3.5 text-[#B9D7EA]" />
+                  <Send className="w-3.5 h-3.5 text-[#B9D7EA]" />
                   <span>Generate Cover Letter</span>
                 </>
               )}

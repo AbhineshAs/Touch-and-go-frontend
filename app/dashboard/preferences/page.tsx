@@ -24,7 +24,6 @@ import {
   ArrowLeft,
   CheckCircle2,
   Sliders,
-  Sparkles,
   Info,
   Layers,
   Save,

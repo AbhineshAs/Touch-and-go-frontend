@@ -3,7 +3,7 @@
 import React from "react";
 import { Card, MetricCard } from "@/components/ui/Card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import { ShieldCheck, Users, Briefcase, Sparkles, TrendingUp } from "lucide-react";
+import { ShieldCheck, Users, Briefcase, Target, TrendingUp } from "lucide-react";
 
 const CITY_DISTRIBUTION = [
   { city: "Bengaluru", candidates: 540, employers: 24 },
@@ -43,7 +43,7 @@ export default function AdminAnalyticsPage() {
         <MetricCard
           label="Recommendation Relevance"
           value="82.6%"
-          icon={<Sparkles className="w-5 h-5 text-primary" />}
+          icon={<Target className="w-5 h-5 text-primary" />}
           change="Calibrated weekly"
           changeType="positive"
         />

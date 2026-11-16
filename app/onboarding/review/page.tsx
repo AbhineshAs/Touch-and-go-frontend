@@ -10,7 +10,6 @@ import { useAuth } from "@/lib/auth/AuthContext";
 import {
   CheckCircle2,
   Edit2,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   User,
@@ -74,7 +73,7 @@ export default function OnboardingReviewPage() {
           {/* Header Banner */}
           <div className="flex flex-col gap-2 text-center sm:text-left">
             <div className="inline-flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider">
-              <Sparkles className="w-4 h-4" />
+              <ShieldCheck className="w-4 h-4" />
               <span>Have we understood you correctly?</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">

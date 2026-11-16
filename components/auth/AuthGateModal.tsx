@@ -6,7 +6,6 @@ import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import {
   Lock,
-  Sparkles,
   CheckCircle2,
   ShieldCheck,
   UserCheck,
@@ -68,7 +67,7 @@ export function AuthGateModal({
               )}
             </div>
             <div className="w-8 h-8 rounded-xl bg-surface border border-primary/30 flex items-center justify-center text-primary shrink-0">
-              <Sparkles className="w-4 h-4" />
+              <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
         )}

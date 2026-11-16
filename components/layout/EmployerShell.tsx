@@ -20,7 +20,6 @@ import {
   SlidersHorizontal,
   Search,
   Bell,
-  Sparkles,
   Command,
 } from "lucide-react";
 import { MOCK_USERS, MOCK_ORGANIZATIONS } from "@/lib/mocks/data";

@@ -11,7 +11,6 @@ import {
   Check,
   ShieldCheck,
   ArrowUpRight,
-  Sparkles,
 } from "lucide-react";
 
 export function ProductBentoGrid() {
@@ -21,7 +20,7 @@ export function ProductBentoGrid() {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#E2DDD3] text-[11px] font-mono font-bold text-[#141413] mb-4 shadow-[1px_1px_0px_#141413]">
-            <Sparkles className="w-3.5 h-3.5 text-[#769FCD]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#769FCD]" />
             <span>PRODUCT ADVANTAGES</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#141413] leading-tight">

@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { NotificationItem } from "@/types";
 import { MOCK_NOTIFICATIONS } from "@/lib/mocks/data";
 import { formatRelativeTime } from "@/lib/utils";
-import { Bell, Calendar, Sparkles, CheckCheck, ShieldCheck, ArrowRight } from "lucide-react";
+import { Bell, Calendar, Target, CheckCheck, ShieldCheck, ArrowRight } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 
 export default function CandidateNotificationsPage() {
@@ -33,7 +33,7 @@ export default function CandidateNotificationsPage() {
       case "interview":
         return <Calendar className="w-4 h-4 text-primary" />;
       case "match":
-        return <Sparkles className="w-4 h-4 text-primary" />;
+        return <Target className="w-4 h-4 text-primary" />;
       default:
         return <Bell className="w-4 h-4 text-text-muted" />;
     }

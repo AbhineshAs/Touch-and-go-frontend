@@ -12,7 +12,7 @@ import {
   ThumbsDown,
   Info,
   ShieldAlert,
-  Sparkles,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
@@ -180,7 +180,7 @@ export function MatchEvidence({
       {/* RELEVANCE FEEDBACK */}
       <div className="rounded-2xl border border-border/80 bg-background-alt/40 p-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
         <div className="flex items-center gap-2.5 text-text-secondary">
-          <Sparkles className="w-4 h-4 text-primary shrink-0" />
+          <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
           <span className="font-medium">Was this criteria breakdown accurate and relevant?</span>
         </div>
 

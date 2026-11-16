@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowLeft, RotateCcw, FileText, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, RotateCcw, FileText, CheckCircle2, ShieldCheck } from "lucide-react";
 import { ResumeModeSelector } from "@/components/resume/ResumeModeSelector";
 import { ATSResumeUploader, ATSAnalysisPayload } from "@/components/resume/ATSResumeUploader";
 import { ATSFeatureSummary } from "@/components/resume/ATSFeatureSummary";
@@ -222,8 +222,8 @@ export default function CandidateResumePage() {
                     ATS Resume Checker
                   </h1>
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
-                    <Sparkles className="w-3.5 h-3.5 text-[#1A2838]" />
-                    Smart ATS Analysis
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#1A2838]" />
+                    Calibrated ATS Analysis
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-[#2C3E50] font-normal max-w-3xl leading-relaxed">

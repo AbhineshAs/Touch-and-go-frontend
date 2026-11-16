@@ -11,7 +11,6 @@ import {
   Briefcase,
   User,
   Building2,
-  Sparkles,
   ShieldCheck,
   Compass,
   ArrowRight,
@@ -95,7 +94,7 @@ export default function NotFound() {
           {/* Top Brand Pill inside Card (matching reference '✦ Muin' / TAG) */}
           <div className="relative z-10 w-full flex items-center justify-between text-xs text-white/90 font-medium pb-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white font-mono text-[11px] font-bold tracking-wide">
-              <Sparkles className="w-3.5 h-3.5 text-white" />
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               <span>Touch And Go · 404 Error</span>
             </div>
 

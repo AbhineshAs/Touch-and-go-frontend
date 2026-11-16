@@ -21,7 +21,8 @@ import {
   ShieldCheck,
   Bookmark,
   Calendar,
-  Sparkles,
+  Target,
+  Zap,
   CheckCircle2,
   ArrowLeft,
   Share2,
@@ -271,7 +272,7 @@ export default function JobDetailsPage() {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-primary" />
+                    <Target className="w-5 h-5 text-primary" />
                     <h2 className="text-xl font-bold text-text-primary">Your Criteria Alignment</h2>
                   </div>
                   <span className="text-xs text-text-muted">
@@ -635,7 +636,7 @@ export default function JobDetailsPage() {
             onClick={handleApplyClick}
             className="px-5 py-2.5 rounded-xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-extrabold text-xs shadow-md flex items-center gap-1.5 cursor-pointer transition-colors"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Zap className="w-3.5 h-3.5" />
             <span>1-Touch Apply</span>
           </button>
         </div>

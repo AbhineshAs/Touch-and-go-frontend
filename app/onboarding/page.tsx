@@ -39,7 +39,6 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
-  Sparkles,
   Info,
   Layers,
   Clock,
@@ -272,8 +271,8 @@ export default function OnboardingDiscoveryPage() {
                   {state.draft.careerStage === "experienced"
                     ? "Optional: Tell us about your background"
                     : state.draft.careerStage === "switcher"
-                    ? "Optional: Your career transition context"
-                    : "Optional: Education or current projects"}
+                      ? "Optional: Your career transition context"
+                      : "Optional: Education or current projects"}
                 </span>
 
                 {state.draft.careerStage === "experienced" && (
@@ -1337,8 +1336,8 @@ export default function OnboardingDiscoveryPage() {
                     {state.draft.primaryChallenge
                       ? state.draft.primaryChallenge.replace(/_/g, " ")
                       : state.draft.challenges.length > 0
-                      ? state.draft.challenges[0].replace(/_/g, " ")
-                      : "Not yet selected"}
+                        ? state.draft.challenges[0].replace(/_/g, " ")
+                        : "Not yet selected"}
                   </p>
                 </div>
 

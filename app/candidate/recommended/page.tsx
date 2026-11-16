@@ -8,7 +8,7 @@ import { SkillBadge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/States";
 import { Modal } from "@/components/ui/Modal";
 import { formatSalaryRange, formatRelativeTime } from "@/lib/utils";
-import { Sparkles, ShieldCheck, MapPin, ArrowRight, Bookmark, CheckCircle2 } from "lucide-react";
+import { Target, ShieldCheck, MapPin, ArrowRight, Bookmark, CheckCircle2 } from "lucide-react";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
 
 export default function RecommendedJobsPage() {
@@ -47,7 +47,7 @@ export default function RecommendedJobsPage() {
       <div className="p-6 sm:p-8 rounded-2xl bg-surface border border-border shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="flex flex-col gap-2 max-w-xl">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-soft text-primary-dark font-semibold text-xs border border-primary/20 w-fit">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
+            <Target className="w-3.5 h-3.5 text-primary" />
             <span>Profile-Matched Sample Opportunities</span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-text-primary">

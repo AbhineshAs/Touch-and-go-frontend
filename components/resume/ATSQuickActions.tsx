@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { FileEdit, Sparkles, Send, X, CheckCircle2, Copy, ArrowRight, Zap, Check } from "lucide-react";
+import { FileEdit, Send, X, CheckCircle2, Copy, ArrowRight, Zap, Check, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/Modal";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -93,7 +93,7 @@ ${candidateName}`;
             onClick={() => setIsCoverLetterModalOpen(true)}
             className="group relative overflow-hidden py-3 px-4 rounded-2xl bg-[#769FCD] hover:bg-[#5E8BBF] text-white font-bold text-xs shadow-md shadow-[#769FCD]/20 flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer"
           >
-            <Sparkles className="w-4 h-4 text-white transition-transform group-hover:scale-110" />
+            <FileText className="w-4 h-4 text-white transition-transform group-hover:scale-110" />
             <span>Create Cover Letter</span>
           </button>
         </div>
@@ -142,7 +142,7 @@ ${candidateName}`;
                   disabled={isGenerating}
                   className="w-full h-11 mt-2 rounded-xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-bold text-xs shadow-md shadow-[#1A2838]/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all"
                 >
-                  <Sparkles className="w-4 h-4 text-[#B9D7EA]" />
+                  <Send className="w-4 h-4 text-[#B9D7EA]" />
                   <span>{isGenerating ? "Drafting Cover Letter..." : "Generate Tailored Letter"}</span>
                 </button>
               </form>

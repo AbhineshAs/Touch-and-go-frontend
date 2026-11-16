@@ -21,7 +21,7 @@ import {
   ChevronDown,
   ArrowRight,
   Zap,
-  Sparkles,
+  Target,
   SlidersHorizontal,
   RotateCcw,
 } from "lucide-react";
@@ -349,7 +349,7 @@ function JobsSearchContent() {
                 </span>
               </div>
               <span className="px-3 py-1 rounded-full bg-[#D6E6F2] border border-[#B9D7EA] text-[#141413] font-mono font-bold text-[11px] flex items-center gap-1.5 shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5 text-[#769FCD] animate-pulse" />
+                <Target className="w-3.5 h-3.5 text-[#769FCD]" />
                 <span>Criteria Match Active</span>
               </span>
             </div>

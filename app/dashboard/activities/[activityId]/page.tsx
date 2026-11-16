@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   Circle,
   Clock,
-  Sparkles,
   BookOpen,
   Send,
   HelpCircle,

@@ -12,7 +12,6 @@ import {
   FileText,
   Eye,
   Edit3,
-  Sparkles,
   ExternalLink,
   ShieldCheck,
 } from "lucide-react";

@@ -23,8 +23,8 @@ import {
   Mic,
   TrendingUp,
   Award,
-  Sparkles,
   ShieldCheck,
+  Cpu,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
@@ -247,7 +247,7 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
             <div className="flex flex-col gap-1 pt-2 border-t border-[#E8E2D8]">
               <span className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-[#74726A] flex items-center justify-between">
                 <span>AI &amp; Career Suite</span>
-                <Sparkles className="w-3 h-3 text-[#769FCD]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#769FCD]" />
               </span>
               <nav className="flex flex-col gap-0.5 mt-1">
                 {aiNavItems.map((item) => {

@@ -18,7 +18,6 @@ import {
   ShieldCheck,
   Building2,
   ChevronRight,
-  Sparkles,
   Zap,
   CheckCircle2,
   Video,

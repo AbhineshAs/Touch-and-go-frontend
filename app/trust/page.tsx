@@ -16,7 +16,6 @@ import {
   Terminal,
   ArrowRight,
   ExternalLink,
-  Sparkles,
   Building2,
   UserCheck,
   Key,

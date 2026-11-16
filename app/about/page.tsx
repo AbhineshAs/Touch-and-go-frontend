@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Footer } from "@/components/layout/Footer";
 import { Card } from "@/components/ui/Card";
-import { ShieldCheck, Target, Users, Sparkles, Scale, Lock } from "lucide-react";
+import { ShieldCheck, Target, Users, Scale, Lock } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -13,7 +13,7 @@ export default function AboutPage() {
       <section className="py-16 lg:py-24 bg-surface border-b border-border">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-soft text-primary font-semibold text-xs border border-primary/20">
-            <Sparkles className="w-3.5 h-3.5" />
+            <ShieldCheck className="w-3.5 h-3.5" />
             <span>White Track Technologies</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-text-primary">
@@ -39,7 +39,7 @@ export default function AboutPage() {
 
           <Card className="p-6 flex flex-col gap-3">
             <div className="w-10 h-10 rounded-lg bg-primary-soft text-primary flex items-center justify-center font-bold">
-              <Sparkles className="w-5 h-5" />
+              <Target className="w-5 h-5" />
             </div>
             <h3 className="text-base font-bold text-text-primary">Explainable Assistance</h3>
             <p className="text-xs text-text-secondary leading-relaxed">

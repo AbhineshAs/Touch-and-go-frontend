@@ -9,7 +9,6 @@ import {
   Copy,
   RotateCcw,
   FileEdit,
-  Sparkles,
   ArrowRight,
   TrendingUp,
   ShieldCheck,

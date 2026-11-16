@@ -4,7 +4,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { MatchResult } from "@/types";
 import {
-  Sparkles,
+  Target,
   HelpCircle,
   Code2,
   Briefcase,
@@ -124,8 +124,8 @@ export function MatchScore({
         </div>
 
         <div className="inline-flex items-center gap-1.5 self-start sm:self-auto px-3.5 py-1.5 rounded-full bg-primary-soft/60 text-primary-dark text-xs font-semibold border border-primary/25 shadow-2xs">
-          <Sparkles className="w-3.5 h-3.5 text-primary" />
-          <span>Explainable AI Engine</span>
+          <Target className="w-3.5 h-3.5 text-primary" />
+          <span>Explainable Match Engine</span>
         </div>
       </div>
 

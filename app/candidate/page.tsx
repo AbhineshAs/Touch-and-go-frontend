@@ -13,7 +13,7 @@ import {
   Search,
   Briefcase,
   CheckCircle2,
-  Sparkles,
+  Target,
   Bot,
   BrainCircuit,
   Mic,
@@ -373,7 +373,7 @@ export default function CandidatePage() {
           { id: "resume", label: "Resume Hub", icon: <FileText className="w-4 h-4" /> },
           { id: "jobs", label: "Job Search & Apply", icon: <Search className="w-4 h-4" /> },
           { id: "agent", label: "Candidate AI Agent", icon: <Bot className="w-4 h-4" />, badge: "6 Agents" },
-          { id: "matching", label: "AI Job Matching", icon: <Sparkles className="w-4 h-4" /> },
+          { id: "matching", label: "AI Job Matching", icon: <Target className="w-4 h-4" /> },
           { id: "interview", label: "AI Interviewer", icon: <Mic className="w-4 h-4" /> },
           { id: "rag", label: "RAG Assistant", icon: <BrainCircuit className="w-4 h-4" /> },
         ].map((tab) => {
@@ -417,7 +417,7 @@ export default function CandidatePage() {
                     AI Match Engine
                   </span>
                   <div className="w-9 h-9 rounded-xl bg-[#D6E6F2] border border-[#E8E2D8] flex items-center justify-center text-[#769FCD] group-hover:scale-105 transition-transform">
-                    <Sparkles className="w-4.5 h-4.5" />
+                    <Target className="w-4.5 h-4.5" />
                   </div>
                 </div>
                 <h3 className="text-2xl font-black text-[#141413] font-display mt-1">
@@ -1100,8 +1100,8 @@ export default function CandidatePage() {
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-extrabold text-base text-slate-900 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-amber-500" />
-              AI Profile & Job Match Explanation Engine
+              <Target className="w-5 h-5 text-[#769FCD]" />
+              AI Profile &amp; Job Match Explanation Engine
             </h3>
             <span className="text-xs text-slate-500">Algorithm: TAG Vector Semantic Match 2026</span>
           </div>

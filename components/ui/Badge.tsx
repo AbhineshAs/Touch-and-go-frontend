@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, Sparkles } from "lucide-react";
+import { CheckCircle2, Target } from "lucide-react";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: "default" | "secondary" | "outline" | "success" | "warning" | "danger" | "info" | "soft";
@@ -164,7 +164,7 @@ export function MatchBadge({ score, size = "md", className }: MatchBadgeProps) {
       )}
       title="Criteria Alignment with published job specifications"
     >
-      <Sparkles className="w-3.5 h-3.5 shrink-0 text-[#769FCD] animate-pulse" />
+      <Target className="w-3.5 h-3.5 shrink-0 text-[#769FCD]" />
       <span>{score}% Alignment</span>
     </span>
   );

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { FileEdit, UploadCloud, ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import { FileEdit, UploadCloud, ArrowRight, CheckCircle2, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ResumeModeSelectorProps {
@@ -24,8 +24,8 @@ export function ResumeModeSelector({
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#1A2838]">
             Resume Builder
           </h1>
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
-            <Sparkles className="w-3 h-3 text-[#1A2838]" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
             ATS Engine v2.4
           </span>
         </div>
