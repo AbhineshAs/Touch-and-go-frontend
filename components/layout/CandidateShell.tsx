@@ -148,11 +148,16 @@ export function CandidateShell({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Quick Status Pill */}
-            <div className="mx-1 px-3 py-2 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] flex items-center justify-between text-xs">
-              <span className="text-[#141413] font-black font-display">Candidate Portal</span>
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Open to Work
+            <div className="px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#E8E2D8] flex items-center justify-between gap-2 shadow-2xs">
+              <span className="text-xs font-bold text-[#141413] tracking-tight whitespace-nowrap">
+                Candidate Portal
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-sans font-semibold text-emerald-800 bg-white border border-emerald-200 shadow-2xs whitespace-nowrap shrink-0">
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                </span>
+                <span>Open to Work</span>
               </span>
             </div>
 
