@@ -107,23 +107,23 @@ ${candidateName}`;
   return (
     <div className={cn("flex flex-col gap-5 lg:sticky lg:top-6", className)}>
       {/* 1. Main ATS Diagnostic Companion Card */}
-      <div className="relative rounded-3xl bg-white border border-[#B9D7EA] shadow-[0_8px_30px_rgba(26,40,56,0.06)] p-6 sm:p-7 flex flex-col gap-5 overflow-hidden">
+      <div className="relative rounded-3xl bg-white border border-[#E2DDD3] shadow-[0_4px_24px_rgba(26,40,56,0.06)] hover:border-[#769FCD] transition-all p-6 sm:p-7 flex flex-col gap-5 overflow-hidden">
         {/* Top Accent Stripe */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#769FCD] via-[#B9D7EA] to-[#1A2838]" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#769FCD] via-[#D6E6F2] to-[#141413]" />
 
         {/* Header with Live Calibration Pill */}
         <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
           <div className="flex flex-col gap-0.5">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-[#141413] border border-[#E2DDD3] shadow-[1px_1px_0px_#141413]">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#769FCD] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#1A2838]"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#141413]"></span>
                 </span>
                 ATS Intelligence v2.4
               </span>
             </div>
-            <h3 className="text-base font-black text-[#1A2838] mt-1 font-display">
+            <h3 className="text-base font-black text-[#141413] mt-1 font-display">
               Enterprise ATS Standards
             </h3>
           </div>
@@ -133,7 +133,7 @@ ${candidateName}`;
             <button
               type="button"
               onClick={onSampleScan}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F4F8FB] hover:bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA] shadow-2xs transition-all cursor-pointer hover:border-[#769FCD]"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-mono font-bold bg-white hover:bg-[#FAF7F2] text-[#141413] border border-[#E2DDD3] shadow-[1px_1px_0px_#141413] transition-all cursor-pointer hover:border-[#769FCD]"
             >
               <Eye className="w-3.5 h-3.5 text-[#769FCD]" />
               <span>Sample Report</span>
@@ -145,15 +145,15 @@ ${candidateName}`;
         </div>
 
         {/* 2. Target Role Benchmark Module */}
-        <div className="rounded-2xl bg-[#F4F8FB] border border-[#B9D7EA] p-3.5 sm:p-4 flex flex-col gap-3">
+        <div className="rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] p-3.5 sm:p-4 flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Target className="w-4 h-4 text-[#769FCD]" />
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#1A2838]">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#141413]">
                 Role Benchmark
               </span>
             </div>
-            <span className="text-[11px] font-mono font-bold text-[#1A2838] bg-white px-2 py-0.5 rounded-lg border border-[#B9D7EA]">
+            <span className="text-[11px] font-mono font-bold text-[#141413] bg-white px-2 py-0.5 rounded-lg border border-[#E2DDD3] shadow-2xs">
               Target: <strong className="text-[#769FCD]">{activeRoleData.minScore}+ / 100</strong>
             </span>
           </div>
@@ -168,10 +168,10 @@ ${candidateName}`;
                   type="button"
                   onClick={() => setSelectedRole(role.id)}
                   className={cn(
-                    "py-1.5 px-2 rounded-xl text-center text-[11px] font-bold transition-all cursor-pointer border",
+                    "py-1.5 px-2 rounded-xl text-center text-[11px] font-mono font-bold transition-all cursor-pointer border",
                     isActive
-                      ? "bg-[#1A2838] text-white border-[#1A2838] shadow-2xs"
-                      : "bg-white text-[#2C3E50] border-[#B9D7EA] hover:bg-[#D6E6F2]/60 hover:text-[#1A2838]"
+                      ? "bg-[#141413] text-white border-[#141413] shadow-2xs"
+                      : "bg-white text-[#5A5852] border-[#E2DDD3] hover:bg-[#FAF7F2] hover:text-[#141413]"
                   )}
                 >
                   {role.title}
@@ -182,11 +182,11 @@ ${candidateName}`;
 
           {/* Key ATS Keywords */}
           <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-            <span className="text-[10px] font-bold text-[#5A7184]">High-Impact Skills:</span>
+            <span className="text-[10px] font-mono font-bold text-[#5A5852]">High-Impact Skills:</span>
             {activeRoleData.skills.map((s) => (
               <span
                 key={s}
-                className="px-2 py-0.5 rounded-md bg-white border border-[#B9D7EA] text-[10px] font-semibold text-[#1A2838]"
+                className="px-2 py-0.5 rounded-md bg-white border border-[#E2DDD3] text-[10px] font-mono font-medium text-[#141413]"
               >
                 {s}
               </span>
@@ -196,43 +196,43 @@ ${candidateName}`;
 
         {/* 3. Three Core Evaluation Pillars (Clean, balanced list) */}
         <div className="flex flex-col gap-2.5">
-          <div className="flex items-start gap-3 p-3 rounded-2xl bg-[#F4F8FB] border border-[#B9D7EA]/70">
-            <div className="w-8 h-8 rounded-xl bg-white border border-[#B9D7EA] flex items-center justify-center shrink-0 shadow-2xs">
+          <div className="flex items-start gap-3 p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
+            <div className="w-8 h-8 rounded-xl bg-white border border-[#E2DDD3] flex items-center justify-center shrink-0 shadow-2xs">
               <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-bold text-[#1A2838]">
+              <span className="text-xs font-bold text-[#141413]">
                 Clean Machine Parsing (0 Truncation)
               </span>
-              <p className="text-[11px] text-[#5A7184] leading-relaxed mt-0.5">
+              <p className="text-[11px] text-[#5A5852] leading-relaxed mt-0.5 font-sans">
                 Standard headings traversed without column fragmentation in Workday, Greenhouse &amp; Lever.
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3 p-3 rounded-2xl bg-[#F4F8FB] border border-[#B9D7EA]/70">
-            <div className="w-8 h-8 rounded-xl bg-white border border-[#B9D7EA] flex items-center justify-center shrink-0 shadow-2xs">
+          <div className="flex items-start gap-3 p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
+            <div className="w-8 h-8 rounded-xl bg-white border border-[#E2DDD3] flex items-center justify-center shrink-0 shadow-2xs">
               <TrendingUp className="w-4 h-4 text-[#769FCD]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-bold text-[#1A2838]">
+              <span className="text-xs font-bold text-[#141413]">
                 STAR-Method Bullet Impact
               </span>
-              <p className="text-[11px] text-[#5A7184] leading-relaxed mt-0.5">
+              <p className="text-[11px] text-[#5A5852] leading-relaxed mt-0.5 font-sans">
                 Measures quantifiable outcome density (% improvements, latency reductions, user scale).
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3 p-3 rounded-2xl bg-[#F4F8FB] border border-[#B9D7EA]/70">
-            <div className="w-8 h-8 rounded-xl bg-white border border-[#B9D7EA] flex items-center justify-center shrink-0 shadow-2xs">
+          <div className="flex items-start gap-3 p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
+            <div className="w-8 h-8 rounded-xl bg-white border border-[#E2DDD3] flex items-center justify-center shrink-0 shadow-2xs">
               <KeyRound className="w-4 h-4 text-[#F59E0B]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-bold text-[#1A2838]">
+              <span className="text-xs font-bold text-[#141413]">
                 Recruiter Keyword Match
               </span>
-              <p className="text-[11px] text-[#5A7184] leading-relaxed mt-0.5">
+              <p className="text-[11px] text-[#5A5852] leading-relaxed mt-0.5 font-sans">
                 Flags missing high-frequency tech taxonomy and framework competencies.
               </p>
             </div>
@@ -243,7 +243,7 @@ ${candidateName}`;
         <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-[#E8E2D8]">
           <Link
             href="/candidate/resume/builder"
-            className="h-10 rounded-xl bg-[#F4F8FB] hover:bg-[#D6E6F2] border border-[#B9D7EA] text-[#1A2838] font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-2xs"
+            className="h-10 rounded-xl bg-white hover:bg-[#FAF7F2] border border-[#E2DDD3] text-[#141413] font-mono font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-[1px_1px_0px_#141413]"
           >
             <FileEdit className="w-3.5 h-3.5 text-[#769FCD]" />
             <span>Open Builder</span>
@@ -252,9 +252,9 @@ ${candidateName}`;
           <button
             type="button"
             onClick={() => setIsCoverLetterModalOpen(true)}
-            className="h-10 rounded-xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+            className="h-10 rounded-xl bg-[#141413] hover:bg-[#769FCD] text-white font-mono font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
           >
-            <Send className="w-3.5 h-3.5 text-[#B9D7EA]" />
+            <Send className="w-3.5 h-3.5 text-[#D6E6F2]" />
             <span>Cover Letter</span>
           </button>
         </div>

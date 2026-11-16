@@ -129,22 +129,22 @@ export default function CandidateResumePage() {
   };
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-8 py-6 sm:py-8 bg-[#F4F8FB]">
+    <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-8 py-6 sm:py-8 bg-[#FAF7F2] text-[#141413]">
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
         {/* Top Breadcrumb & View Toggle Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Link
               href="/candidate/dashboard"
-              className="text-xs font-semibold text-[#2C3E50] hover:text-[#1A2838] transition-colors"
+              className="text-xs font-semibold text-[#5A5852] hover:text-[#141413] transition-colors"
             >
               Candidate Portal
             </Link>
-            <span className="text-[#B9D7EA]">/</span>
-            <span className="text-xs font-bold text-[#1A2838]">Resume &amp; ATS</span>
+            <span className="text-[#E2DDD3]">/</span>
+            <span className="text-xs font-bold text-[#141413]">Resume &amp; ATS</span>
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 bg-white border border-[#B9D7EA] rounded-xl shadow-2xs">
+          <div className="flex items-center gap-1.5 p-1 bg-white border border-[#E2DDD3] rounded-xl shadow-[1px_1px_0px_#141413]">
             <button
               type="button"
               onClick={() => {
@@ -152,10 +152,10 @@ export default function CandidateResumePage() {
                 setAnalysisReport(null);
               }}
               className={cn(
-                "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                "px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
                 activeTab === "selector"
-                  ? "bg-[#1A2838] text-white shadow-2xs"
-                  : "text-[#2C3E50] hover:bg-[#D6E6F2] hover:text-[#1A2838]"
+                  ? "bg-[#141413] text-white shadow-2xs"
+                  : "text-[#5A5852] hover:bg-[#FAF7F2] hover:text-[#141413]"
               )}
             >
               Resume Overview
@@ -164,10 +164,10 @@ export default function CandidateResumePage() {
               type="button"
               onClick={() => setActiveTab("ats")}
               className={cn(
-                "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                "px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
                 activeTab === "ats"
-                  ? "bg-[#1A2838] text-white shadow-2xs"
-                  : "text-[#2C3E50] hover:bg-[#D6E6F2] hover:text-[#1A2838]"
+                  ? "bg-[#141413] text-white shadow-2xs"
+                  : "text-[#5A5852] hover:bg-[#FAF7F2] hover:text-[#141413]"
               )}
             >
               ATS Resume Checker
@@ -185,17 +185,17 @@ export default function CandidateResumePage() {
             />
 
             {/* In-page ATS Preview / Quick Jump Card */}
-            <div className="bg-gradient-to-r from-[#D6E6F2] via-white to-[#D6E6F2]/40 border border-[#B9D7EA] rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5">
-              <div className="flex flex-col gap-1 text-center sm:text-left">
+            <div className="bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-3xl p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-[0_4px_24px_rgba(26,40,56,0.06)] hover:shadow-[0_8px_30px_rgba(118,159,205,0.15)] transition-all">
+              <div className="flex flex-col gap-1.5 text-center sm:text-left">
                 <div className="flex items-center justify-center sm:justify-start gap-2">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#1A2838]">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#FAF7F2] border border-[#E8E2D8] text-[10px] font-mono font-bold uppercase tracking-wider text-[#141413]">
                     Instant Verification
                   </span>
                 </div>
-                <h3 className="text-base sm:text-lg font-bold text-[#1A2838]">
+                <h3 className="text-base sm:text-lg font-black text-[#141413] font-display">
                   Already have a resume? Check your ATS score in seconds
                 </h3>
-                <p className="text-xs text-[#2C3E50] max-w-xl">
+                <p className="text-xs text-[#5A5852] max-w-xl font-sans leading-relaxed">
                   Upload your CV to simulate enterprise applicant tracking system algorithms and discover missing keywords before applying.
                 </p>
               </div>
@@ -203,7 +203,7 @@ export default function CandidateResumePage() {
               <button
                 type="button"
                 onClick={() => setActiveTab("ats")}
-                className="px-5 py-2.5 rounded-xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-semibold text-xs shadow-xs transition-colors shrink-0 cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-[#141413] hover:bg-[#769FCD] text-white font-mono font-bold text-xs shadow-md shadow-[#141413]/15 transition-all shrink-0 cursor-pointer hover:scale-[1.02]"
               >
                 Open ATS Checker →
               </button>
@@ -215,18 +215,18 @@ export default function CandidateResumePage() {
         {activeTab === "ats" && (
           <div className="flex flex-col gap-6">
             {/* Header Section */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#B9D7EA]/80">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#E8E2D8]">
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2.5">
-                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1A2838]">
+                  <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#141413] font-display">
                     ATS Resume Checker
                   </h1>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#1A2838]" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-white text-[#141413] border border-[#E2DDD3] shadow-[1px_1px_0px_#141413]">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#769FCD]" />
                     Calibrated ATS Analysis
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#2C3E50] font-normal max-w-3xl leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#5A5852] font-sans font-normal max-w-3xl leading-relaxed">
                   Upload your resume with drag and drop, compare it against a job description, and get a polished ATS-style analysis with scores, risks, keywords, and actionable rewrites.
                 </p>
               </div>
@@ -237,9 +237,9 @@ export default function CandidateResumePage() {
                   setActiveTab("selector");
                   setAnalysisReport(null);
                 }}
-                className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#B9D7EA] bg-white hover:bg-[#D6E6F2]/50 text-[#1A2838] text-xs font-semibold cursor-pointer shadow-2xs"
+                className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#E2DDD3] bg-white hover:bg-[#FAF7F2] text-[#141413] text-xs font-mono font-bold cursor-pointer shadow-[1px_1px_0px_#141413] transition-all"
               >
-                <ArrowLeft className="w-3.5 h-3.5 text-[#1A2838]" />
+                <ArrowLeft className="w-3.5 h-3.5 text-[#141413]" />
                 <span>Back to Overview</span>
               </button>
             </div>

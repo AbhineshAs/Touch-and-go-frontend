@@ -223,44 +223,44 @@ export function ATSResumeUploader({
   return (
     <div
       className={cn(
-        "relative rounded-3xl bg-white border border-[#B9D7EA] shadow-[0_8px_30px_rgba(26,40,56,0.06)] p-6 sm:p-7 flex flex-col gap-6",
+        "relative rounded-3xl bg-white border border-[#E2DDD3] hover:border-[#769FCD] shadow-[0_4px_24px_rgba(26,40,56,0.06)] hover:shadow-[0_8px_30px_rgba(118,159,205,0.15)] p-6 sm:p-7 flex flex-col gap-6 transition-all",
         className
       )}
     >
       {/* Top Accent Stripe */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1A2838] via-[#769FCD] to-[#B9D7EA] rounded-t-3xl" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#141413] via-[#769FCD] to-[#D6E6F2] rounded-t-3xl" />
 
       {/* Header with Title and Quick Demo Pills */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E8E2D8]">
         <div className="flex flex-col gap-0.5">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
-              <Zap className="w-3 h-3 text-[#1A2838]" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-[#141413] border border-[#E2DDD3] shadow-[1px_1px_0px_#141413]">
+              <Zap className="w-3 h-3 text-[#769FCD]" />
               Smart ATS Diagnostic
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-[#1A2838] mt-1 font-display">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-[#141413] mt-1 font-display">
             Resume Scanner
           </h2>
-          <p className="text-xs text-[#5A7184]">
+          <p className="text-xs text-[#5A5852] font-sans">
             Evaluates format compliance, keyword match density, and STAR impact metrics.
           </p>
         </div>
 
         {/* Quick Demo Pre-fillers */}
-        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-[#F4F8FB] p-1.5 rounded-xl border border-[#B9D7EA]">
-          <span className="text-[10px] font-mono font-bold text-[#5A7184] px-1">Quick Demo:</span>
+        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E8E2D8]">
+          <span className="text-[10px] font-mono font-bold text-[#5A5852] px-1">Quick Demo:</span>
           <button
             type="button"
             onClick={() => handleApplyPreset("fullstack")}
-            className="px-2.5 py-1 rounded-lg bg-white hover:bg-[#D6E6F2] text-[#1A2838] font-bold text-[10px] transition-colors cursor-pointer border border-[#B9D7EA] shadow-2xs"
+            className="px-2.5 py-1 rounded-lg bg-white hover:bg-[#FAF7F2] text-[#141413] font-mono font-bold text-[10px] transition-colors cursor-pointer border border-[#E2DDD3] shadow-[1px_1px_0px_#141413]"
           >
             Full Stack CV
           </button>
           <button
             type="button"
             onClick={() => handleApplyPreset("frontend")}
-            className="px-2.5 py-1 rounded-lg bg-white hover:bg-[#D6E6F2] text-[#1A2838] font-bold text-[10px] transition-colors cursor-pointer border border-[#B9D7EA] shadow-2xs"
+            className="px-2.5 py-1 rounded-lg bg-white hover:bg-[#FAF7F2] text-[#141413] font-mono font-bold text-[10px] transition-colors cursor-pointer border border-[#E2DDD3] shadow-[1px_1px_0px_#141413]"
           >
             Frontend CV
           </button>
@@ -268,46 +268,44 @@ export function ATSResumeUploader({
       </div>
 
       {/* Source Selector Tabs */}
-      <div className="grid grid-cols-3 gap-2 p-1 bg-[#F4F8FB] rounded-2xl border border-[#B9D7EA]">
+      <div className="grid grid-cols-3 gap-2 p-1 bg-[#FAF7F2] rounded-2xl border border-[#E8E2D8]">
         <button
           type="button"
           onClick={() => setInputMode("file")}
           className={cn(
-            "py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer",
+            "py-2 px-3 rounded-xl text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 cursor-pointer",
             inputMode === "file"
-              ? "bg-[#1A2838] text-white shadow-xs"
-              : "text-[#2C3E50] hover:text-[#1A2838] hover:bg-white/60"
+              ? "bg-[#141413] text-white shadow-xs"
+              : "text-[#5A5852] hover:text-[#141413] hover:bg-white/60"
           )}
         >
           <UploadCloud className="w-3.5 h-3.5" />
           <span>Upload File</span>
         </button>
-
         <button
           type="button"
           onClick={handleSelectProfileResume}
           className={cn(
-            "py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer",
+            "py-2 px-3 rounded-xl text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 cursor-pointer",
             inputMode === "profile"
-              ? "bg-[#1A2838] text-white shadow-xs"
-              : "text-[#2C3E50] hover:text-[#1A2838] hover:bg-white/60"
+              ? "bg-[#141413] text-white shadow-xs"
+              : "text-[#5A5852] hover:text-[#141413] hover:bg-white/60"
           )}
         >
           <UserCheck className="w-3.5 h-3.5" />
-          <span>Profile Resume</span>
+          <span>Synced Profile</span>
         </button>
-
         <button
           type="button"
           onClick={() => setInputMode("text")}
           className={cn(
-            "py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer",
+            "py-2 px-3 rounded-xl text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 cursor-pointer",
             inputMode === "text"
-              ? "bg-[#1A2838] text-white shadow-xs"
-              : "text-[#2C3E50] hover:text-[#1A2838] hover:bg-white/60"
+              ? "bg-[#141413] text-white shadow-xs"
+              : "text-[#5A5852] hover:text-[#141413] hover:bg-white/60"
           )}
         >
-          <Code2 className="w-3.5 h-3.5" />
+          <FileText className="w-3.5 h-3.5" />
           <span>Paste Text</span>
         </button>
       </div>
@@ -332,8 +330,8 @@ export function ATSResumeUploader({
               className={cn(
                 "group relative border-2 border-dashed rounded-3xl p-8 sm:p-10 text-center transition-all duration-200 cursor-pointer flex flex-col items-center justify-center gap-3 overflow-hidden",
                 isDragging
-                  ? "border-[#1A2838] bg-[#D6E6F2]/70 scale-[1.01] shadow-lg shadow-[#1A2838]/10"
-                  : "border-[#B9D7EA] hover:border-[#769FCD] bg-gradient-to-b from-[#D6E6F2]/30 via-white to-[#D6E6F2]/10 hover:bg-[#D6E6F2]/50"
+                  ? "border-[#141413] bg-[#FAF7F2] scale-[1.01] shadow-lg shadow-[#141413]/10"
+                  : "border-[#E2DDD3] hover:border-[#769FCD] bg-[#FAF7F2]/40 hover:bg-[#FAF7F2]"
               )}
             >
               <input
@@ -344,15 +342,15 @@ export function ATSResumeUploader({
                 className="hidden"
               />
 
-              <div className="w-14 h-14 rounded-2xl bg-white shadow-md shadow-[#769FCD]/15 border border-[#B9D7EA] flex items-center justify-center text-[#769FCD] transition-transform duration-200 group-hover:scale-110">
+              <div className="w-14 h-14 rounded-2xl bg-white shadow-md shadow-[#769FCD]/15 border border-[#E2DDD3] flex items-center justify-center text-[#769FCD] transition-transform duration-200 group-hover:scale-110">
                 <UploadCloud className="w-7 h-7 text-[#769FCD]" />
               </div>
 
               <div className="flex flex-col gap-1 items-center">
-                <p className="text-sm font-black text-[#1A2838] group-hover:text-[#769FCD] transition-colors font-display">
+                <p className="text-sm font-black text-[#141413] group-hover:text-[#769FCD] transition-colors font-display">
                   Drag &amp; drop your resume file here
                 </p>
-                <p className="text-xs text-[#5A7184]">
+                <p className="text-xs text-[#5A5852] font-sans">
                   Supports PDF, DOCX, or TXT (Max 10MB)
                 </p>
               </div>
@@ -363,7 +361,7 @@ export function ATSResumeUploader({
                   e.stopPropagation();
                   fileInputRef.current?.click();
                 }}
-                className="mt-1 px-4 py-2 rounded-xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-bold text-xs shadow-xs transition-all cursor-pointer"
+                className="mt-1 px-4 py-2 rounded-xl bg-[#141413] hover:bg-[#769FCD] text-white font-mono font-bold text-xs shadow-xs transition-all cursor-pointer"
               >
                 Choose File from Device
               </button>
@@ -454,27 +452,27 @@ export function ATSResumeUploader({
             value={pastedText}
             onChange={(e) => setPastedText(e.target.value)}
             placeholder="Paste raw resume text here (Summary, Skills, Work Experience, Education)..."
-            className="w-full rounded-2xl bg-[#F4F8FB] border border-[#B9D7EA] p-4 text-xs font-mono text-[#1A2838] placeholder:text-slate-400 transition-all focus:bg-white focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20 shadow-inner"
+            className="w-full rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] p-4 text-xs font-mono text-[#141413] placeholder:text-stone-400 transition-all focus:bg-white focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20 shadow-inner"
           />
         </div>
       )}
 
       {/* Target Job Description Comparator Drawer */}
-      <div className="border border-[#B9D7EA] rounded-2xl p-4 bg-[#F4F8FB]">
+      <div className="border border-[#E8E2D8] rounded-2xl p-4 bg-[#FAF7F2]">
         <button
           type="button"
           onClick={() => setShowJobDescInput(!showJobDescInput)}
           className="w-full flex items-center justify-between text-left cursor-pointer"
         >
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-[#D6E6F2] text-[#1A2838] flex items-center justify-center border border-[#B9D7EA]">
-              <Briefcase className="w-3.5 h-3.5 text-[#1A2838]" />
+            <div className="w-7 h-7 rounded-lg bg-white text-[#141413] flex items-center justify-center border border-[#E2DDD3] shadow-2xs">
+              <Briefcase className="w-3.5 h-3.5 text-[#141413]" />
             </div>
             <div>
-              <span className="text-xs font-bold text-[#1A2838] block">
+              <span className="text-xs font-bold text-[#141413] block font-sans">
                 Target Job Description Matcher (Optional)
               </span>
-              <span className="text-[11px] text-[#5A7184]">
+              <span className="text-[11px] text-[#5A5852] font-sans">
                 Extracts missing role-specific keywords against job postings
               </span>
             </div>
@@ -485,9 +483,9 @@ export function ATSResumeUploader({
         </button>
 
         {showJobDescInput && (
-          <div className="mt-3.5 flex flex-col gap-2.5 pt-3 border-t border-[#B9D7EA] animate-in fade-in duration-150">
+          <div className="mt-3.5 flex flex-col gap-2.5 pt-3 border-t border-[#E8E2D8] animate-in fade-in duration-150">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[10px] font-mono text-[#5A7184]">Presets:</span>
+              <span className="text-[10px] font-mono text-[#5A5852]">Presets:</span>
               <button
                 type="button"
                 onClick={() =>
@@ -495,7 +493,7 @@ export function ATSResumeUploader({
                     "Senior Frontend Engineer: 4+ years React 19, Next.js, TypeScript, Tailwind CSS, Core Web Vitals optimization, and Jest testing."
                   )
                 }
-                className="px-2 py-0.5 rounded-md bg-white border border-[#B9D7EA] text-[10px] font-bold text-[#1A2838] hover:bg-[#D6E6F2]"
+                className="px-2 py-0.5 rounded-md bg-white border border-[#E2DDD3] text-[10px] font-mono font-bold text-[#141413] hover:bg-[#FAF7F2]"
               >
                 Frontend Role
               </button>
@@ -506,7 +504,7 @@ export function ATSResumeUploader({
                     "Full Stack Engineer: React, Node.js, TypeScript, PostgreSQL, RESTful APIs, Docker, and CI/CD pipelines."
                   )
                 }
-                className="px-2 py-0.5 rounded-md bg-white border border-[#B9D7EA] text-[10px] font-bold text-[#1A2838] hover:bg-[#D6E6F2]"
+                className="px-2 py-0.5 rounded-md bg-white border border-[#E2DDD3] text-[10px] font-mono font-bold text-[#141413] hover:bg-[#FAF7F2]"
               >
                 Full Stack Role
               </button>
@@ -516,14 +514,14 @@ export function ATSResumeUploader({
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
               placeholder="Paste target job requirements here to benchmark exact match percentage..."
-              className="w-full rounded-xl bg-white border border-[#B9D7EA] p-3 text-xs text-[#1A2838] placeholder:text-slate-400 focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20"
+              className="w-full rounded-xl bg-white border border-[#E2DDD3] p-3 text-xs text-[#141413] placeholder:text-stone-400 focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20"
             />
           </div>
         )}
       </div>
 
       {/* Pre-flight Diagnostic Badges */}
-      <div className="grid grid-cols-3 gap-2 py-2 px-3 rounded-xl bg-[#F4F8FB] border border-[#B9D7EA] text-[11px] font-mono text-[#5A7184]">
+      <div className="grid grid-cols-3 gap-2 py-2 px-3 rounded-xl bg-[#FAF7F2] border border-[#E8E2D8] text-[11px] font-mono text-[#5A5852]">
         <div className="flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
           <span>Workday Safe</span>

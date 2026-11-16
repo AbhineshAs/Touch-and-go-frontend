@@ -20,44 +20,44 @@ export function ResumeModeSelector({
     <div className={cn("w-full flex flex-col gap-6", className)}>
       {/* Header */}
       <div className="flex flex-col gap-1.5">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#1A2838]">
+        <div className="flex items-center gap-2.5">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#141413] font-display">
             Resume Builder
           </h1>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-white text-[#141413] border border-[#E2DDD3] shadow-[1px_1px_0px_#141413]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             ATS Engine v2.4
           </span>
         </div>
-        <p className="text-xs sm:text-sm text-[#2C3E50] font-normal max-w-2xl leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#5A5852] font-sans font-normal max-w-2xl leading-relaxed">
           Create an ATS-optimized CV tailored for high-growth tech roles, or import your current resume for instant parsing, keyword gap detection, and scoring.
         </p>
       </div>
 
-      {/* Action Grid: 2 Selection Cards with #D6E6F2 / #B9D7EA / #769FCD / #1A2838 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+      {/* Action Grid: 2 Selection Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* OPTION 1: CREATE NEW CV */}
-        <div className="group relative bg-white border border-[#B9D7EA] hover:border-[#769FCD] rounded-3xl p-6 sm:p-7 shadow-[0_4px_20px_-4px_rgba(26,40,56,0.06)] hover:shadow-[0_12px_32px_-8px_rgba(118,159,205,0.2)] transition-all duration-200 flex flex-col justify-between">
+        <div className="group relative bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-3xl p-6 sm:p-7 shadow-[0_4px_24px_rgba(26,40,56,0.06)] hover:shadow-[0_8px_30px_rgba(118,159,205,0.15)] transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <div className="w-13 h-13 rounded-2xl bg-[#D6E6F2] border border-[#B9D7EA] flex items-center justify-center text-[#1A2838] group-hover:scale-105 transition-transform">
-                <FileEdit className="w-6 h-6 text-[#1A2838]" />
+              <div className="w-12 h-12 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] group-hover:border-[#769FCD] flex items-center justify-center text-[#769FCD] group-hover:scale-105 transition-all shadow-2xs">
+                <FileEdit className="w-6 h-6 text-[#141413]" />
               </div>
-              <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#D6E6F2] text-[#1A2838] border border-[#B9D7EA]">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-xl bg-[#FAF7F2] text-[#141413] border border-[#E8E2D8] shadow-2xs">
                 Start Fresh
               </span>
             </div>
 
             <div className="flex flex-col gap-1">
-              <h2 className="text-lg font-black text-[#1A2838] group-hover:text-[#769FCD] transition-colors">
+              <h2 className="text-lg font-black text-[#141413] group-hover:text-[#769FCD] transition-colors font-display">
                 Create New CV
               </h2>
-              <p className="text-xs text-[#2C3E50] leading-relaxed">
+              <p className="text-xs text-[#5A5852] leading-relaxed font-sans">
                 Build a clean, structured ATS-compliant CV using guided section prompts, live A4 formatting, and pre-populated profile data.
               </p>
             </div>
 
-            <ul className="flex flex-col gap-2 pt-2 border-t border-[#B9D7EA]/60 text-xs text-[#1A2838]">
+            <ul className="flex flex-col gap-2.5 pt-3 border-t border-[#E8E2D8] text-xs text-[#141413] font-sans">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-[#769FCD] shrink-0" />
                 <span>Single &amp; two-column ATS-tested layouts</span>
@@ -76,36 +76,36 @@ export function ResumeModeSelector({
           <div className="pt-6 mt-auto">
             <Link
               href="/candidate/resume/builder"
-              className="w-full h-11 rounded-xl bg-[#1A2838] hover:bg-[#769FCD] text-white font-bold text-xs shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] text-white font-mono font-bold text-xs shadow-md shadow-[#141413]/15 flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-[1.01]"
             >
               <span>Create New CV</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#B9D7EA]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#D6E6F2] transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
 
         {/* OPTION 2: IMPORT / CHECK ATS */}
-        <div className="group relative bg-white border border-[#B9D7EA] hover:border-[#769FCD] rounded-3xl p-6 sm:p-7 shadow-[0_4px_20px_-4px_rgba(26,40,56,0.06)] hover:shadow-[0_12px_32px_-8px_rgba(118,159,205,0.2)] transition-all duration-200 flex flex-col justify-between">
+        <div className="group relative bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-3xl p-6 sm:p-7 shadow-[0_4px_24px_rgba(26,40,56,0.06)] hover:shadow-[0_8px_30px_rgba(118,159,205,0.15)] transition-all duration-200 flex flex-col justify-between hover:-translate-y-1">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <div className="w-13 h-13 rounded-2xl bg-[#D6E6F2] border border-[#B9D7EA] flex items-center justify-center text-[#769FCD] group-hover:scale-105 transition-transform">
-                <UploadCloud className="w-6 h-6 text-[#1A2838]" />
+              <div className="w-12 h-12 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] group-hover:border-[#769FCD] flex items-center justify-center text-[#769FCD] group-hover:scale-105 transition-all shadow-2xs">
+                <UploadCloud className="w-6 h-6 text-[#141413]" />
               </div>
-              <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#B9D7EA]/60 text-[#1A2838] border border-[#B9D7EA]">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-xl bg-[#FAF7F2] text-[#141413] border border-[#E8E2D8] shadow-2xs">
                 Use Current CV
               </span>
             </div>
 
             <div className="flex flex-col gap-1">
-              <h2 className="text-lg font-black text-[#1A2838] group-hover:text-[#769FCD] transition-colors">
+              <h2 className="text-lg font-black text-[#141413] group-hover:text-[#769FCD] transition-colors font-display">
                 Import / Check ATS
               </h2>
-              <p className="text-xs text-[#2C3E50] leading-relaxed">
+              <p className="text-xs text-[#5A5852] leading-relaxed font-sans">
                 Upload your existing PDF, DOCX, or paste text to evaluate your ATS score, parser compatibility, keyword gaps, and formatting risks.
               </p>
             </div>
 
-            <ul className="flex flex-col gap-2 pt-2 border-t border-[#B9D7EA]/60 text-xs text-[#1A2838]">
+            <ul className="flex flex-col gap-2.5 pt-3 border-t border-[#E8E2D8] text-xs text-[#141413] font-sans">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-[#769FCD] shrink-0" />
                 <span>Instant 0–100 ATS compatibility grade</span>
@@ -125,10 +125,10 @@ export function ResumeModeSelector({
             <button
               type="button"
               onClick={() => onSelectMode?.("ats")}
-              className="w-full h-11 rounded-xl bg-white border-2 border-[#1A2838] hover:bg-[#D6E6F2] active:bg-[#B9D7EA] text-[#1A2838] font-bold text-xs shadow-2xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full h-11 rounded-xl bg-white border border-[#E2DDD3] hover:border-[#769FCD] hover:bg-[#FAF7F2] text-[#141413] font-mono font-bold text-xs shadow-[1px_1px_0px_#141413] flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-[1.01]"
             >
               <span>Import &amp; Check ATS</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#769FCD]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#769FCD] transition-transform group-hover:translate-x-1" />
             </button>
           </div>
         </div>
