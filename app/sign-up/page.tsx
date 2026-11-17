@@ -6,38 +6,36 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Input } from "@/components/ui/Input";
-import { Checkbox } from "@/components/ui/Select";
-import { LoadingState } from "@/components/ui/States";
 import {
   User,
   Building2,
   ArrowRight,
   ArrowLeft,
-  ShieldAlert,
+  Mail,
+  Lock,
+  Phone,
   Eye,
   EyeOff,
   CheckCircle2,
   RotateCcw,
-  Mail,
-  KeyRound,
   Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
-import { mockOtpService } from "@/lib/candidate/services/otpService";
 import { TagLogo } from "@/components/ui/TagLogo";
+import { LoadingState } from "@/components/ui/States";
+import { AuthVisualStage } from "@/components/auth/AuthVisualStage";
 
 type AuthMode = "signup" | "login" | "forgot_password";
 type AuthRole = "candidate" | "employer";
 
 const COUNTRY_CODES = [
   { code: "+91", label: "India (+91)", flag: "🇮🇳" },
-  { code: "+1", label: "United States / Canada (+1)", flag: "🇺🇸" },
-  { code: "+44", label: "United Kingdom (+44)", flag: "🇬🇧" },
+  { code: "+1", label: "USA / Canada (+1)", flag: "🇺🇸" },
+  { code: "+44", label: "UK (+44)", flag: "🇬🇧" },
   { code: "+65", label: "Singapore (+65)", flag: "🇸🇬" },
-  { code: "+971", label: "United Arab Emirates (+971)", flag: "🇦🇪" },
+  { code: "+971", label: "UAE (+971)", flag: "🇦🇪" },
   { code: "+49", label: "Germany (+49)", flag: "🇩🇪" },
   { code: "+61", label: "Australia (+61)", flag: "🇦🇺" },
 ];
@@ -49,10 +47,7 @@ const candidateSignUpSchema = z
       .trim()
       .min(1, "Please enter your name")
       .max(100, "Name is too long"),
-    email: z
-      .string()
-      .trim()
-      .email("Please enter a valid email address"),
+    email: z.string().trim().email("Please enter a valid email address"),
     countryCode: z.string().min(1, "Please select a country code"),
     phone: z
       .string()
@@ -112,6 +107,37 @@ const employerLoginSchema = z.object({
 
 type EmployerLoginFormValues = z.infer<typeof employerLoginSchema>;
 
+function GoogleIcon() {
+  return (
+    <svg className="w-4 h-4" viewBox="0 0 24 24">
+      <path
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+      />
+    </svg>
+  );
+}
+
+function AppleIcon() {
+  return (
+    <svg className="w-4 h-4 fill-[#141413]" viewBox="0 0 170 170">
+      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.08-7.7-7.91-12.04-14.49-6.3-9.61-11.22-20.73-14.75-33.36-3.53-12.63-5.29-24.3-5.29-35.01 0-14.7 3.73-26.68 11.19-35.95 7.46-9.27 16.92-14.05 28.38-14.34 5.34 0 11.37 1.48 18.09 4.45 6.72 2.97 10.87 4.51 12.45 4.62 1.39-.11 5.76-1.74 13.11-4.89 7.35-3.15 13.43-4.48 18.25-3.99 13.56 1.09 23.95 6.23 31.17 15.42-11.75 7.18-17.51 17.15-17.29 29.9.22 10.11 4.13 18.57 11.75 25.38 7.61 6.81 16.8 10.66 27.56 11.53-2.39 7.4-5.22 14.58-8.49 21.54zM119.22 33.15c0-7.72 2.72-15.01 8.16-21.87 5.44-6.85 12.18-10.99 20.22-12.4 1.09 7.94-1.3 15.35-7.18 22.24-5.87 6.88-12.94 11.08-21.2 12.03z" />
+    </svg>
+  );
+}
+
 function AuthContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -121,7 +147,7 @@ function AuthContent() {
   const initialRole: AuthRole = rawRole === "employer" ? "employer" : "candidate";
 
   const { user, isAuthenticated, isLoading, login, signup } = useAuth();
-  const { setIdentity, confirmProfile, loginCandidateByPhone, loginCandidateByEmail } = useCandidate();
+  const { setIdentity, confirmProfile, loginCandidateByEmail } = useCandidate();
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && user) {
@@ -137,8 +163,6 @@ function AuthContent() {
 
   const [activeTab, setActiveTab] = useState<AuthMode>(initialMode);
   const [selectedRole, setSelectedRole] = useState<AuthRole>(initialRole);
-  const [showRoleSwitchWarning, setShowRoleSwitchWarning] = useState(false);
-  const [pendingRoleSwitch, setPendingRoleSwitch] = useState<AuthRole | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
 
   const [showCandidatePassword, setShowCandidatePassword] = useState(false);
@@ -403,16 +427,34 @@ function AuthContent() {
     }
   };
 
+  const handleQuickDemoLogin = async (role: AuthRole) => {
+    try {
+      setAuthError(null);
+      const demoEmail = role === "candidate" ? "candidate@touchandgo.ai" : "recruiter@touchandgo.ai";
+      if (role === "candidate" && loginCandidateByEmail) {
+        loginCandidateByEmail(demoEmail);
+      }
+      await login(demoEmail, role);
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push(role === "candidate" ? "/candidate/dashboard" : "/employer/dashboard");
+      }
+    } catch (err: any) {
+      setAuthError("Failed to sign in with demo credentials.");
+    }
+  };
+
   if (isLoading || (isAuthenticated && user)) {
     return (
-      <div className="min-h-screen bg-[#D6E6F2]/30 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-6">
         <LoadingState message="Redirecting to your workspace..." />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-between items-center bg-[#FAF7F2] px-4 py-10 sm:py-14 text-[#141413] font-sans relative overflow-x-hidden">
+    <div className="min-h-screen flex flex-col justify-between items-center bg-[#FAF7F2] px-4 py-8 sm:py-12 text-[#141413] font-sans relative overflow-x-hidden">
       {/* Subtle architectural dot grid background */}
       <div
         className="absolute inset-0 pointer-events-none opacity-40"
@@ -422,729 +464,909 @@ function AuthContent() {
         }}
       />
 
-      <div className="w-full max-w-[440px] flex flex-col gap-6 my-auto relative z-10">
-        {/* Brand Header */}
-        <div className="flex flex-col items-center text-center gap-1.5">
-          <TagLogo height={44} />
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#141413] font-display mt-2">
-            {activeTab === "signup"
-              ? selectedRole === "candidate"
-                ? "Candidate Registration"
-                : "Company Registration"
-              : activeTab === "login"
-                ? selectedRole === "candidate"
-                  ? "Candidate Sign In"
-                  : "Company Sign In"
-                : forgotStep === "otp"
-                  ? "Verify your email"
-                  : forgotStep === "reset_password"
-                    ? "Create new password"
-                    : forgotStep === "success"
-                      ? "Password reset complete"
-                      : "Reset your password"}
-          </h1>
-          <p className="text-xs sm:text-sm text-[#5A5852] font-sans font-normal max-w-sm leading-relaxed mt-1">
-            {activeTab === "signup"
-              ? selectedRole === "candidate"
-                ? "Enter your details to create your candidate profile and discover matched opportunities"
-                : "Register your organization to access verified tech talent matches for your team"
-              : activeTab === "login"
-                ? selectedRole === "candidate"
-                  ? "Enter your credentials to access your candidate dashboard"
-                  : "Access your company's hiring pipeline and talent matches"
-                : forgotStep === "otp"
-                  ? `Enter the 6-digit verification code sent to ${forgotEmail}`
-                  : forgotStep === "reset_password"
-                    ? "Enter your new password below"
-                    : forgotStep === "success"
-                      ? "You can now log in to your account"
-                      : "Enter your registered email to receive a verification code"}
-          </p>
-        </div>
-
-        {/* Main Card */}
-        <div className="p-6 sm:p-8 flex flex-col gap-5 bg-white border border-[#E2DDD3] rounded-3xl shadow-[0_16px_40px_rgba(20,20,19,0.06)]">
-          {activeTab !== "forgot_password" && (
-            <>
-              {/* Main Auth Mode Switcher */}
-              <div className="grid grid-cols-2 p-1.5 bg-[#FAF7F2] border border-[#E2DDD3] rounded-2xl gap-1">
-                <button
-                  type="button"
-                  onClick={() => switchMode("signup")}
-                  className={cn(
-                    "flex items-center justify-center py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer font-sans",
-                    activeTab === "signup"
-                      ? "bg-[#141413] text-white shadow-xs"
-                      : "text-[#74726A] hover:text-[#141413] hover:bg-white/60"
-                  )}
-                >
-                  Sign Up
-                </button>
-                <button
-                  type="button"
-                  onClick={() => switchMode("login")}
-                  className={cn(
-                    "flex items-center justify-center py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer font-sans",
-                    activeTab === "login"
-                      ? "bg-[#141413] text-white shadow-xs"
-                      : "text-[#74726A] hover:text-[#141413] hover:bg-white/60"
-                  )}
-                >
-                  Log In
-                </button>
-              </div>
-
-              {/* Sub Role Selector */}
-              <div className="flex items-center justify-center gap-1.5 p-1 bg-white border border-[#E2DDD3] rounded-xl">
-                <button
-                  type="button"
-                  onClick={() => handleRoleChange("candidate")}
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer font-sans",
-                    selectedRole === "candidate"
-                      ? "bg-[#D6E6F2] text-[#141413] border border-[#769FCD] shadow-2xs"
-                      : "text-[#74726A] hover:text-[#141413] hover:bg-[#FAF7F2] font-medium"
-                  )}
-                >
-                  <User className="w-3.5 h-3.5 text-[#769FCD]" />
-                  <span>Job Seeker</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleRoleChange("employer")}
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer font-sans",
-                    selectedRole === "employer"
-                      ? "bg-[#D6E6F2] text-[#141413] border border-[#769FCD] shadow-2xs"
-                      : "text-[#74726A] hover:text-[#141413] hover:bg-[#FAF7F2] font-medium"
-                  )}
-                >
-                  <Building2 className="w-3.5 h-3.5 text-[#769FCD]" />
-                  <span>Company</span>
-                </button>
-              </div>
-            </>
-          )}
-
-          {authError && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-semibold font-sans">
-              {authError}
+      <div className="w-full max-w-5xl my-auto relative z-10">
+        {/* Split Auth Card Container */}
+        <div className="bg-white border border-[#E2DDD3] rounded-3xl sm:rounded-[36px] shadow-[0_24px_64px_rgba(20,20,19,0.06)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
+          
+          {/* Mobile Arch Hero Stage (shown only on mobile/tablet) */}
+          <div className="lg:hidden w-full bg-[#FAF7F2] border-b border-[#E8E2D8] pt-6 pb-2 px-4 flex items-center justify-center">
+            <div className="w-full max-w-[280px]">
+              <AuthVisualStage mode={activeTab} role={selectedRole} compact hideFooter />
             </div>
-          )}
+          </div>
 
-          {/* MODE 1: SIGN UP */}
-          {activeTab === "signup" && (
-            <>
-              {selectedRole === "candidate" ? (
-                <form onSubmit={candidateSignUpForm.handleSubmit(onCandidateSignUpSubmit)} className="flex flex-col gap-4">
-                  <Input
-                    label="Full Name"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    placeholder="e.g. Ananya Sharma"
-                    error={candidateSignUpForm.formState.errors.fullName?.message}
-                    {...candidateSignUpForm.register("fullName")}
-                  />
+          {/* Left / Form Column */}
+          <div className="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between">
+            <div>
+              {/* Header: TagLogo + Role Pill Selector */}
+              <div className="flex items-center justify-between pb-6 border-b border-[#F4EFEA]">
+                <TagLogo height={36} href="/" />
 
-                  <Input
-                    label="Email Address"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type="email"
-                    placeholder="you@example.com"
-                    error={candidateSignUpForm.formState.errors.email?.message}
-                    {...candidateSignUpForm.register("email")}
-                  />
-
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-[#141413] select-none font-sans">Phone Number</label>
-                    <div className="flex h-11 rounded-xl border border-[#E2DDD3] bg-white overflow-hidden focus-within:border-[#769FCD] focus-within:ring-2 focus-within:ring-[#769FCD]/20 transition-all">
-                      <select
-                        {...candidateSignUpForm.register("countryCode")}
-                        className="h-full px-3 bg-[#FAF7F2] border-r border-[#E2DDD3] text-xs font-mono font-bold text-[#141413] outline-none cursor-pointer hover:bg-white transition-colors"
-                      >
-                        {COUNTRY_CODES.map((c) => (
-                          <option key={c.code} value={c.code}>
-                            {c.flag} {c.code}
-                          </option>
-                        ))}
-                      </select>
-                      <input
-                        type="tel"
-                        placeholder="98765 43210"
-                        {...candidateSignUpForm.register("phone")}
-                        className="flex-1 h-full px-3.5 text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#8A8A85] outline-none bg-transparent font-sans"
-                      />
-                    </div>
-                    {candidateSignUpForm.formState.errors.phone && (
-                      <p className="text-[11px] text-red-600 font-medium mt-0.5">
-                        {candidateSignUpForm.formState.errors.phone.message}
-                      </p>
-                    )}
+                {activeTab !== "forgot_password" && (
+                  <div className="inline-flex items-center p-1 bg-[#FAF7F2] border border-[#E2DDD3] rounded-full text-xs font-bold font-sans">
+                    <button
+                      type="button"
+                      onClick={() => handleRoleChange("candidate")}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all cursor-pointer",
+                        selectedRole === "candidate"
+                          ? "bg-white text-[#141413] shadow-xs font-bold"
+                          : "text-[#74726A] hover:text-[#141413]"
+                      )}
+                    >
+                      <User className="w-3.5 h-3.5 text-[#141413]" />
+                      <span>Job Seeker</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRoleChange("employer")}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all cursor-pointer",
+                        selectedRole === "employer"
+                          ? "bg-white text-[#141413] shadow-xs font-bold"
+                          : "text-[#74726A] hover:text-[#141413]"
+                      )}
+                    >
+                      <Building2 className="w-3.5 h-3.5 text-[#141413]" />
+                      <span>Company</span>
+                    </button>
                   </div>
-
-                  <Input
-                    label="Password"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type={showCandidatePassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    error={candidateSignUpForm.formState.errors.password?.message}
-                    helperText="At least 8 characters with 1 number and uppercase letter"
-                    rightIcon={
-                      <button
-                        type="button"
-                        onClick={() => setShowCandidatePassword(!showCandidatePassword)}
-                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
-                        tabIndex={-1}
-                        aria-label={showCandidatePassword ? "Hide password" : "Show password"}
-                      >
-                        {showCandidatePassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    }
-                    {...candidateSignUpForm.register("password")}
-                  />
-
-                  <Input
-                    label="Confirm Password"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type={showCandidateConfirmPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    error={candidateSignUpForm.formState.errors.confirmPassword?.message}
-                    rightIcon={
-                      <button
-                        type="button"
-                        onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
-                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
-                        tabIndex={-1}
-                        aria-label={showCandidateConfirmPassword ? "Hide password" : "Show password"}
-                      >
-                        {showCandidateConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    }
-                    {...candidateSignUpForm.register("confirmPassword")}
-                  />
-
-                  <div className="pt-1">
-                    <Checkbox
-                      label={
-                        <span className="text-xs text-[#5A5852] leading-relaxed font-normal">
-                          I agree to the{" "}
-                          <Link href="/trust" target="_blank" className="text-[#141413] font-bold hover:underline">
-                            Terms of Service
-                          </Link>{" "}
-                          and{" "}
-                          <Link href="/trust" target="_blank" className="text-[#141413] font-bold hover:underline">
-                            Privacy Policy
-                          </Link>
-                        </span>
-                      }
-                      checked={candidateSignUpForm.watch("agreeToTerms")}
-                      onChange={(e) =>
-                        candidateSignUpForm.setValue("agreeToTerms", e.target.checked, { shouldValidate: true })
-                      }
-                    />
-                    {candidateSignUpForm.formState.errors.agreeToTerms?.message && (
-                      <p className="text-[11px] text-red-600 font-medium mt-1">
-                        {candidateSignUpForm.formState.errors.agreeToTerms.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 font-sans"
-                  >
-                    <span>Agree &amp; Join</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </form>
-              ) : (
-                <form onSubmit={employerSignUpForm.handleSubmit(onEmployerSignUpSubmit)} className="flex flex-col gap-4">
-                  <Input
-                    label="Full Name"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    placeholder="e.g. Vikramaditya Nair"
-                    error={employerSignUpForm.formState.errors.fullName?.message}
-                    {...employerSignUpForm.register("fullName")}
-                  />
-
-                  <Input
-                    label="Company Work Email"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type="email"
-                    placeholder="name@company.com"
-                    error={employerSignUpForm.formState.errors.email?.message}
-                    helperText="Please use your official company domain"
-                    {...employerSignUpForm.register("email")}
-                  />
-
-                  <Input
-                    label="Create Password"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type={showEmployerPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    error={employerSignUpForm.formState.errors.password?.message}
-                    helperText="At least 8 characters with 1 number and uppercase letter"
-                    rightIcon={
-                      <button
-                        type="button"
-                        onClick={() => setShowEmployerPassword(!showEmployerPassword)}
-                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
-                        tabIndex={-1}
-                        aria-label={showEmployerPassword ? "Hide password" : "Show password"}
-                      >
-                        {showEmployerPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    }
-                    {...employerSignUpForm.register("password")}
-                  />
-
-                  <Input
-                    label="Confirm Password"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type={showEmployerConfirmPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    error={employerSignUpForm.formState.errors.confirmPassword?.message}
-                    rightIcon={
-                      <button
-                        type="button"
-                        onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
-                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
-                        tabIndex={-1}
-                        aria-label={showEmployerConfirmPassword ? "Hide password" : "Show password"}
-                      >
-                        {showEmployerConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    }
-                    {...employerSignUpForm.register("confirmPassword")}
-                  />
-
-                  <div className="pt-1">
-                    <Checkbox
-                      label={
-                        <span className="text-xs text-[#5A5852] font-normal leading-relaxed">
-                          I agree to the{" "}
-                          <Link href="/trust" className="text-[#141413] font-bold hover:underline">
-                            Terms of Service
-                          </Link>{" "}
-                          and{" "}
-                          <Link href="/trust" className="text-[#141413] font-bold hover:underline">
-                            Responsible AI Charter
-                          </Link>
-                        </span>
-                      }
-                      checked={employerSignUpForm.watch("agreeToTerms")}
-                      onChange={(e) =>
-                        employerSignUpForm.setValue("agreeToTerms", e.target.checked, { shouldValidate: true })
-                      }
-                    />
-                    {employerSignUpForm.formState.errors.agreeToTerms?.message && (
-                      <p className="text-[11px] text-red-600 font-medium mt-1">
-                        {employerSignUpForm.formState.errors.agreeToTerms.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 font-sans"
-                  >
-                    <span>Create Account &amp; Verify Email</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </form>
-              )}
-
-              <div className="pt-4 border-t border-[#E8E2D8] text-center text-xs text-[#5A5852] font-sans">
-                Already on TAG?{" "}
-                <button
-                  type="button"
-                  onClick={() => switchMode("login")}
-                  className="font-bold text-[#141413] hover:text-[#769FCD] transition-colors cursor-pointer underline underline-offset-4"
-                >
-                  Sign in
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* MODE 2: LOG IN */}
-          {activeTab === "login" && (
-            <>
-              {selectedRole === "candidate" ? (
-                <form onSubmit={candidateLoginForm.handleSubmit(onCandidateLoginSubmit)} className="flex flex-col gap-4">
-                  <Input
-                    label="Email Address"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type="email"
-                    placeholder="you@example.com"
-                    error={candidateLoginForm.formState.errors.email?.message}
-                    {...candidateLoginForm.register("email")}
-                  />
-
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-[#141413] select-none font-sans">Password</label>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setAuthError(null);
-                          setForgotStep("email");
-                          const currentEmail = candidateLoginForm.getValues("email");
-                          if (currentEmail) setForgotEmail(currentEmail);
-                          setActiveTab("forgot_password");
-                        }}
-                        className="text-xs font-bold text-[#769FCD] hover:text-[#141413] transition-colors cursor-pointer"
-                      >
-                        Forgot password?
-                      </button>
-                    </div>
-                    <Input
-                      type={showCandidateLoginPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      error={candidateLoginForm.formState.errors.password?.message}
-                      rightIcon={
-                        <button
-                          type="button"
-                          onClick={() => setShowCandidateLoginPassword(!showCandidateLoginPassword)}
-                          className="text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
-                          tabIndex={-1}
-                          aria-label={showCandidateLoginPassword ? "Hide password" : "Show password"}
-                        >
-                          {showCandidateLoginPassword ? (
-                            <EyeOff className="w-4 h-4" />
-                          ) : (
-                            <Eye className="w-4 h-4" />
-                          )}
-                        </button>
-                      }
-                      {...candidateLoginForm.register("password")}
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={candidateLoginForm.formState.isSubmitting}
-                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
-                  >
-                    <span>{candidateLoginForm.formState.isSubmitting ? "Signing In..." : "Sign In"}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </form>
-              ) : (
-                <form onSubmit={employerLoginForm.handleSubmit(onEmployerLoginSubmit)} className="flex flex-col gap-4">
-                  <Input
-                    label="Company Email"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type="email"
-                    placeholder="name@company.com"
-                    error={employerLoginForm.formState.errors.email?.message}
-                    {...employerLoginForm.register("email")}
-                  />
-
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-[#141413] select-none font-sans">Password</label>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setAuthError(null);
-                          setForgotStep("email");
-                          const currentEmail = employerLoginForm.getValues("email");
-                          if (currentEmail) setForgotEmail(currentEmail);
-                          setActiveTab("forgot_password");
-                        }}
-                        className="text-xs font-bold text-[#769FCD] hover:text-[#141413] transition-colors cursor-pointer"
-                      >
-                        Forgot password?
-                      </button>
-                    </div>
-                    <Input
-                      type={showEmployerPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      error={employerLoginForm.formState.errors.password?.message}
-                      rightIcon={
-                        <button
-                          type="button"
-                          onClick={() => setShowEmployerPassword(!showEmployerPassword)}
-                          className="text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
-                          tabIndex={-1}
-                          aria-label={showEmployerPassword ? "Hide password" : "Show password"}
-                        >
-                          {showEmployerPassword ? (
-                            <EyeOff className="w-4 h-4" />
-                          ) : (
-                            <Eye className="w-4 h-4" />
-                          )}
-                        </button>
-                      }
-                      {...employerLoginForm.register("password")}
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={employerLoginForm.formState.isSubmitting}
-                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
-                  >
-                    <span>{employerLoginForm.formState.isSubmitting ? "Signing In..." : "Sign In"}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </form>
-              )}
-
-              <div className="pt-4 border-t border-[#E8E2D8] text-center text-xs text-[#5A5852] font-sans">
-                New to TAG?{" "}
-                <button
-                  type="button"
-                  onClick={() => switchMode("signup")}
-                  className="font-bold text-[#141413] hover:text-[#769FCD] transition-colors cursor-pointer underline underline-offset-4"
-                >
-                  Join now
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* MODE 3: FORGOT PASSWORD */}
-          {activeTab === "forgot_password" && (
-            <div className="flex flex-col gap-4">
-              {/* Clean Top Navigation */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveTab("login");
-                    setForgotStep("email");
-                    setAuthError(null);
-                  }}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#74726A] hover:text-[#141413] transition-colors cursor-pointer font-sans"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Back to Sign In</span>
-                </button>
-                {forgotStep !== "success" && (
-                  <span className="text-[11px] font-mono font-bold text-[#74726A]">
-                    Step {forgotStep === "email" ? "1" : forgotStep === "otp" ? "2" : "3"} of 3
-                  </span>
                 )}
               </div>
 
-              {/* STEP 1: ENTER EMAIL */}
-              {forgotStep === "email" && (
-                <form onSubmit={handleSendForgotOtp} className="flex flex-col gap-4">
-                  <Input
-                    label="Email Address"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={forgotEmail}
-                    onChange={(e) => {
-                      setForgotEmail(e.target.value);
-                      setAuthError(null);
-                    }}
-                    required
-                    autoFocus
-                  />
+              {/* Main Headline */}
+              <div className="pt-6 pb-5">
+                <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#141413] font-display">
+                  {activeTab === "login"
+                    ? "Welcome Back!!"
+                    : activeTab === "signup"
+                      ? selectedRole === "candidate"
+                        ? "Create Candidate Account"
+                        : "Register Company Account"
+                      : forgotStep === "otp"
+                        ? "Verify your email"
+                        : forgotStep === "reset_password"
+                          ? "Create new password"
+                          : forgotStep === "success"
+                            ? "Password reset complete"
+                            : "Reset your password"}
+                </h1>
+                <p className="text-xs sm:text-sm text-[#74726A] font-sans mt-1">
+                  {activeTab === "login"
+                    ? selectedRole === "candidate"
+                      ? "Sign in to access your AI candidate dashboard and 1-touch matched roles."
+                      : "Sign in to manage company hiring pipelines and verified tech talent."
+                    : activeTab === "signup"
+                      ? selectedRole === "candidate"
+                        ? "Join Touch & Go to explore pre-vetted CTCs with instant vector matching."
+                        : "Access verified engineering talent with zero recruiter spam."
+                      : forgotStep === "otp"
+                        ? `Enter the 6-digit verification code sent to ${forgotEmail}`
+                        : forgotStep === "reset_password"
+                          ? "Enter your new password below"
+                          : forgotStep === "success"
+                            ? "You can now log in with your updated password"
+                            : "Enter your registered email to receive a password reset code"}
+                </p>
+              </div>
 
-                  {authError && (
-                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
-                      {authError}
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={isSendingForgotOtp}
-                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
-                  >
-                    <span>{isSendingForgotOtp ? "Sending Code..." : "Send Verification Code"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </form>
+              {/* Error banner */}
+              {authError && (
+                <div className="mb-4 p-3 rounded-2xl bg-red-50 border border-red-200 text-xs text-red-700 font-medium">
+                  {authError}
+                </div>
               )}
 
-              {/* STEP 2: ENTER OTP */}
-              {forgotStep === "otp" && (
-                <form onSubmit={handleVerifyForgotOtp} className="flex flex-col gap-4">
-                  {/* 6 Digit Input Grid */}
-                  <div className="flex justify-between gap-1.5 sm:gap-2">
-                    {forgotOtp.map((digit, idx) => (
-                      <input
-                        key={idx}
-                        ref={(el) => {
-                          forgotOtpRefs.current[idx] = el;
-                        }}
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={1}
-                        value={digit}
-                        onChange={(e) => handleForgotOtpChange(idx, e.target.value)}
-                        onKeyDown={(e) => handleForgotOtpKeyDown(idx, e)}
-                        onPaste={idx === 0 ? handleForgotOtpPaste : undefined}
-                        aria-label={`Digit ${idx + 1}`}
-                        className="w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-bold rounded-xl border border-[#E2DDD3] bg-white text-[#141413] focus:border-[#769FCD] focus:outline-none focus:ring-2 focus:ring-[#769FCD]/20 transition-all font-mono"
-                      />
-                    ))}
-                  </div>
+              {/* MODE 1: LOGIN */}
+              {activeTab === "login" && (
+                <div className="flex flex-col gap-4">
+                  {selectedRole === "candidate" ? (
+                    <form onSubmit={candidateLoginForm.handleSubmit(onCandidateLoginSubmit)} className="flex flex-col gap-3.5">
+                      {/* Email Pill Input */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Email</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type="email"
+                            placeholder="email@gmail.com"
+                            {...candidateLoginForm.register("email")}
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                        </div>
+                        {candidateLoginForm.formState.errors.email && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {candidateLoginForm.formState.errors.email.message}
+                          </p>
+                        )}
+                      </div>
 
-                  {forgotOtpError && (
-                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
-                      {forgotOtpError}
-                    </div>
+                      {/* Password Pill Input */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Password</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Lock className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type={showCandidateLoginPassword ? "text" : "password"}
+                            placeholder="Enter your password"
+                            {...candidateLoginForm.register("password")}
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowCandidateLoginPassword(!showCandidateLoginPassword)}
+                            className="p-1 text-[#9A9890] hover:text-[#141413] transition-colors cursor-pointer"
+                            tabIndex={-1}
+                          >
+                            {showCandidateLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                        {candidateLoginForm.formState.errors.password && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {candidateLoginForm.formState.errors.password.message}
+                          </p>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAuthError(null);
+                            setForgotStep("email");
+                            const currentEmail = candidateLoginForm.getValues("email");
+                            if (currentEmail) setForgotEmail(currentEmail);
+                            setActiveTab("forgot_password");
+                          }}
+                          className="self-end text-xs font-medium text-[#74726A] hover:text-[#141413] transition-colors cursor-pointer mt-0.5"
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
+
+                      {/* Peach Primary CTA */}
+                      <button
+                        type="submit"
+                        disabled={candidateLoginForm.formState.isSubmitting}
+                        className="w-full h-12 rounded-full bg-[#F6C8B4] hover:bg-[#EEB69E] active:bg-[#E8A58A] text-[#141413] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(246,200,180,0.45)] hover:shadow-[0_6px_20px_rgba(246,200,180,0.65)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                      >
+                        <span>{candidateLoginForm.formState.isSubmitting ? "Signing In..." : "Login"}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </form>
+                  ) : (
+                    <form onSubmit={employerLoginForm.handleSubmit(onEmployerLoginSubmit)} className="flex flex-col gap-3.5">
+                      {/* Company Email Pill Input */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Company Work Email</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type="email"
+                            placeholder="name@company.com"
+                            {...employerLoginForm.register("email")}
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                        </div>
+                        {employerLoginForm.formState.errors.email && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {employerLoginForm.formState.errors.email.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Password Pill Input */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Password</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Lock className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type={showEmployerPassword ? "text" : "password"}
+                            placeholder="Enter company password"
+                            {...employerLoginForm.register("password")}
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowEmployerPassword(!showEmployerPassword)}
+                            className="p-1 text-[#9A9890] hover:text-[#141413] transition-colors cursor-pointer"
+                            tabIndex={-1}
+                          >
+                            {showEmployerPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                        {employerLoginForm.formState.errors.password && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {employerLoginForm.formState.errors.password.message}
+                          </p>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAuthError(null);
+                            setForgotStep("email");
+                            const currentEmail = employerLoginForm.getValues("email");
+                            if (currentEmail) setForgotEmail(currentEmail);
+                            setActiveTab("forgot_password");
+                          }}
+                          className="self-end text-xs font-medium text-[#74726A] hover:text-[#141413] transition-colors cursor-pointer mt-0.5"
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
+
+                      {/* Peach Primary CTA */}
+                      <button
+                        type="submit"
+                        disabled={employerLoginForm.formState.isSubmitting}
+                        className="w-full h-12 rounded-full bg-[#F6C8B4] hover:bg-[#EEB69E] active:bg-[#E8A58A] text-[#141413] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(246,200,180,0.45)] hover:shadow-[0_6px_20px_rgba(246,200,180,0.65)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                      >
+                        <span>{employerLoginForm.formState.isSubmitting ? "Signing In..." : "Company Login"}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </form>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={isVerifyingForgotOtp}
-                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
-                  >
-                    <span>{isVerifyingForgotOtp ? "Verifying..." : "Verify Code"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  {/* Subtle "- or -" Divider */}
+                  <div className="relative my-2">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-[#E8E2D8]" />
+                    </div>
+                    <div className="relative flex justify-center text-xs">
+                      <span className="bg-white px-3 text-[#9A9890] font-sans font-medium">- or -</span>
+                    </div>
+                  </div>
 
-                  <div className="flex items-center justify-between text-xs pt-3 border-t border-[#E8E2D8]">
+                  {/* Social Logins */}
+                  <div className="flex items-center justify-center gap-3">
                     <button
                       type="button"
-                      onClick={() => setForgotStep("email")}
-                      className="text-[#74726A] hover:text-[#141413] transition-colors cursor-pointer text-xs font-medium"
+                      onClick={() => handleQuickDemoLogin(selectedRole)}
+                      className="w-11 h-11 rounded-full border border-[#E2DDD3] bg-white hover:bg-[#FAF7F2] hover:border-[#D0CBC0] shadow-2xs flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
+                      title="Sign in with Google"
                     >
-                      Change Email
+                      <GoogleIcon />
                     </button>
-                    {forgotResendCooldown > 0 ? (
-                      <span className="text-[#74726A] text-xs font-mono">Resend in {forgotResendCooldown}s</span>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleResendForgotOtp}
-                        className="font-bold text-[#141413] hover:text-[#769FCD] cursor-pointer flex items-center gap-1 text-xs"
-                      >
-                        <RotateCcw className="w-3 h-3" />
-                        <span>Resend Code</span>
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleQuickDemoLogin(selectedRole)}
+                      className="w-11 h-11 rounded-full border border-[#E2DDD3] bg-white hover:bg-[#FAF7F2] hover:border-[#D0CBC0] shadow-2xs flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
+                      title="Sign in with Apple"
+                    >
+                      <AppleIcon />
+                    </button>
                   </div>
-                </form>
+                </div>
               )}
 
-              {/* STEP 3: CREATE NEW PASSWORD */}
-              {forgotStep === "reset_password" && (
-                <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
-                  <Input
-                    label="New Password"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type={showForgotNewPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    value={forgotNewPassword}
-                    onChange={(e) => {
-                      setForgotNewPassword(e.target.value);
-                      setForgotPasswordError(null);
-                    }}
-                    helperText="At least 8 characters with 1 number and 1 uppercase letter"
-                    rightIcon={
-                      <button
-                        type="button"
-                        onClick={() => setShowForgotNewPassword(!showForgotNewPassword)}
-                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
-                        tabIndex={-1}
-                      >
-                        {showForgotNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    }
-                    required
-                  />
+              {/* MODE 2: SIGN UP */}
+              {activeTab === "signup" && (
+                <div className="flex flex-col gap-4">
+                  {selectedRole === "candidate" ? (
+                    <form onSubmit={candidateSignUpForm.handleSubmit(onCandidateSignUpSubmit)} className="flex flex-col gap-3.5">
+                      {/* Full Name */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Full Name</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <User className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            placeholder="e.g. Ananya Sharma"
+                            {...candidateSignUpForm.register("fullName")}
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                        </div>
+                        {candidateSignUpForm.formState.errors.fullName && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {candidateSignUpForm.formState.errors.fullName.message}
+                          </p>
+                        )}
+                      </div>
 
-                  <Input
-                    label="Confirm New Password"
-                    labelClassName="text-xs font-bold text-[#141413]"
-                    type={showForgotConfirmPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    value={forgotConfirmPassword}
-                    onChange={(e) => {
-                      setForgotConfirmPassword(e.target.value);
-                      setForgotPasswordError(null);
-                    }}
-                    rightIcon={
-                      <button
-                        type="button"
-                        onClick={() => setShowForgotConfirmPassword(!showForgotConfirmPassword)}
-                        className="p-1 text-[#74726A] hover:text-[#141413] focus:outline-none cursor-pointer"
-                        tabIndex={-1}
-                      >
-                        {showForgotConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    }
-                    required
-                  />
+                      {/* Email */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Email Address</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type="email"
+                            placeholder="you@example.com"
+                            {...candidateSignUpForm.register("email")}
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                        </div>
+                        {candidateSignUpForm.formState.errors.email && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {candidateSignUpForm.formState.errors.email.message}
+                          </p>
+                        )}
+                      </div>
 
-                  {forgotPasswordError && (
-                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
-                      {forgotPasswordError}
-                    </div>
+                      {/* Phone Number with Country Code */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Phone Number</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white overflow-hidden hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <div className="h-full pl-3 pr-2 flex items-center bg-[#FAF7F2] border-r border-[#E2DDD3]">
+                            <select
+                              {...candidateSignUpForm.register("countryCode")}
+                              className="h-full bg-transparent text-xs font-mono font-bold text-[#141413] outline-none cursor-pointer"
+                            >
+                              {COUNTRY_CODES.map((c) => (
+                                <option key={c.code} value={c.code}>
+                                  {c.flag} {c.code}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="flex-1 flex items-center h-full px-3">
+                            <Phone className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                            <input
+                              type="tel"
+                              placeholder="98765 43210"
+                              {...candidateSignUpForm.register("phone")}
+                              className="w-full h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            />
+                          </div>
+                        </div>
+                        {candidateSignUpForm.formState.errors.phone && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {candidateSignUpForm.formState.errors.phone.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Password & Confirm Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-xs font-bold text-[#141413]">Password</label>
+                          <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                            <Lock className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                            <input
+                              type={showCandidatePassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              {...candidateSignUpForm.register("password")}
+                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowCandidatePassword(!showCandidatePassword)}
+                              className="p-1 text-[#9A9890] hover:text-[#141413] cursor-pointer"
+                              tabIndex={-1}
+                            >
+                              {showCandidatePassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                          {candidateSignUpForm.formState.errors.password && (
+                            <p className="text-[11px] text-red-600 font-medium ml-3">
+                              {candidateSignUpForm.formState.errors.password.message}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-xs font-bold text-[#141413]">Confirm Password</label>
+                          <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                            <Lock className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                            <input
+                              type={showCandidateConfirmPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              {...candidateSignUpForm.register("confirmPassword")}
+                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
+                              className="p-1 text-[#9A9890] hover:text-[#141413] cursor-pointer"
+                              tabIndex={-1}
+                            >
+                              {showCandidateConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                          {candidateSignUpForm.formState.errors.confirmPassword && (
+                            <p className="text-[11px] text-red-600 font-medium ml-3">
+                              {candidateSignUpForm.formState.errors.confirmPassword.message}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Terms Checkbox */}
+                      <div className="pt-1 flex items-start gap-2.5">
+                        <input
+                          type="checkbox"
+                          id="candidateTerms"
+                          {...candidateSignUpForm.register("agreeToTerms")}
+                          className="mt-0.5 rounded accent-[#141413] cursor-pointer"
+                        />
+                        <label htmlFor="candidateTerms" className="text-xs text-[#5A5852] leading-relaxed cursor-pointer select-none">
+                          I agree to the{" "}
+                          <Link href="/trust" target="_blank" className="text-[#141413] font-bold underline underline-offset-2">
+                            Terms of Service
+                          </Link>{" "}
+                          and{" "}
+                          <Link href="/trust" target="_blank" className="text-[#141413] font-bold underline underline-offset-2">
+                            Privacy Policy
+                          </Link>
+                        </label>
+                      </div>
+                      {candidateSignUpForm.formState.errors.agreeToTerms && (
+                        <p className="text-[11px] text-red-600 font-medium ml-3">
+                          {candidateSignUpForm.formState.errors.agreeToTerms.message}
+                        </p>
+                      )}
+
+                      {/* Peach Primary CTA */}
+                      <button
+                        type="submit"
+                        disabled={candidateSignUpForm.formState.isSubmitting}
+                        className="w-full h-12 rounded-full bg-[#F6C8B4] hover:bg-[#EEB69E] active:bg-[#E8A58A] text-[#141413] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(246,200,180,0.45)] hover:shadow-[0_6px_20px_rgba(246,200,180,0.65)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                      >
+                        <span>Agree &amp; Join</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </form>
+                  ) : (
+                    <form onSubmit={employerSignUpForm.handleSubmit(onEmployerSignUpSubmit)} className="flex flex-col gap-3.5">
+                      {/* Full Name */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Recruiter / Contact Name</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <User className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            placeholder="e.g. Vikramaditya Nair"
+                            {...employerSignUpForm.register("fullName")}
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                        </div>
+                        {employerSignUpForm.formState.errors.fullName && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {employerSignUpForm.formState.errors.fullName.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Work Email */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Company Work Email</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type="email"
+                            placeholder="name@company.com"
+                            {...employerSignUpForm.register("email")}
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                        </div>
+                        {employerSignUpForm.formState.errors.email && (
+                          <p className="text-[11px] text-red-600 font-medium ml-3">
+                            {employerSignUpForm.formState.errors.email.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Password & Confirm Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-xs font-bold text-[#141413]">Password</label>
+                          <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                            <Lock className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                            <input
+                              type={showEmployerPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              {...employerSignUpForm.register("password")}
+                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowEmployerPassword(!showEmployerPassword)}
+                              className="p-1 text-[#9A9890] hover:text-[#141413] cursor-pointer"
+                              tabIndex={-1}
+                            >
+                              {showEmployerPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                          {employerSignUpForm.formState.errors.password && (
+                            <p className="text-[11px] text-red-600 font-medium ml-3">
+                              {employerSignUpForm.formState.errors.password.message}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-xs font-bold text-[#141413]">Confirm Password</label>
+                          <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                            <Lock className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                            <input
+                              type={showEmployerConfirmPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              {...employerSignUpForm.register("confirmPassword")}
+                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
+                              className="p-1 text-[#9A9890] hover:text-[#141413] cursor-pointer"
+                              tabIndex={-1}
+                            >
+                              {showEmployerConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                          {employerSignUpForm.formState.errors.confirmPassword && (
+                            <p className="text-[11px] text-red-600 font-medium ml-3">
+                              {employerSignUpForm.formState.errors.confirmPassword.message}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Terms Checkbox */}
+                      <div className="pt-1 flex items-start gap-2.5">
+                        <input
+                          type="checkbox"
+                          id="employerTerms"
+                          {...employerSignUpForm.register("agreeToTerms")}
+                          className="mt-0.5 rounded accent-[#141413] cursor-pointer"
+                        />
+                        <label htmlFor="employerTerms" className="text-xs text-[#5A5852] leading-relaxed cursor-pointer select-none">
+                          I agree to the{" "}
+                          <Link href="/trust" target="_blank" className="text-[#141413] font-bold underline underline-offset-2">
+                            Terms of Service
+                          </Link>{" "}
+                          and{" "}
+                          <Link href="/trust" target="_blank" className="text-[#141413] font-bold underline underline-offset-2">
+                            Responsible Hiring Charter
+                          </Link>
+                        </label>
+                      </div>
+                      {employerSignUpForm.formState.errors.agreeToTerms && (
+                        <p className="text-[11px] text-red-600 font-medium ml-3">
+                          {employerSignUpForm.formState.errors.agreeToTerms.message}
+                        </p>
+                      )}
+
+                      {/* Peach Primary CTA */}
+                      <button
+                        type="submit"
+                        disabled={employerSignUpForm.formState.isSubmitting}
+                        className="w-full h-12 rounded-full bg-[#F6C8B4] hover:bg-[#EEB69E] active:bg-[#E8A58A] text-[#141413] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(246,200,180,0.45)] hover:shadow-[0_6px_20px_rgba(246,200,180,0.65)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                      >
+                        <span>Create Company Account</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </form>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={isResettingPassword}
-                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-2 disabled:opacity-50 font-sans"
-                  >
-                    <span>{isResettingPassword ? "Saving..." : "Save New Password"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </form>
+                  {/* Subtle "- or -" Divider */}
+                  <div className="relative my-2">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-[#E8E2D8]" />
+                    </div>
+                    <div className="relative flex justify-center text-xs">
+                      <span className="bg-white px-3 text-[#9A9890] font-sans font-medium">- or -</span>
+                    </div>
+                  </div>
+
+                  {/* Social Logins */}
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => handleQuickDemoLogin(selectedRole)}
+                      className="w-11 h-11 rounded-full border border-[#E2DDD3] bg-white hover:bg-[#FAF7F2] hover:border-[#D0CBC0] shadow-2xs flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
+                      title="Sign up with Google"
+                    >
+                      <GoogleIcon />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleQuickDemoLogin(selectedRole)}
+                      className="w-11 h-11 rounded-full border border-[#E2DDD3] bg-white hover:bg-[#FAF7F2] hover:border-[#D0CBC0] shadow-2xs flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
+                      title="Sign up with Apple"
+                    >
+                      <AppleIcon />
+                    </button>
+                  </div>
+                </div>
               )}
 
-              {/* STEP 4: SUCCESS */}
-              {forgotStep === "success" && (
-                <div className="py-2 text-center flex flex-col items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] border border-[#769FCD] text-[#769FCD] flex items-center justify-center shadow-xs">
-                    <CheckCircle2 className="w-6 h-6" />
+              {/* MODE 3: FORGOT PASSWORD */}
+              {activeTab === "forgot_password" && (
+                <div className="flex flex-col gap-4">
+                  {/* Top Navigation */}
+                  <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D8]">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveTab("login");
+                        setForgotStep("email");
+                        setAuthError(null);
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#74726A] hover:text-[#141413] transition-colors cursor-pointer"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Back to Login</span>
+                    </button>
+                    {forgotStep !== "success" && (
+                      <span className="text-[11px] font-mono font-bold text-[#74726A]">
+                        Step {forgotStep === "email" ? "1" : forgotStep === "otp" ? "2" : "3"} of 3
+                      </span>
+                    )}
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-base font-bold text-[#141413] font-display">Password Reset Complete</h3>
-                    <p className="text-xs text-[#5A5852] leading-relaxed max-w-xs font-sans">
-                      Your password has been updated. You can now sign in with your new password.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (selectedRole === "candidate") {
-                        candidateLoginForm.setValue("email", forgotEmail);
-                      } else {
-                        employerLoginForm.setValue("email", forgotEmail);
-                      }
-                      setActiveTab("login");
-                      setForgotStep("email");
-                    }}
-                    className="w-full h-11 rounded-xl bg-[#141413] hover:bg-[#769FCD] active:bg-[#0E0E0D] text-white font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#769FCD] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer mt-3 font-sans"
-                  >
-                    <span>Sign In to Account</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+
+                  {/* STEP 1: ENTER EMAIL */}
+                  {forgotStep === "email" && (
+                    <form onSubmit={handleSendForgotOtp} className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Email Address</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type="email"
+                            placeholder="name@example.com"
+                            value={forgotEmail}
+                            onChange={(e) => {
+                              setForgotEmail(e.target.value);
+                              setAuthError(null);
+                            }}
+                            required
+                            autoFocus
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isSendingForgotOtp}
+                        className="w-full h-12 rounded-full bg-[#F6C8B4] hover:bg-[#EEB69E] active:bg-[#E8A58A] text-[#141413] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(246,200,180,0.45)] hover:shadow-[0_6px_20px_rgba(246,200,180,0.65)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                      >
+                        <span>{isSendingForgotOtp ? "Sending Code..." : "Send Verification Code"}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </form>
+                  )}
+
+                  {/* STEP 2: ENTER OTP */}
+                  {forgotStep === "otp" && (
+                    <form onSubmit={handleVerifyForgotOtp} className="flex flex-col gap-4">
+                      <div className="flex justify-between gap-1.5 sm:gap-2">
+                        {forgotOtp.map((digit, idx) => (
+                          <input
+                            key={idx}
+                            ref={(el) => {
+                              forgotOtpRefs.current[idx] = el;
+                            }}
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={1}
+                            value={digit}
+                            onChange={(e) => handleForgotOtpChange(idx, e.target.value)}
+                            onKeyDown={(e) => handleForgotOtpKeyDown(idx, e)}
+                            onPaste={idx === 0 ? handleForgotOtpPaste : undefined}
+                            aria-label={`Digit ${idx + 1}`}
+                            className="w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-bold rounded-2xl border border-[#E2DDD3] bg-white text-[#141413] focus:border-[#F6C8B4] focus:outline-none focus:ring-2 focus:ring-[#F6C8B4]/30 transition-all font-mono"
+                          />
+                        ))}
+                      </div>
+
+                      {forgotOtpError && (
+                        <div className="p-3 rounded-2xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
+                          {forgotOtpError}
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        disabled={isVerifyingForgotOtp}
+                        className="w-full h-12 rounded-full bg-[#F6C8B4] hover:bg-[#EEB69E] active:bg-[#E8A58A] text-[#141413] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(246,200,180,0.45)] hover:shadow-[0_6px_20px_rgba(246,200,180,0.65)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                      >
+                        <span>{isVerifyingForgotOtp ? "Verifying..." : "Verify Code"}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+
+                      <div className="flex items-center justify-between text-xs pt-3 border-t border-[#E8E2D8]">
+                        <button
+                          type="button"
+                          onClick={() => setForgotStep("email")}
+                          className="text-[#74726A] hover:text-[#141413] transition-colors cursor-pointer text-xs font-medium"
+                        >
+                          Change Email
+                        </button>
+                        {forgotResendCooldown > 0 ? (
+                          <span className="text-[#74726A] text-xs font-mono">Resend in {forgotResendCooldown}s</span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={handleResendForgotOtp}
+                            className="font-bold text-[#141413] hover:text-[#E08A6B] cursor-pointer flex items-center gap-1 text-xs"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            <span>Resend Code</span>
+                          </button>
+                        )}
+                      </div>
+                    </form>
+                  )}
+
+                  {/* STEP 3: CREATE NEW PASSWORD */}
+                  {forgotStep === "reset_password" && (
+                    <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
+                      {/* New Password */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">New Password</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Lock className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type={showForgotNewPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            value={forgotNewPassword}
+                            onChange={(e) => {
+                              setForgotNewPassword(e.target.value);
+                              setForgotPasswordError(null);
+                            }}
+                            required
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowForgotNewPassword(!showForgotNewPassword)}
+                            className="p-1 text-[#9A9890] hover:text-[#141413] cursor-pointer"
+                            tabIndex={-1}
+                          >
+                            {showForgotNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Confirm New Password */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-[#141413]">Confirm New Password</label>
+                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
+                          <Lock className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                          <input
+                            type={showForgotConfirmPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            value={forgotConfirmPassword}
+                            onChange={(e) => {
+                              setForgotConfirmPassword(e.target.value);
+                              setForgotPasswordError(null);
+                            }}
+                            required
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowForgotConfirmPassword(!showForgotConfirmPassword)}
+                            className="p-1 text-[#9A9890] hover:text-[#141413] cursor-pointer"
+                            tabIndex={-1}
+                          >
+                            {showForgotConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                      </div>
+
+                      {forgotPasswordError && (
+                        <div className="p-3 rounded-2xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
+                          {forgotPasswordError}
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        disabled={isResettingPassword}
+                        className="w-full h-12 rounded-full bg-[#F6C8B4] hover:bg-[#EEB69E] active:bg-[#E8A58A] text-[#141413] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(246,200,180,0.45)] hover:shadow-[0_6px_20px_rgba(246,200,180,0.65)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                      >
+                        <span>{isResettingPassword ? "Saving..." : "Save New Password"}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </form>
+                  )}
+
+                  {/* STEP 4: SUCCESS */}
+                  {forgotStep === "success" && (
+                    <div className="py-4 text-center flex flex-col items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shadow-xs">
+                        <CheckCircle2 className="w-6 h-6" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <h3 className="text-base font-bold text-[#141413] font-display">Password Reset Complete</h3>
+                        <p className="text-xs text-[#5A5852] leading-relaxed max-w-xs">
+                          Your password has been successfully updated. You can now log in to your account.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (selectedRole === "candidate") {
+                            candidateLoginForm.setValue("email", forgotEmail);
+                          } else {
+                            employerLoginForm.setValue("email", forgotEmail);
+                          }
+                          setActiveTab("login");
+                          setForgotStep("email");
+                        }}
+                        className="w-full h-12 rounded-full bg-[#F6C8B4] hover:bg-[#EEB69E] active:bg-[#E8A58A] text-[#141413] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(246,200,180,0.45)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-3"
+                      >
+                        <span>Sign In to Account</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          )}
+
+            {/* Bottom Mode Switcher */}
+            {activeTab !== "forgot_password" && (
+              <div className="pt-6 mt-6 border-t border-[#F4EFEA] text-center text-xs text-[#74726A] font-sans">
+                {activeTab === "login" ? (
+                  <>
+                    Don&apos;t have an account?{" "}
+                    <button
+                      type="button"
+                      onClick={() => switchMode("signup")}
+                      className="font-bold text-[#E08A6B] hover:text-[#C77457] transition-colors cursor-pointer underline underline-offset-2 ml-1"
+                    >
+                      Sign up
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Already have an account?{" "}
+                    <button
+                      type="button"
+                      onClick={() => switchMode("login")}
+                      className="font-bold text-[#E08A6B] hover:text-[#C77457] transition-colors cursor-pointer underline underline-offset-2 ml-1"
+                    >
+                      Sign in
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Right Column: Visual Stage Desktop (Hidden on mobile) */}
+          <div className="hidden lg:flex lg:col-span-5 bg-[#FAF7F2] border-l border-[#E8E2D8] items-center justify-center relative p-8">
+            <AuthVisualStage mode={activeTab} role={selectedRole} />
+          </div>
+
         </div>
 
         {/* Page Footer / Sponsors (Outside Card) */}
-        <footer className="text-center pt-2 pb-2 space-y-1.5">
+        <footer className="text-center pt-6 pb-2 space-y-1.5">
           <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#74726A]">
             Official Platform Sponsors
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-mono font-medium text-[#74726A]">
-            <a href="https://www.whitetracktech.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#141413] transition-colors">
+            <a
+              href="https://www.whitetracktech.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#141413] transition-colors"
+            >
               WhiteTrack Technologies
             </a>
             <span className="text-[#D0CBC0]">•</span>
-            <a href="https://www.whiteaurax.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#141413] transition-colors">
+            <a
+              href="https://www.whiteaurax.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#141413] transition-colors"
+            >
               WhiteAurax
             </a>
             <span className="text-[#D0CBC0]">•</span>
-            <a href="https://zynorixglobal.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#141413] transition-colors">
+            <a
+              href="https://zynorixglobal.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#141413] transition-colors"
+            >
               Zynorix Global
             </a>
             <span className="text-[#D0CBC0]">•</span>
-            <a href="https://www.whitetracktech.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#141413] transition-colors">
+            <a
+              href="https://www.whitetracktech.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#141413] transition-colors"
+            >
               Techcy Routes
             </a>
           </div>
@@ -1156,7 +1378,9 @@ function AuthContent() {
 
 export default function SignUpPage() {
   return (
-    <React.Suspense fallback={<LoadingState message="Loading authentication..." className="min-h-screen bg-[#F4F8FB]" />}>
+    <React.Suspense
+      fallback={<LoadingState message="Loading authentication..." className="min-h-screen bg-[#FAF7F2]" />}
+    >
       <AuthContent />
     </React.Suspense>
   );
