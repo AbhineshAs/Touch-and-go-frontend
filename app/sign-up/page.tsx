@@ -23,7 +23,6 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
-import { TagLogo } from "@/components/ui/TagLogo";
 import { LoadingState } from "@/components/ui/States";
 import { AuthVisualStage } from "@/components/auth/AuthVisualStage";
 
@@ -478,11 +477,9 @@ function AuthContent() {
           {/* Left / Form Column */}
           <div className="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between">
             <div>
-              {/* Header: TagLogo + Role Pill Selector */}
-              <div className="flex items-center justify-between pb-6 border-b border-[#F4EFEA]">
-                <TagLogo height={36} href="/" />
-
-                {activeTab !== "forgot_password" && (
+              {/* Header: Role Pill Selector */}
+              {activeTab !== "forgot_password" && (
+                <div className="flex items-center justify-end pb-5 border-b border-[#F4EFEA]">
                   <div className="inline-flex items-center p-1 bg-[#FAF7F2] border border-[#E2DDD3] rounded-full text-xs font-bold font-sans">
                     <button
                       type="button"
@@ -511,8 +508,8 @@ function AuthContent() {
                       <span>Company</span>
                     </button>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* Main Headline */}
               <div className="pt-6 pb-5">
