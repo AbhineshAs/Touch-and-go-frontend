@@ -17,8 +17,8 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, role: UserRole) => Promise<User>;
-  signup: (data: { name: string; email: string; role: UserRole }) => Promise<User>;
+  login: (email: string, role?: UserRole, password?: string) => Promise<User>;
+  signup: (data: { name: string; email: string; role: UserRole; password?: string }) => Promise<User>;
   logout: (redirectTo?: string) => Promise<void>;
   switchRole: (role: UserRole) => Promise<User>;
   refreshAuth: () => User | null;
@@ -72,10 +72,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [refreshAuth]);
 
-  const login = async (email: string, role: UserRole): Promise<User> => {
+  const login = async (email: string, role?: UserRole, password?: string): Promise<User> => {
     setIsLoading(true);
     try {
-      const res = await signIn(email, role);
+      const res = await signIn(email, role, password);
       setUser(res.user);
       setToken(res.token);
       return res.user;
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signup = async (data: { name: string; email: string; role: UserRole }): Promise<User> => {
+  const signup = async (data: { name: string; email: string; role: UserRole; password?: string }): Promise<User> => {
     setIsLoading(true);
     try {
       const res = await signUp(data);

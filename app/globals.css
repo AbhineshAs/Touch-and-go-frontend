@@ -157,6 +157,23 @@ body {
   outline-offset: 2px;
 }
 
+/* Ensure form controls do not inherit raw rectangular focus outlines */
+input,
+select,
+textarea {
+  outline: none;
+}
+
+input:focus,
+input:focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

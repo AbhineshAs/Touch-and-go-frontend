@@ -2,7 +2,37 @@ import { Job, JobStatus, WorkMode, EmploymentType, ExperienceLevel } from "@/typ
 import { MOCK_JOBS } from "@/lib/mocks/data";
 import { mockDelay } from "./delay";
 
+const STORAGE_KEY = "tag_employer_jobs_state";
+
 let jobsState: Job[] = [...MOCK_JOBS];
+
+function syncJobs(): Job[] {
+  if (typeof window !== "undefined") {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed: Job[] = JSON.parse(stored);
+        // Exclude removed dummy mock jobs
+        jobsState = parsed.filter((j) => j.id !== "job_01" && j.id !== "job_06");
+        return jobsState;
+      }
+    } catch (e) {
+      console.warn("Failed to load jobs from localStorage", e);
+    }
+  }
+  return jobsState;
+}
+
+function persistJobs(jobs: Job[]) {
+  jobsState = jobs.filter((j) => j.id !== "job_01" && j.id !== "job_06");
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(jobsState));
+    } catch (e) {
+      console.warn("Failed to persist jobs to localStorage", e);
+    }
+  }
+}
 
 export interface JobFilterParams {
   keyword?: string;
@@ -17,6 +47,7 @@ export interface JobFilterParams {
 
 export async function getJobs(filters?: JobFilterParams): Promise<Job[]> {
   await mockDelay(150);
+  syncJobs();
   let results = [...jobsState].filter((j) => j.status === "Published");
 
   if (!filters) return results;
@@ -64,12 +95,14 @@ export async function getJobs(filters?: JobFilterParams): Promise<Job[]> {
 
 export async function getJobBySlug(slug: string): Promise<Job | null> {
   await mockDelay(120);
+  syncJobs();
   const job = jobsState.find((j) => j.slug === slug || j.id === slug);
   return job ? { ...job } : null;
 }
 
 export async function getRecommendedJobs(): Promise<Job[]> {
   await mockDelay(150);
+  syncJobs();
   return jobsState
     .filter((j) => j.status === "Published" && (j.matchScore || 0) >= 60)
     .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
@@ -77,6 +110,7 @@ export async function getRecommendedJobs(): Promise<Job[]> {
 
 export async function getEmployerJobs(organizationId: string = "org_razorwave"): Promise<Job[]> {
   await mockDelay(120);
+  syncJobs();
   return jobsState.filter((j) => j.organizationId === organizationId);
 }
 
@@ -123,18 +157,32 @@ export async function createJob(
     matchScore: 80,
   };
 
-  jobsState = [newJob, ...jobsState];
+  syncJobs();
+  const next = [newJob, ...jobsState];
+  persistJobs(next);
   return newJob;
 }
 
 export async function updateJobStatus(jobId: string, status: JobStatus): Promise<Job> {
   await mockDelay(150);
+  syncJobs();
   const index = jobsState.findIndex((j) => j.id === jobId);
   if (index === -1) throw new Error("Job not found");
-  jobsState[index] = {
+  const updated = {
     ...jobsState[index],
     status,
     updatedAt: new Date().toISOString(),
   };
-  return jobsState[index];
+  const next = [...jobsState];
+  next[index] = updated;
+  persistJobs(next);
+  return updated;
+}
+
+export async function deleteJob(jobId: string): Promise<boolean> {
+  await mockDelay(150);
+  syncJobs();
+  const next = jobsState.filter((j) => j.id !== jobId);
+  persistJobs(next);
+  return true;
 }

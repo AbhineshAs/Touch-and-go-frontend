@@ -25,6 +25,14 @@ import { useAuth } from "@/lib/auth/AuthContext";
 import { useCandidate } from "@/lib/candidate/context/CandidateContext";
 import { LoadingState } from "@/components/ui/States";
 import { AuthVisualStage } from "@/components/auth/AuthVisualStage";
+import {
+  candidateSignUp,
+  employerSignUp,
+  requestPasswordReset,
+  verifyPasswordResetOTP,
+  resendOTP,
+  resetPasswordWithOTP,
+} from "@/lib/api/auth";
 
 type AuthMode = "signup" | "login" | "forgot_password";
 type AuthRole = "candidate" | "employer";
@@ -236,10 +244,15 @@ function AuthContent() {
     }
     setIsSendingForgotOtp(true);
     setAuthError(null);
-    await new Promise((r) => setTimeout(r, 450));
-    setIsSendingForgotOtp(false);
-    setForgotResendCooldown(30);
-    setForgotStep("otp");
+    try {
+      await requestPasswordReset(email);
+      setForgotResendCooldown(30);
+      setForgotStep("otp");
+    } catch (err: any) {
+      setAuthError(err.message || "Failed to send verification code.");
+    } finally {
+      setIsSendingForgotOtp(false);
+    }
   };
 
   const handleVerifyForgotOtp = async (e: React.FormEvent) => {
@@ -251,22 +264,26 @@ function AuthContent() {
     }
     setIsVerifyingForgotOtp(true);
     setForgotOtpError(null);
-    await new Promise((r) => setTimeout(r, 400));
-    setIsVerifyingForgotOtp(false);
-
-    if (!/^\d{6}$/.test(code)) {
-      setForgotOtpError("Invalid verification code. Please check the code sent to your email.");
-      return;
+    try {
+      await verifyPasswordResetOTP(forgotEmail, code);
+      setForgotStep("reset_password");
+    } catch (err: any) {
+      setForgotOtpError(err.message || "Invalid or expired verification code.");
+    } finally {
+      setIsVerifyingForgotOtp(false);
     }
-
-    setForgotStep("reset_password");
   };
 
-  const handleResendForgotOtp = () => {
+  const handleResendForgotOtp = async () => {
     if (forgotResendCooldown > 0) return;
     setForgotOtp(["", "", "", "", "", ""]);
     setForgotOtpError(null);
-    setForgotResendCooldown(30);
+    try {
+      await resendOTP(forgotEmail, "password_reset");
+      setForgotResendCooldown(30);
+    } catch (err: any) {
+      setForgotOtpError(err.message || "Failed to resend code.");
+    }
   };
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -291,9 +308,19 @@ function AuthContent() {
     }
 
     setIsResettingPassword(true);
-    await new Promise((r) => setTimeout(r, 500));
-    setIsResettingPassword(false);
-    setForgotStep("success");
+    try {
+      await resetPasswordWithOTP({
+        email: forgotEmail,
+        code: forgotOtp.join(""),
+        newPassword: forgotNewPassword,
+        confirmPassword: forgotConfirmPassword,
+      });
+      setForgotStep("success");
+    } catch (err: any) {
+      setForgotPasswordError(err.message || "Failed to reset password.");
+    } finally {
+      setIsResettingPassword(false);
+    }
   };
 
   useEffect(() => {
@@ -366,12 +393,17 @@ function AuthContent() {
         agreeToTerms: data.agreeToTerms,
       });
 
-      await signup({
-        name: data.fullName,
+      await candidateSignUp({
+        fullName: data.fullName,
         email: data.email,
-        role: "candidate",
+        countryCode: data.countryCode,
+        phone: data.phone,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        agreeToTerms: data.agreeToTerms,
       });
 
+      await login(data.email, "candidate", data.password);
       confirmProfile();
 
       router.push(redirect || "/candidate/dashboard");
@@ -383,11 +415,15 @@ function AuthContent() {
   const onEmployerSignUpSubmit = async (data: EmployerSignUpFormValues) => {
     try {
       setAuthError(null);
-      await signup({
-        name: data.fullName,
+      await employerSignUp({
+        fullName: data.fullName,
         email: data.email,
-        role: "employer",
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        agreeToTerms: data.agreeToTerms,
       });
+
+      await login(data.email, "employer", data.password);
       router.push(redirect || "/employer/dashboard");
     } catch (err: any) {
       setAuthError(err.message || "Failed to register company account.");
@@ -400,7 +436,7 @@ function AuthContent() {
       if (loginCandidateByEmail) {
         loginCandidateByEmail(data.email);
       }
-      await login(data.email, "candidate");
+      await login(data.email, "candidate", data.password);
 
       if (redirect) {
         router.push(redirect);
@@ -415,7 +451,7 @@ function AuthContent() {
   const onEmployerLoginSubmit = async (data: EmployerLoginFormValues) => {
     try {
       setAuthError(null);
-      await login(data.email, "employer");
+      await login(data.email, "employer", data.password);
       if (redirect) {
         router.push(redirect);
       } else {
@@ -562,13 +598,13 @@ function AuthContent() {
                       {/* Email Pill Input */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Email</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Mail className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type="email"
                             placeholder="email@gmail.com"
                             {...candidateLoginForm.register("email")}
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                         </div>
                         {candidateLoginForm.formState.errors.email && (
@@ -581,13 +617,13 @@ function AuthContent() {
                       {/* Password Pill Input */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Password</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Lock className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Lock className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type={showCandidateLoginPassword ? "text" : "password"}
                             placeholder="Enter your password"
                             {...candidateLoginForm.register("password")}
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                           <button
                             type="button"
@@ -633,13 +669,13 @@ function AuthContent() {
                       {/* Company Email Pill Input */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Company Work Email</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Mail className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type="email"
                             placeholder="name@company.com"
                             {...employerLoginForm.register("email")}
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                         </div>
                         {employerLoginForm.formState.errors.email && (
@@ -652,13 +688,13 @@ function AuthContent() {
                       {/* Password Pill Input */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Password</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Lock className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Lock className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type={showEmployerPassword ? "text" : "password"}
                             placeholder="Enter company password"
                             {...employerLoginForm.register("password")}
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                           <button
                             type="button"
@@ -741,12 +777,12 @@ function AuthContent() {
                       {/* Full Name */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Full Name</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <User className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <User className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             placeholder="e.g. Ananya Sharma"
                             {...candidateSignUpForm.register("fullName")}
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                         </div>
                         {candidateSignUpForm.formState.errors.fullName && (
@@ -759,13 +795,13 @@ function AuthContent() {
                       {/* Email */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Email Address</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Mail className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type="email"
                             placeholder="you@example.com"
                             {...candidateSignUpForm.register("email")}
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                         </div>
                         {candidateSignUpForm.formState.errors.email && (
@@ -778,11 +814,11 @@ function AuthContent() {
                       {/* Phone Number with Country Code */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Phone Number</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white overflow-hidden hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <div className="h-full pl-3 pr-2 flex items-center bg-[#FAF7F2] border-r border-[#E2DDD3]">
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white overflow-hidden hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <div className="h-full pl-3 pr-2 flex items-center bg-[#FAF7F2] border-r border-[#E2DDD3] group-focus-within:border-[#F6C8B4] transition-colors">
                             <select
                               {...candidateSignUpForm.register("countryCode")}
-                              className="h-full bg-transparent text-xs font-mono font-bold text-[#141413] outline-none cursor-pointer"
+                              className="h-full bg-transparent text-xs font-mono font-bold text-[#141413] outline-none focus:outline-none focus-visible:outline-none cursor-pointer"
                             >
                               {COUNTRY_CODES.map((c) => (
                                 <option key={c.code} value={c.code}>
@@ -792,12 +828,12 @@ function AuthContent() {
                             </select>
                           </div>
                           <div className="flex-1 flex items-center h-full px-3">
-                            <Phone className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                            <Phone className="w-3.5 h-3.5 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2 transition-colors" />
                             <input
                               type="tel"
                               placeholder="98765 43210"
                               {...candidateSignUpForm.register("phone")}
-                              className="w-full h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                              className="w-full h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                             />
                           </div>
                         </div>
@@ -812,13 +848,13 @@ function AuthContent() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1.5">
                           <label className="text-xs font-bold text-[#141413]">Password</label>
-                          <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                            <Lock className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                          <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                            <Lock className="w-3.5 h-3.5 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2 transition-colors" />
                             <input
                               type={showCandidatePassword ? "text" : "password"}
                               placeholder="••••••••"
                               {...candidateSignUpForm.register("password")}
-                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                             />
                             <button
                               type="button"
@@ -838,13 +874,13 @@ function AuthContent() {
 
                         <div className="flex flex-col gap-1.5">
                           <label className="text-xs font-bold text-[#141413]">Confirm Password</label>
-                          <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                            <Lock className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                          <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                            <Lock className="w-3.5 h-3.5 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2 transition-colors" />
                             <input
                               type={showCandidateConfirmPassword ? "text" : "password"}
                               placeholder="••••••••"
                               {...candidateSignUpForm.register("confirmPassword")}
-                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                             />
                             <button
                               type="button"
@@ -903,12 +939,12 @@ function AuthContent() {
                       {/* Full Name */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Recruiter / Contact Name</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <User className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <User className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             placeholder="e.g. Vikramaditya Nair"
                             {...employerSignUpForm.register("fullName")}
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                         </div>
                         {employerSignUpForm.formState.errors.fullName && (
@@ -921,13 +957,13 @@ function AuthContent() {
                       {/* Work Email */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Company Work Email</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Mail className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type="email"
                             placeholder="name@company.com"
                             {...employerSignUpForm.register("email")}
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                         </div>
                         {employerSignUpForm.formState.errors.email && (
@@ -941,13 +977,13 @@ function AuthContent() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1.5">
                           <label className="text-xs font-bold text-[#141413]">Password</label>
-                          <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                            <Lock className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                          <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                            <Lock className="w-3.5 h-3.5 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2 transition-colors" />
                             <input
                               type={showEmployerPassword ? "text" : "password"}
                               placeholder="••••••••"
                               {...employerSignUpForm.register("password")}
-                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                             />
                             <button
                               type="button"
@@ -967,13 +1003,13 @@ function AuthContent() {
 
                         <div className="flex flex-col gap-1.5">
                           <label className="text-xs font-bold text-[#141413]">Confirm Password</label>
-                          <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                            <Lock className="w-3.5 h-3.5 text-[#9A9890] shrink-0 mr-2" />
+                          <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-3.5 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                            <Lock className="w-3.5 h-3.5 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2 transition-colors" />
                             <input
                               type={showEmployerConfirmPassword ? "text" : "password"}
                               placeholder="••••••••"
                               {...employerSignUpForm.register("confirmPassword")}
-                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                              className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                             />
                             <button
                               type="button"
@@ -1090,8 +1126,8 @@ function AuthContent() {
                     <form onSubmit={handleSendForgotOtp} className="flex flex-col gap-4">
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Email Address</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Mail className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Mail className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type="email"
                             placeholder="name@example.com"
@@ -1102,7 +1138,7 @@ function AuthContent() {
                             }}
                             required
                             autoFocus
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                         </div>
                       </div>
@@ -1136,7 +1172,7 @@ function AuthContent() {
                             onKeyDown={(e) => handleForgotOtpKeyDown(idx, e)}
                             onPaste={idx === 0 ? handleForgotOtpPaste : undefined}
                             aria-label={`Digit ${idx + 1}`}
-                            className="w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-bold rounded-2xl border border-[#E2DDD3] bg-white text-[#141413] focus:border-[#F6C8B4] focus:outline-none focus:ring-2 focus:ring-[#F6C8B4]/30 transition-all font-mono"
+                            className="w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-bold rounded-2xl border border-[#E2DDD3] bg-white text-[#141413] focus:border-[#E08A6B] focus:outline-none focus-visible:outline-none focus:ring-3 focus:ring-[#F6C8B4]/40 transition-all font-mono shadow-2xs"
                           />
                         ))}
                       </div>
@@ -1186,8 +1222,8 @@ function AuthContent() {
                       {/* New Password */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">New Password</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Lock className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Lock className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type={showForgotNewPassword ? "text" : "password"}
                             placeholder="••••••••"
@@ -1197,7 +1233,7 @@ function AuthContent() {
                               setForgotPasswordError(null);
                             }}
                             required
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                           <button
                             type="button"
@@ -1213,8 +1249,8 @@ function AuthContent() {
                       {/* Confirm New Password */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-[#141413]">Confirm New Password</label>
-                        <div className="flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#F6C8B4] focus-within:ring-2 focus-within:ring-[#F6C8B4]/30 transition-all">
-                          <Lock className="w-4 h-4 text-[#9A9890] shrink-0 mr-2.5" />
+                        <div className="group flex items-center h-12 rounded-full border border-[#E2DDD3] bg-white px-4 hover:border-[#CBD5E1] focus-within:border-[#E08A6B] focus-within:ring-3 focus-within:ring-[#F6C8B4]/40 shadow-2xs transition-all duration-200">
+                          <Lock className="w-4 h-4 text-[#9A9890] group-focus-within:text-[#E08A6B] shrink-0 mr-2.5 transition-colors" />
                           <input
                             type={showForgotConfirmPassword ? "text" : "password"}
                             placeholder="••••••••"
@@ -1224,7 +1260,7 @@ function AuthContent() {
                               setForgotPasswordError(null);
                             }}
                             required
-                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none bg-transparent"
+                            className="flex-1 h-full text-xs sm:text-sm font-medium text-[#141413] placeholder:text-[#9A9890] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 border-0 bg-transparent"
                           />
                           <button
                             type="button"

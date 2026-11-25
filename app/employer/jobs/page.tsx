@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/Badge";
 import { LoadingState, EmptyState } from "@/components/ui/States";
 import { Job, JobStatus } from "@/types";
-import { getEmployerJobs, updateJobStatus } from "@/lib/api/jobs";
+import { getEmployerJobs, updateJobStatus, deleteJob } from "@/lib/api/jobs";
 import { formatDate, formatSalaryRange } from "@/lib/utils";
 import {
   Plus,
@@ -22,6 +22,7 @@ import {
   Copy,
   ChevronRight,
   ArrowRight,
+  Trash2,
 } from "lucide-react";
 
 export default function EmployerJobsPage() {
@@ -45,6 +46,14 @@ export default function EmployerJobsPage() {
     setJobs(
       jobs.map((j) => (j.id === jobId ? { ...j, status: newStatus } : j))
     );
+  };
+
+  const handleDeleteJob = async (jobId: string) => {
+    if (typeof window !== "undefined" && !window.confirm("Are you sure you want to delete this job listing?")) {
+      return;
+    }
+    await deleteJob(jobId);
+    setJobs((prev) => prev.filter((j) => j.id !== jobId));
   };
 
   const filteredJobs = jobs.filter((j) => {
@@ -194,6 +203,14 @@ export default function EmployerJobsPage() {
                     className="px-2.5 py-1 text-xs text-danger hover:bg-danger-soft rounded-md transition-colors cursor-pointer"
                   >
                     Close
+                  </button>
+                  <button
+                    onClick={() => handleDeleteJob(job.id)}
+                    className="px-2.5 py-1 text-xs text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer flex items-center gap-1 font-medium"
+                    title="Delete listing"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete</span>
                   </button>
                 </div>
               </div>

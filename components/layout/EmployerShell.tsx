@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,7 @@ import {
   Command,
 } from "lucide-react";
 import { MOCK_USERS, MOCK_ORGANIZATIONS } from "@/lib/mocks/data";
+import { getOrganization } from "@/lib/api/employers";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
@@ -31,7 +32,26 @@ export function EmployerShell({ children }: { children: React.ReactNode }) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const { user: authUser, logout } = useAuth();
   const user = authUser || MOCK_USERS.employer;
-  const org = MOCK_ORGANIZATIONS[0];
+  const [org, setOrg] = useState(MOCK_ORGANIZATIONS[0]);
+
+  useEffect(() => {
+    async function loadOrg() {
+      const loaded = await getOrganization();
+      if (loaded) setOrg(loaded);
+    }
+    loadOrg();
+
+    const handleOrgUpdate = (e: any) => {
+      if (e.detail && Array.isArray(e.detail) && e.detail.length > 0) {
+        setOrg(e.detail[0]);
+      } else if (e.detail && e.detail.name) {
+        setOrg(e.detail);
+      }
+    };
+
+    window.addEventListener("tag_organization_updated", handleOrgUpdate);
+    return () => window.removeEventListener("tag_organization_updated", handleOrgUpdate);
+  }, []);
 
   const getPageTitle = (path: string): string => {
     const parts = path.split("/").filter(Boolean);
@@ -58,7 +78,7 @@ export function EmployerShell({ children }: { children: React.ReactNode }) {
   const mainNav = [
     { label: "Overview", href: "/employer/dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
     { label: "Jobs", href: "/employer/jobs", icon: <Briefcase className="w-4 h-4" /> },
-    { label: "Pipeline", href: "/employer/jobs/job_01/pipeline", icon: <SlidersHorizontal className="w-4 h-4" /> },
+    { label: "Pipeline", href: "/employer/jobs", icon: <SlidersHorizontal className="w-4 h-4" /> },
     { label: "Interviews", href: "/employer/interviews", icon: <Calendar className="w-4 h-4" />, badge: 1 },
     { label: "Team", href: "/employer/team", icon: <Users className="w-4 h-4" /> },
     { label: "Analytics", href: "/employer/analytics", icon: <BarChart3 className="w-4 h-4" /> },
@@ -149,11 +169,17 @@ export function EmployerShell({ children }: { children: React.ReactNode }) {
 
             {/* Org mini card */}
             <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] flex items-center gap-2.5">
-              <img
-                src={org.logo}
-                alt={org.name}
-                className="w-9 h-9 rounded-xl object-cover border border-[#E8E2D8] shrink-0 bg-white"
-              />
+              {org.logo ? (
+                <img
+                  src={org.logo}
+                  alt={org.name}
+                  className="w-9 h-9 rounded-xl object-cover border border-[#E8E2D8] shrink-0 bg-white"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1A2838] to-[#769FCD] text-white flex items-center justify-center font-bold text-xs shrink-0 border border-[#E8E2D8] shadow-2xs font-display">
+                  {org.name.slice(0, 1).toUpperCase()}
+                </div>
+              )}
               <div className="flex flex-col overflow-hidden">
                 <div className="flex items-center gap-1">
                   <span className="text-xs font-bold text-[#141413] truncate">{org.name}</span>

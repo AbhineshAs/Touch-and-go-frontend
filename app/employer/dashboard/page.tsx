@@ -252,21 +252,41 @@ export default function EmployerDashboardPage() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] hover:border-[#769FCD] transition-all flex flex-col gap-1.5">
-              <span className="font-bold text-xs text-[#141413]">
-                Senior Frontend Engineer (React)
-              </span>
-              <p className="text-xs text-[#5A5850] leading-relaxed">
-                4 new applicants with &gt;80% criteria alignment awaiting recruiter screening.
-              </p>
-              <Link
-                href="/employer/jobs/job_01/pipeline"
-                className="text-[#769FCD] hover:text-[#5E8BBF] font-bold text-xs mt-1 inline-flex items-center gap-1 transition-colors"
-              >
-                <span>Open Pipeline</span>
-                <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
+            {jobs.length > 0 ? (
+              <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] hover:border-[#769FCD] transition-all flex flex-col gap-1.5">
+                <span className="font-bold text-xs text-[#141413]">
+                  {jobs[0].title}
+                </span>
+                <p className="text-xs text-[#5A5850] leading-relaxed">
+                  {jobs[0].applicantsCount > 0
+                    ? `${jobs[0].applicantsCount} applicant${jobs[0].applicantsCount > 1 ? "s" : ""} awaiting recruiter screening.`
+                    : "Listing is live. Awaiting incoming applicant submissions."}
+                </p>
+                <Link
+                  href={`/employer/jobs/${jobs[0].id}/pipeline`}
+                  className="text-[#769FCD] hover:text-[#5E8BBF] font-bold text-xs mt-1 inline-flex items-center gap-1 transition-colors"
+                >
+                  <span>Open Pipeline</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            ) : (
+              <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] hover:border-[#769FCD] transition-all flex flex-col gap-1.5">
+                <span className="font-bold text-xs text-[#141413]">
+                  No Pending Actions
+                </span>
+                <p className="text-xs text-[#5A5850] leading-relaxed">
+                  All applicant screening queues are currently cleared.
+                </p>
+                <Link
+                  href="/employer/jobs/new"
+                  className="text-[#769FCD] hover:text-[#5E8BBF] font-bold text-xs mt-1 inline-flex items-center gap-1 transition-colors"
+                >
+                  <span>Create New Job</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            )}
 
             <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] hover:border-[#769FCD] transition-all flex flex-col gap-1.5">
               <span className="font-bold text-xs text-[#141413]">
@@ -310,65 +330,84 @@ export default function EmployerDashboardPage() {
           </div>
 
           <div className="flex flex-col gap-3.5">
-            {jobs.slice(0, 3).map((job) => (
-              <div
-                key={job.id}
-                className="bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-3xl p-6 shadow-[0_4px_24px_rgba(26,40,56,0.04)] hover:shadow-[0_12px_32px_rgba(118,159,205,0.12)] transition-all hover:-translate-y-0.5 flex flex-col gap-4"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <Link href={`/employer/jobs/${job.id}/pipeline`}>
-                      <h3 className="text-base font-black text-[#141413] hover:text-[#769FCD] transition-colors font-display">
-                        {job.title}
-                      </h3>
-                    </Link>
-                    <span className="text-xs font-mono text-[#74726A] mt-0.5 block">
-                      {job.department} • {job.location} ({job.workMode})
-                    </span>
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-mono font-bold text-[11px] shrink-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    <span>{job.status}</span>
-                  </span>
+            {jobs.length === 0 ? (
+              <div className="bg-white border border-[#E2DDD3] rounded-3xl p-8 text-center flex flex-col items-center justify-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-[#D6E6F2] flex items-center justify-center text-[#769FCD]">
+                  <Briefcase className="w-6 h-6" />
                 </div>
-
-                <div className="grid grid-cols-3 gap-2.5 pt-1 text-xs text-center">
-                  <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
-                    <span className="text-[#74726A] block text-[10px] font-mono font-bold uppercase tracking-wider">
-                      Applicants
-                    </span>
-                    <strong className="text-[#141413] text-lg font-black font-mono mt-0.5 block">
-                      {job.applicantsCount}
-                    </strong>
-                  </div>
-                  <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
-                    <span className="text-[#74726A] block text-[10px] font-mono font-bold uppercase tracking-wider">
-                      Shortlisted
-                    </span>
-                    <strong className="text-[#141413] text-lg font-black font-mono mt-0.5 block">
-                      {job.shortlistedCount}
-                    </strong>
-                  </div>
-                  <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
-                    <span className="text-[#74726A] block text-[10px] font-mono font-bold uppercase tracking-wider">
-                      Interviews
-                    </span>
-                    <strong className="text-[#141413] text-lg font-black font-mono mt-0.5 block">
-                      {job.interviewsCount}
-                    </strong>
-                  </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-sm font-bold text-[#141413]">No active jobs</h3>
+                  <p className="text-xs text-[#74726A]">
+                    Create a job listing to start receiving verified candidate applications.
+                  </p>
                 </div>
-
-                <div className="flex justify-end pt-1">
-                  <Link href={`/employer/jobs/${job.id}/pipeline`}>
-                    <button className="px-4 py-2 rounded-xl bg-[#FAF7F2] hover:bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8] hover:border-[#769FCD] font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer">
-                      <span>View Applicant Pipeline</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#769FCD]" />
-                    </button>
-                  </Link>
-                </div>
+                <Link href="/employer/jobs/new">
+                  <button className="px-4 py-2 mt-1 rounded-xl bg-[#141413] hover:bg-[#769FCD] text-white font-bold text-xs transition-colors cursor-pointer">
+                    Create Job Listing
+                  </button>
+                </Link>
               </div>
-            ))}
+            ) : (
+              jobs.slice(0, 3).map((job) => (
+                <div
+                  key={job.id}
+                  className="bg-white border border-[#E2DDD3] hover:border-[#769FCD] rounded-3xl p-6 shadow-[0_4px_24px_rgba(26,40,56,0.04)] hover:shadow-[0_12px_32px_rgba(118,159,205,0.12)] transition-all hover:-translate-y-0.5 flex flex-col gap-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <Link href={`/employer/jobs/${job.id}/pipeline`}>
+                        <h3 className="text-base font-black text-[#141413] hover:text-[#769FCD] transition-colors font-display">
+                          {job.title}
+                        </h3>
+                      </Link>
+                      <span className="text-xs font-mono text-[#74726A] mt-0.5 block">
+                        {job.department} • {job.location} ({job.workMode})
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-mono font-bold text-[11px] shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span>{job.status}</span>
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2.5 pt-1 text-xs text-center">
+                    <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
+                      <span className="text-[#74726A] block text-[10px] font-mono font-bold uppercase tracking-wider">
+                        Applicants
+                      </span>
+                      <strong className="text-[#141413] text-lg font-black font-mono mt-0.5 block">
+                        {job.applicantsCount}
+                      </strong>
+                    </div>
+                    <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
+                      <span className="text-[#74726A] block text-[10px] font-mono font-bold uppercase tracking-wider">
+                        Shortlisted
+                      </span>
+                      <strong className="text-[#141413] text-lg font-black font-mono mt-0.5 block">
+                        {job.shortlistedCount}
+                      </strong>
+                    </div>
+                    <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8]">
+                      <span className="text-[#74726A] block text-[10px] font-mono font-bold uppercase tracking-wider">
+                        Interviews
+                      </span>
+                      <strong className="text-[#141413] text-lg font-black font-mono mt-0.5 block">
+                        {job.interviewsCount}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end pt-1">
+                    <Link href={`/employer/jobs/${job.id}/pipeline`}>
+                      <button className="px-4 py-2 rounded-xl bg-[#FAF7F2] hover:bg-[#D6E6F2] text-[#141413] border border-[#E8E2D8] hover:border-[#769FCD] font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer">
+                        <span>View Applicant Pipeline</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#769FCD]" />
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 

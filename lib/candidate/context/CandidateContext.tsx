@@ -962,7 +962,7 @@ export function CandidateProvider({ children }: { children: React.ReactNode }) {
           appliedAt: app.appliedAt,
           stage: app.stage,
         })),
-        savedJobIds: ["job_01", "job_06"],
+        savedJobIds: ["job_02", "job_03"],
         interviews: MOCK_INTERVIEWS.map((i) => ({
           id: i.id,
           applicationId: i.applicationId,

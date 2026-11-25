@@ -1,9 +1,90 @@
 import { CandidateProfile } from "@/types";
 import { MOCK_CANDIDATE_PROFILE } from "@/lib/mocks/data";
+import { api, ApiError } from "./client";
 import { mockDelay } from "./delay";
 
 let candidateProfileState: CandidateProfile = { ...MOCK_CANDIDATE_PROFILE };
-let savedJobsState: string[] = ["job_01", "job_06"];
+let savedJobsState: string[] = ["job_02", "job_03"];
+
+export interface CandidateResumeRecord {
+  id: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  dataUrl?: string;
+  extractedText?: string;
+  atsScore?: number;
+  uploadedAt: string;
+  fileUrl?: string;
+  is_active?: boolean;
+}
+
+export async function getCandidateResume(email?: string): Promise<CandidateResumeRecord | null> {
+  try {
+    const query = email ? `?email=${encodeURIComponent(email)}` : "";
+    const res = await api.get<{ success: boolean; resume: CandidateResumeRecord | null }>(
+      `/candidate/resume/${query}`
+    );
+    if (res && res.resume) {
+      return res.resume;
+    }
+  } catch (err) {
+    if (!(err instanceof ApiError && err.status === 0)) {
+      console.warn("Could not fetch remote resume from backend:", err);
+    }
+  }
+  return null;
+}
+
+export async function saveCandidateResume(payload: {
+  file?: File;
+  fileName: string;
+  fileSize?: number;
+  fileType?: string;
+  dataUrl?: string;
+  extractedText?: string;
+  atsScore?: number;
+  email?: string;
+}): Promise<CandidateResumeRecord | null> {
+  try {
+    let body: any;
+    if (payload.file) {
+      const formData = new FormData();
+      formData.append("file", payload.file);
+      formData.append("fileName", payload.fileName);
+      if (payload.fileSize) formData.append("fileSize", String(payload.fileSize));
+      if (payload.fileType) formData.append("fileType", payload.fileType);
+      if (payload.dataUrl) formData.append("dataUrl", payload.dataUrl);
+      if (payload.extractedText) formData.append("extractedText", payload.extractedText);
+      if (payload.atsScore) formData.append("atsScore", String(payload.atsScore));
+      if (payload.email) formData.append("email", payload.email);
+      body = formData;
+    } else {
+      body = payload;
+    }
+
+    const res = await api.post<{ success: boolean; resume: CandidateResumeRecord }>(
+      "/candidate/resume/",
+      body
+    );
+    if (res && res.resume) {
+      return res.resume;
+    }
+  } catch (err) {
+    console.warn("Backend resume save failed, using local fallback:", err);
+  }
+  return null;
+}
+
+export async function deleteCandidateResume(email?: string): Promise<boolean> {
+  try {
+    const query = email ? `?email=${encodeURIComponent(email)}` : "";
+    await api.delete(`/candidate/resume/${query}`);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
 
 export async function getCandidateProfile(): Promise<CandidateProfile> {
   await mockDelay(200);
